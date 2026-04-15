@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('phone_number')->nullable();
-            $table->string('role')->required();
+            $table->string('role');
             $table->rememberToken();
             $table->timestamps();
         });
