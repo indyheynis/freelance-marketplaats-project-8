@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->decimal('amount', 10, 2)->nullable();
             $table->decimal('budget', 10, 2)->nullable();
             $table->string('status')->default('open');
             $table->date('deadline')->nullable();

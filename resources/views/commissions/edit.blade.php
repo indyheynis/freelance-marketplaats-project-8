@@ -14,10 +14,7 @@
                 <textarea class="form-control" id="description" name="description" rows="3">{{ $commission->description }}</textarea>
             </div>
 
-            <div class="mb-3">
-                <label for="amount" class="form-label">Amount</label>
-                <input type="number" step="0.01" class="form-control" id="amount" name="amount" value="{{ $commission->amount }}">
-            </div>
+            
 
             <div class="mb-3">
                 <label for="budget" class="form-label">Budget</label>

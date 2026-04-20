@@ -9,7 +9,6 @@ class Commission extends Model
     protected $fillable = [
         'title',
         'description',
-        'amount',
         'budget',
         'status',
         'deadline',

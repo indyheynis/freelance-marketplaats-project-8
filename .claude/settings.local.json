@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\Users\\\\Indy\\\\Herd\\\\freelance-marketplaats-project-8\\\\vendor\\\\bin\\\\phpunit\" --version)"
+    ]
+  }
+}
