@@ -21,6 +21,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-07-31',
                 'category_id' => 1,
+                'created_at' => now(),
             ],
             [
                 'title' => 'Website Development',
@@ -29,6 +30,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-08-15',
                 'category_id' => 2,
+                'created_at' => now(),
             ],
             [
                 'title' => 'Social Media Marketing',
@@ -37,6 +39,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-09-30',
                 'category_id' => 3,
+                'created_at' => now(),
             ],
         ];
         DB::table('commissions')->insert($commissions);
