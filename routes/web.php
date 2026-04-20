@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
 // Route voor Commissions 
 Route::get('/commissions', [CommissionController::class, 'index'])->name('commissions.index');
+Route::get('/commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 
 
 require __DIR__.'/auth.php';
