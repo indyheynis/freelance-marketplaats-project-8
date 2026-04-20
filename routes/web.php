@@ -18,9 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route voor Commissions 
-Route::get('/commissions', [CommissionController::class, 'index'])->name('commissions.index');
-Route::get('/commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+// Route voor Commissions
+Route::resource('commissions', CommissionController::class);
+
 
 
 require __DIR__.'/auth.php';

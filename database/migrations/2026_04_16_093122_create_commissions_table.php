@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
             $table->decimal('budget', 10, 2)->nullable();
             $table->date('deadline')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');

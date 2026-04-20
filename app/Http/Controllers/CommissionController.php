@@ -3,64 +3,70 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commission;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CommissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $commissions = Commission::all();
+        $commissions = Commission::with('category')->get();
         return view('commissions.index', compact('commissions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('commissions.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'amount' => 'nullable|numeric',
+            'budget' => 'nullable|numeric',
+            'deadline' => 'nullable|date',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        Commission::create($request->all());
+
+        return redirect()->route('commissions.index')->with('success', 'Commission created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Commission $commission)
     {
         return view('commissions.show', compact('commission'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Commission $commission)
     {
-        //
+        $categories = Category::all();
+        return view('commissions.edit', compact('commission', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Commission $commission)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'amount' => 'nullable|numeric',
+            'budget' => 'nullable|numeric',
+            'deadline' => 'nullable|date',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $commission->update($request->all());
+
+        return redirect()->route('commissions.show', $commission)->with('success', 'Commission updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Commission $commission)
     {
-        //
+        $commission->delete();
+
+        return redirect()->route('commissions.index')->with('success', 'Commission deleted successfully.');
     }
 }
