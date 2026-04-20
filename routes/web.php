@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
 // Route voor Commissions
 Route::resource('commissions', CommissionController::class);
+Route::resource('categories', CategoryController::class);
 
 
 
