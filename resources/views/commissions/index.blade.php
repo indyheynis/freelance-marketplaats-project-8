@@ -7,6 +7,7 @@
             <p class="card-text">Amount: {{ $commission->amount }}</p>
             <p class="card-text">Status: {{ $commission->status }}</p>
             <p class="card-text">Budget: {{ $commission->budget }}</p>
+            <p class="card-text">Category: {{ $commission->category->name }}</p>
             <a href="{{ route('commissions.show', $commission->id) }}" class="btn btn-primary">View Details</a>
         </div>
     </div>
