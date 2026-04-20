@@ -1,3 +1,4 @@
+<x-base-layout>
 @foreach ($commissions as $commission)
     <div class="card mb-3">
         <div class="card-body">
@@ -9,3 +10,4 @@
         </div>
     </div>
 @endforeach
+</x-base-layout>
