@@ -10,6 +10,7 @@ class Commission extends Model
         'title',
         'description',
         'budget',
+        'status',
         'deadline',
         'category_id',
     ];
