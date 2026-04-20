@@ -13,7 +13,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/">Freelance Marketing</a>
+            <a class="navbar-brand" href="/commissions">Freelance Marketing</a>
+            <a class="navbar-text" href="/login">Login</a>
    
         </div>
     </nav>
