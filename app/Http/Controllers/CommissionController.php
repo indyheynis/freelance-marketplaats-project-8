@@ -37,7 +37,7 @@ class CommissionController extends Controller
      */
     public function show(Commission $commission)
     {
-        //
+        return view('commissions.show', compact('commission'));
     }
 
     /**
