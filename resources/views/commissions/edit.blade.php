@@ -15,11 +15,6 @@
             </div>
 
             <div class="mb-3">
-                <label for="amount" class="form-label">Amount</label>
-                <input type="number" step="0.01" class="form-control" id="amount" name="amount" value="{{ $commission->amount }}">
-            </div>
-
-            <div class="mb-3">
                 <label for="budget" class="form-label">Budget</label>
                 <input type="number" step="0.01" class="form-control" id="budget" name="budget" value="{{ $commission->budget }}">
             </div>

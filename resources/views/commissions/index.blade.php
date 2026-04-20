@@ -15,7 +15,6 @@
                     <h5 class="card-title">{{ $commission->title }}</h5>
                     <p class="card-text"><strong>Category:</strong> {{ $commission->category->name ?? 'N/A' }}</p>
                     <p class="card-text"><strong>Description:</strong> {{ $commission->description }}</p>
-                    <p class="card-text"><strong>Amount:</strong> {{ $commission->amount }}</p>
                     <p class="card-text"><strong>Budget:</strong> {{ $commission->budget }}</p>
                     <p class="card-text"><strong>Deadline:</strong> {{ $commission->deadline }}</p>
                     <a href="{{ route('commissions.show', $commission) }}" class="btn btn-primary">View</a>
