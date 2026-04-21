@@ -24,6 +24,7 @@
             </div>
         @endif
 
+<<<<<<< HEAD
         <!-- Cards Grid -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($commissions as $commission)
@@ -62,6 +63,31 @@
                             </button>
                         </form>
                     </div>
+=======
+        @forelse ($commissions as $commission)
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $commission->title }}</h5>
+                    <p class="card-text"><strong>Category:</strong> {{ $commission->category->name ?? 'N/A' }}</p>
+                    <p class="card-text"><strong>Description:</strong> {{ $commission->description }}</p>
+                    <p class="card-text"><strong>Budget:</strong> {{ $commission->budget }}</p>
+                    <p class="card-text"><strong>Deadline:</strong> {{ $commission->deadline }}</p>
+                    <a href="{{ route('commissions.show', $commission) }}" class="btn btn-primary">View</a>
+                    @auth
+                        @if (auth()->user()->role === 'client')
+                            <a href="{{ route('commissions.edit', $commission) }}" class="btn btn-warning">Edit</a>
+                        @endif
+                    @endauth
+                    <form action="{{ route('commissions.destroy', $commission) }}" method="POST" class="d-inline">
+                        @auth
+                            @if (auth()->user()->role === 'client')
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            @endif
+                        @endauth
+                    </form>
+>>>>>>> 871a3c02d726b640cb0b5ca53d2f349689fc97f6
                 </div>
             @empty
                 <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
