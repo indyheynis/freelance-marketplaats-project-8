@@ -34,4 +34,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isFreelancer(): bool
+    {
+        return $this->role === 'freelancer';
+    }
+
+    public function isClient(): bool
+    {
+        return $this->role === 'client';
+    }
 }
