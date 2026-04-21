@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
 Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
@@ -38,5 +37,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
 });
+
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 
 require __DIR__.'/auth.php';
