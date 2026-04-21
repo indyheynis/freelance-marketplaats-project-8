@@ -24,6 +24,20 @@
             </div>
         @endif
 
+                <form method="GET" action="{{ route('commissions.index') }}">
+            <select name="category_id">
+                <option value="">-- Kies categorie --</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
         <!-- Cards Grid -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($commissions as $commission)
