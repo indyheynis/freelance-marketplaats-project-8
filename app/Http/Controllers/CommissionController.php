@@ -32,7 +32,6 @@ class CommissionController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'nullable|numeric',
             'budget' => 'nullable|numeric',
             'deadline' => 'nullable|date',
             'category_id' => 'required|exists:categories,id',
@@ -59,7 +58,6 @@ class CommissionController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'nullable|numeric',
             'budget' => 'nullable|numeric',
             'deadline' => 'nullable|date',
             'category_id' => 'required|exists:categories,id',
