@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(\"C:\\\\Users\\\\Indy\\\\Herd\\\\freelance-marketplaats-project-8\\\\vendor\\\\bin\\\\phpunit\" --version)",
-      "Bash(php artisan *)"
+      "Bash(php artisan *)",
+      "Bash(where php *)",
+      "Bash(C:\\\\Users\\\\Indy\\\\.config\\\\herd\\\\bin\\\\php.bat artisan *)",
+      "Bash(cmd *)"
     ]
   }
 }
