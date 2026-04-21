@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class CommissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $commissions = Commission::with('category')->get();
-        return view('commissions.index', compact('commissions'));
+        $categories = Category::all();
+        $query = Commission::with('category');
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $commissions = $query->get();
+        return view('commissions.index', compact('commissions', 'categories'));
     }
 
     public function create()

@@ -9,6 +9,20 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
+                <form method="GET" action="{{ route('commissions.index') }}">
+            <select name="category_id">
+                <option value="">-- Kies categorie --</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
         @forelse ($commissions as $commission)
             <div class="card mb-3">
                 <div class="card-body">
