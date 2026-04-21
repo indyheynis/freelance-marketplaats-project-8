@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')->default('open');
             $table->date('deadline')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

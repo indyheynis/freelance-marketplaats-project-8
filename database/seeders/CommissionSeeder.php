@@ -21,6 +21,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-07-31',
                 'category_id' => 1,
+                'user_id' => 1,
                 'created_at' => now(),
             ],
             [
@@ -30,6 +31,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-08-15',
                 'category_id' => 2,
+                'user_id' => 1,
                 'created_at' => now(),
             ],
             [
@@ -39,6 +41,7 @@ class CommissionSeeder extends Seeder
                 'status' => 'open',
                 'deadline' => '2024-09-30',
                 'category_id' => 3,
+                'user_id' => 1,
                 'created_at' => now(),
             ],
         ];
