@@ -138,7 +138,7 @@
 
                         @if($alreadyApplied)
                             <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4">
-                                ✅ Je hebt al gesolliciteerd op deze commission.
+                                Je hebt al gesolliciteerd op deze commission.
                                 @if($alreadyApplied->message)
                                     <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
                                 @endif
@@ -163,6 +163,24 @@
                                 </button>
                             </form>
                         @endif
+                    </div>
+                @elseif(auth()->guest())
+                    <div class="px-6 py-6 border-t border-slate-100">
+                        <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
+                            <p class="font-medium mb-2">Geinteresseerd in deze commission?</p>
+                            <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
+                            <div class="flex gap-3">
+                                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                    </svg>
+                                    Log in
+                                </a>
+                                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    Registreer
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @endif
             @endauth
