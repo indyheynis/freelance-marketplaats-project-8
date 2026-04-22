@@ -79,6 +79,42 @@
                             </button>
                         </form>
                     </div>
+
+                    {{-- Sollicitaties sectie --}}
+                    <div class="px-6 py-6 border-t border-slate-100">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                            Sollicitaties ({{ $commission->applications->count() }})
+                        </h2>
+
+                        @forelse($commission->applications as $application)
+                            <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                            <span class="text-purple-700 font-semibold text-sm">
+                                                {{ strtoupper(substr($application->freelancer->firstname, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-800">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
+                                            <p class="text-xs text-slate-500">{{ $application->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {{ $application->status === 'pending' ? 'bg-amber-100 text-amber-800' : '' }}
+                                        {{ $application->status === 'accepted' ? 'bg-green-100 text-green-800' : '' }}
+                                        {{ $application->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
+                                        {{ ucfirst($application->status) }}
+                                    </span>
+                                </div>
+                                @if($application->message)
+                                    <p class="text-sm text-slate-600 mt-2">{{ $application->message }}</p>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
+                        @endforelse
+                    </div>
                 @endif
 
                 @if(auth()->user()->isFreelancer())

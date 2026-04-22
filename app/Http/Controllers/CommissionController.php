@@ -51,6 +51,7 @@ class CommissionController extends Controller
 
     public function show(Commission $commission)
     {
+        $commission->load('applications.freelancer');
         return view('commissions.show', compact('commission'));
     }
 
