@@ -30,7 +30,7 @@
             <div class="relative flex-1 min-w-[200px]">
                 <select name="category_id"
                     class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-700 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400">
-                    <option value="">-- Alle categorieën --</option>
+                    <option value="">-- All categories --</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}"
                             {{ request('category_id') == $category->id ? 'selected' : '' }}>
