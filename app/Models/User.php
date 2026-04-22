@@ -13,6 +13,8 @@ use App\Models\Commission;
 
 #[Fillable([
     'name',
+    'firstname',
+    'lastname',
     'email',
     'role',
     'password',
