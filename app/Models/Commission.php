@@ -13,6 +13,7 @@ class Commission extends Model
         'status',
         'deadline',
         'category_id',
+        'user_id',
     ];
 
     public function category()
