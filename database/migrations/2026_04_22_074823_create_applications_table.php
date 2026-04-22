@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignID('commissions_id')->constrained()->onDelete('cascade');
+            $table->foreignID('commission_id')->constrained()->onDelete('cascade');
             $table->foreignID('user_id')->constrained()->onDelete('cascade');
             $table->text('message')->nullable();
             $table->string('status')->default('pending');

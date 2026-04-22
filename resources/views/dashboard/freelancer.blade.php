@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-sans antialiased bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Navbar -->
@@ -89,53 +91,53 @@
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @forelse(\App\Models\Commission::with('category')->where('status', 'open')->latest()->take(6)->get() as $commission)
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-lg font-semibold text-slate-800 line-clamp-1">{{ $commission->title }}</h3>
-                            @if($commission->category)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                    {{ $commission->category->name }}
-                                </span>
-                            @endif
-                        </div>
-                        <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
-                        <div class="flex gap-2">
-                            <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                                View Details
-                            </a>
-                            <button class="flex-1 text-center bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Apply
-                            </button>
-                        </div>
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-lg font-semibold text-slate-800 line-clamp-1">{{ $commission->title }}</h3>
+                        @if($commission->category)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            {{ $commission->category->name }}
+                        </span>
+                        @endif
                     </div>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-medium text-slate-700 mb-2">No commissions available</h3>
-                        <p class="text-slate-500 mb-6">Check back later for new opportunities.</p>
-                        <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            Refresh
+                    <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
+                    <div class="flex gap-2">
+                        <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            View Details
+                        </a>
+                        <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Apply
                         </a>
                     </div>
+                </div>
+                @empty
+                <div class="col-span-full text-center py-12">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-700 mb-2">No commissions available</h3>
+                    <p class="text-slate-500 mb-6">Check back later for new opportunities.</p>
+                    <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Refresh
+                    </a>
+                </div>
                 @endforelse
             </div>
 
             @if(\App\Models\Commission::where('status', 'open')->count() > 6)
-                <div class="text-center mt-8">
-                    <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold transition-colors">
-                        View All Commissions
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
-                </div>
+            <div class="text-center mt-8">
+                <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold transition-colors">
+                    View All Commissions
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
             @endif
         </div>
     </section>
@@ -148,4 +150,5 @@
     </footer>
 
 </body>
+
 </html>
