@@ -35,6 +35,13 @@
                     <a href="{{ route('categories.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors {{ request()->routeIs('categories.index') ? 'text-indigo-600' : '' }}">
                         Categories
                     </a>
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                            <a href="{{ route('users.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors {{ request()->routeIs('users.index') ? 'text-indigo-600' : '' }}">
+                                Users
+                            </a>
+                        @endif
+                    @endauth
                 </div>
 
                 <!-- Auth Links -->

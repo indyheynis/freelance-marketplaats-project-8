@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->role === 'client';
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
     public function commissions()
     {
         return $this->hasMany(Commission::class);

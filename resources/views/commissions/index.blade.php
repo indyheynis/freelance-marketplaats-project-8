@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-bold text-slate-800">Commissions</h1>
                 <p class="text-slate-500 mt-1">Browse and manage freelance commissions</p>
             </div>
-           @if(auth()->check() && auth()->user()->role === 'client')       
+           @if(auth()->check() && auth()->user()->role === 'client' || auth()->user()->role === 'admin')     
             <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -87,12 +87,12 @@
                         <a href="{{ route('commissions.show', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             View
                         </a>
-                          @if(auth()->check() && auth()->user()->role === 'client')    
+                          @if(auth()->check() && auth()->user()->role === 'client' || auth()->user()->role === 'admin')   
                         <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             Edit
                         </a>
                         @endif
-                          @if(auth()->check() && auth()->user()->role === 'client')    
+                          @if(auth()->check() && auth()->user()->role === 'client' || auth()->user()->role === 'admin')  
                         <form action="{{ route('commissions.destroy', $commission) }}" method="POST" class="flex-1">
                             @csrf
                             @method('DELETE')
@@ -111,7 +111,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-medium text-slate-700 mb-1">No commissions found</h3>
-                    @if(auth()->check() && auth()->user()->role === 'client')                        
+                    @if(auth()->check() && auth()->user()->role === 'client' || auth()->user()->role === 'admin')                      
                     <p class="text-slate-500 mb-4">Get started by creating your first commission.</p>
                     <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                         Create One
