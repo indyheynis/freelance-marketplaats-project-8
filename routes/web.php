@@ -28,9 +28,11 @@ Route::middleware('auth')->group(function () {
 
 // Route voor Commissions
 // Route::resource('commissions', CommissionController::class);
+Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
 Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
+Route::get('search', [CommissionController::class, 'search'])->name('search');
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');

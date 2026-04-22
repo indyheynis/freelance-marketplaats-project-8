@@ -17,6 +17,18 @@ class CategorySeeder extends Seeder
             ['name' => 'Graphic Design'],
             ['name' => 'Web Development'],
             ['name' => 'Digital Marketing'],
+            ['name' => 'Video Production'],
+            ['name' => 'Photography'],
+            ['name' => 'Copywriting'],
+            ['name' => 'UI/UX Design'],
+            ['name' => 'Mobile App Development'],
+            ['name' => 'SEO Optimization'],
+            ['name' => 'Animation'],
+            ['name' => 'Voice Over'],
+            ['name' => 'Translation'],
+            ['name' => 'Data Analysis'],
+            ['name' => '3D Modeling'],
+            ['name' => 'Music Production'],
         ];
         DB::table('categories')->insert($categories);
     }
