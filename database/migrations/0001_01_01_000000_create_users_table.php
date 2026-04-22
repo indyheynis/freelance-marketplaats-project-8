@@ -23,8 +23,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('phone_number')->nullable();
-            $table->enum('role', ['client', 'freelancer']);
-            $table->json('skills')->nullable();
+            $table->enum('role', ['client', 'freelancer', 'admin'])->default('client');
             $table->rememberToken();
             $table->timestamps();
         });
