@@ -22,6 +22,27 @@ class CommissionController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
+        if ($request->filled('q')) {
+            $query->where('title', 'like', '%' . $request->q . '%');
+        }
+
+        $commissions = $query->get();
+        return view('commissions.index', compact('commissions', 'categories'));
+    }
+
+    public function search(Request $request)
+    {
+        $categories = Category::all();
+        $query = Commission::with('category');
+
+        if (auth()->check() && auth()->user()->isClient()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('q')) {
+            $query->where('title', 'like', '%' . $request->q . '%');
+        }
+
         $commissions = $query->get();
         return view('commissions.index', compact('commissions', 'categories'));
     }

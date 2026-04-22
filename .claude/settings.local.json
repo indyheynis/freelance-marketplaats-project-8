@@ -5,7 +5,12 @@
       "Bash(php artisan *)",
       "Bash(where php *)",
       "Bash(C:\\\\Users\\\\Indy\\\\.config\\\\herd\\\\bin\\\\php.bat artisan *)",
-      "Bash(cmd *)"
+      "Bash(cmd *)",
+      "Read(//c/Users/Indy/.valet/Services/**)",
+      "Read(//c/Users/Indy/.valet/**)",
+      "Read(//c/Users/Indy/AppData/Roaming/Laravel/**)",
+      "Read(//c/Users/Indy/.config/**)",
+      "Bash(php -v)"
     ]
   }
 }
