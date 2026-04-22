@@ -18,6 +18,7 @@ use App\Models\Commission;
     'email',
     'role',
     'password',
+    'skills',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -35,6 +36,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'skills' => 'array',
         ];
     }
 

@@ -14,13 +14,18 @@
         </div>
         @endif
 
-
+        <!-- Voornaam -->
+        <div class="mt-4">
+            <x-input-label for="firstname" :value="__('Voornaam')" />
+            <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autocomplete="given-name" />
+            <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
+        </div>
 
         <!-- Achternaam -->
         <div class="mt-4">
-            <x-input-label for="name" :value="__('Naam')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autocomplete="given-name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <x-input-label for="lastname" :value="__('Achternaam')" />
+            <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname')" required autocomplete="family-name" />
+            <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
         </div>
 
         <!-- E-mailadres -->
