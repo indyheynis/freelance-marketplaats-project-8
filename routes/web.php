@@ -5,6 +5,7 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,4 +50,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
-require __DIR__.'/auth.php';
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
+        ->name('applications.store');
+    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
+        ->name('applications.destroy');
+});
+
+
+require __DIR__ . '/auth.php';
