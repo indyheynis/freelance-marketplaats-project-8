@@ -13,6 +13,11 @@ class CommissionController extends Controller
         $categories = Category::all();
         $query = Commission::with('category');
 
+        // Filter commissions based on user role
+        if (auth()->check() && auth()->user()->isClient()) {
+            $query->where('user_id', auth()->id());
+        }
+
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
@@ -37,7 +42,9 @@ class CommissionController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Commission::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+        Commission::create($data);
 
         return redirect()->route('commissions.index')->with('success', 'Commission created successfully.');
     }

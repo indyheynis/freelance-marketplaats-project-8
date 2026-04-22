@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Commission;
 
 #[Fillable([
     'name',
+    'firstname',
+    'lastname',
     'email',
     'role',
     'password',
@@ -43,5 +46,10 @@ class User extends Authenticatable
     public function isClient(): bool
     {
         return $this->role === 'client';
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
     }
 }
