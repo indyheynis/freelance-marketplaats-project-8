@@ -13,8 +13,34 @@ class CommissionController extends Controller
         $categories = Category::all();
         $query = Commission::with('category');
 
+        // Filter commissions based on user role
+        if (auth()->check() && auth()->user()->isClient()) {
+            $query->where('user_id', auth()->id());
+        }
+
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('q')) {
+            $query->where('title', 'like', '%' . $request->q . '%');
+        }
+
+        $commissions = $query->get();
+        return view('commissions.index', compact('commissions', 'categories'));
+    }
+
+    public function search(Request $request)
+    {
+        $categories = Category::all();
+        $query = Commission::with('category');
+
+        if (auth()->check() && auth()->user()->isClient()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('q')) {
+            $query->where('title', 'like', '%' . $request->q . '%');
         }
 
         $commissions = $query->get();
@@ -37,13 +63,16 @@ class CommissionController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Commission::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+        Commission::create($data);
 
         return redirect()->route('commissions.index')->with('success', 'Commission created successfully.');
     }
 
     public function show(Commission $commission)
     {
+        $commission->load('applications.freelancer');
         return view('commissions.show', compact('commission'));
     }
 

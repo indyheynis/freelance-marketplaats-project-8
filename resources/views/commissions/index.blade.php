@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-bold text-slate-800">Commissions</h1>
                 <p class="text-slate-500 mt-1">Browse and manage freelance commissions</p>
             </div>
-           @if(auth()->check() && auth()->user()->role === 'client')       
+           @if(auth()->check() && in_array(auth()->user()->role, ['client', 'admin']))     
             <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -26,18 +26,38 @@
             </div>
         @endif
 
-                <form method="GET" action="{{ route('commissions.index') }}">
-            <select name="category_id">
-                <option value="">-- Kies categorie --</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}"
-                        {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-
-            <button type="submit">Filter</button>
+                <form method="GET" action="{{ route('commissions.index') }}" class="flex flex-wrap gap-3 items-center mb-8">
+            <div class="relative flex-1 min-w-[200px]">
+                <select name="category_id"
+                    class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-700 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400">
+                    <option value="">-- All categories --</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}"
+                            {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+            <button type="submit"
+                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filter
+            </button>
+            @if(request('category_id'))
+                <a href="{{ route('commissions.index') }}"
+                    class="inline-flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Wis filter
+                </a>
+            @endif
         </form>
 
         <!-- Cards Grid -->
@@ -67,12 +87,12 @@
                         <a href="{{ route('commissions.show', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             View
                         </a>
-                          @if(auth()->check() && auth()->user()->role === 'client')    
+                          @if(auth()->check() && in_array(auth()->user()->role, ['client', 'admin']))   
                         <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             Edit
                         </a>
                         @endif
-                          @if(auth()->check() && auth()->user()->role === 'client')    
+                          @if(auth()->check() && in_array(auth()->user()->role, ['client', 'admin']))  
                         <form action="{{ route('commissions.destroy', $commission) }}" method="POST" class="flex-1">
                             @csrf
                             @method('DELETE')
@@ -91,7 +111,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-medium text-slate-700 mb-1">No commissions found</h3>
-                    @if(auth()->check() && auth()->user()->role === 'client')                        
+                    @if(auth()->check() && in_array(auth()->user()->role, ['client', 'admin']))                      
                     <p class="text-slate-500 mb-4">Get started by creating your first commission.</p>
                     <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                         Create One

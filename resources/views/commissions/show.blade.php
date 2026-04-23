@@ -60,7 +60,7 @@
 
             <!-- Actions -->
             @auth
-                @if (auth()->user()->role === 'client')
+                @if(auth()->user()->role === 'client')
                     <div class="px-6 py-4 border-t border-slate-100 flex items-center gap-3">
                         <a href="{{ route('commissions.edit', $commission) }}" class="inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-700 px-4 py-2 rounded-lg font-medium transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,6 +78,109 @@
                                 Delete
                             </button>
                         </form>
+                    </div>
+
+                    {{-- Sollicitaties sectie --}}
+                    <div class="px-6 py-6 border-t border-slate-100">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                            Sollicitaties ({{ $commission->applications->count() }})
+                        </h2>
+
+                        @forelse($commission->applications as $application)
+                            <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                            <span class="text-purple-700 font-semibold text-sm">
+                                                {{ strtoupper(substr($application->freelancer->firstname, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-800">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
+                                            <p class="text-xs text-slate-500">{{ $application->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {{ $application->status === 'pending' ? 'bg-amber-100 text-amber-800' : '' }}
+                                        {{ $application->status === 'accepted' ? 'bg-green-100 text-green-800' : '' }}
+                                        {{ $application->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
+                                        {{ ucfirst($application->status) }}
+                                    </span>
+                                </div>
+                                @if($application->message)
+                                    <p class="text-sm text-slate-600 mt-2">{{ $application->message }}</p>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
+                        @endforelse
+                    </div>
+                @endif
+
+                @if(auth()->user()->isFreelancer())
+                    @php
+                        $alreadyApplied = $commission->applications->where('user_id', auth()->id())->first();
+                    @endphp
+
+                    <div class="px-6 py-6 border-t border-slate-100">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4">Apply for this Commission</h2>
+
+                        @if(session('success'))
+                            <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if(session('error'))
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if($alreadyApplied)
+                            <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4">
+                                Je hebt al gesolliciteerd op deze commission.
+                                @if($alreadyApplied->message)
+                                    <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
+                                @endif
+                            </div>
+                            <form action="{{ route('applications.destroy', $alreadyApplied) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    Sollicitatie intrekken
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('applications.store', $commission) }}" method="POST">
+                                @csrf
+                                <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze commission..."
+                                    class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                                <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    Apply Now
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                @elseif(auth()->guest())
+                    <div class="px-6 py-6 border-t border-slate-100">
+                        <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
+                            <p class="font-medium mb-2">Geinteresseerd in deze commission?</p>
+                            <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
+                            <div class="flex gap-3">
+                                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                    </svg>
+                                    Log in
+                                </a>
+                                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    Registreer
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @endif
             @endauth
