@@ -13,26 +13,11 @@ class Commission extends Model
         'status',
         'deadline',
         'category_id',
+        'user_id',
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-
-    public function offers()
-    {
-        return $this->hasMany(Offer::class);
-    }
-
-    public function commission()
-    {
-        return $this->belongsTo(Commission::class);
-    }
-
-public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
 }

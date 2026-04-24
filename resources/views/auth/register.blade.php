@@ -15,9 +15,9 @@
         @endif
 
         <!-- Voornaam -->
-        <div>
+        <div class="mt-4">
             <x-input-label for="firstname" :value="__('Voornaam')" />
-            <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autofocus autocomplete="given-name" />
+            <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autocomplete="given-name" />
             <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
         </div>
 
@@ -40,9 +40,9 @@
             <x-input-label for="role" :value="__('Rol')" />
             <select id="role" name="role" required
                 class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Selecteer een rol --</option>
-                <option value="client" {{ old('role') == 'client' ? 'selected' : '' }}>Client</option>
-                <option value="freelancer" {{ old('role') == 'freelancer' ? 'selected' : '' }}>Freelancer</option>
+                <option value="" disabled {{ old('role', request('role')) ? '' : 'selected' }}>-- Selecteer een rol --</option>
+                <option value="client" {{ old('role', request('role')) == 'client' ? 'selected' : '' }}>Client</option>
+                <option value="freelancer" {{ old('role', request('role')) == 'freelancer' ? 'selected' : '' }}>Freelancer</option>
             </select>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
         </div>
