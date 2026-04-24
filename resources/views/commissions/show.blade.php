@@ -23,6 +23,38 @@
                 <span class="text-sm text-slate-500">Posted {{ $commission->created_at->diffForHumans() }}</span>
             </div>
 
+            <h3>Reageer met offerte</h3>
+
+    <form method="POST" action="{{ route('offers.store') }}">
+        @csrf
+
+        <input type="hidden" name="commission_id" value="{{ $commission->id }}">
+
+        <div class="mb-2">
+            <label>Prijs</label>
+            <input type="number" name="price" class="form-control">
+        </div>
+
+        <div class="mb-2">
+            <label>Bericht</label>
+            <textarea name="message" class="form-control"></textarea>
+        </div>
+
+        <button class="btn btn-primary">Verstuur offerte</button>
+    </form>
+
+    <h3>Offertes</h3>
+
+        @foreach($commission->offers as $offer)
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p><strong>{{ $offer->user->name }}</strong></p>
+                    <p>€{{ $offer->price }}</p>
+                    <p>{{ $offer->message }}</p>
+                </div>
+            </div>
+        @endforeach
+
             <!-- Description -->
             <div class="px-6 py-6">
                 <h2 class="text-lg font-semibold text-slate-800 mb-3">Description</h2>

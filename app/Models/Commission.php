@@ -19,4 +19,20 @@ class Commission extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
+
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class);
+    }
+
+public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

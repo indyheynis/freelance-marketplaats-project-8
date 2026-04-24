@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->role === 'client';
     }
+
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 }
