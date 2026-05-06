@@ -35,7 +35,9 @@ Route::resource('categories', CategoryController::class);
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
 
-Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
+Route::middleware('auth')->group(function () {
+    Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
+});
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
