@@ -61,5 +61,17 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.destroy');
 });
 
+//applications accept/reject routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
+        ->name('applications.store');
+    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
+        ->name('applications.destroy');
+    Route::patch('applications/{application}/accept', [ApplicationController::class, 'accept'])
+        ->name('applications.accept');
+    Route::patch('applications/{application}/reject', [ApplicationController::class, 'reject'])
+        ->name('applications.reject');
+});
+
 
 require __DIR__ . '/auth.php';
