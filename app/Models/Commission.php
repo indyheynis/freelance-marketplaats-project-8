@@ -26,8 +26,5 @@ class Commission extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function offers()
-    {
-        return $this->hasMany(Offer::class);
-    }
+
 }
