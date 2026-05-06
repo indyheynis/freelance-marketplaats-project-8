@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OfferController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,8 @@ Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
+
+Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
