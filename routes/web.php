@@ -45,7 +45,9 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
 });
 
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+    Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])
+        ->name('offers.accept');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');

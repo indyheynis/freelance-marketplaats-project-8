@@ -120,49 +120,87 @@
         </div>
 
         {{-- Offertes Sectie --}}
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
-            <div class="px-6 py-4 border-b border-slate-100">
-                <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
-                <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
-            </div>
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+    <div class="px-6 py-4 border-b border-slate-100">
+        <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
+        <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
+    </div>
 
-            <div class="p-6">
-                @forelse($commission->offers as $offer)
-                    <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                                    <span class="text-indigo-700 font-semibold text-sm">
-                                        {{ strtoupper(substr($offer->user->firstname ?? $offer->user->name, 0, 1)) }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-slate-800">{{ $offer->user->firstname ?? $offer->user->name }} {{ $offer->user->lastname ?? '' }}</p>
-                                    <p class="text-xs text-slate-500">{{ $offer->created_at->diffForHumans() }}</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-2xl font-bold text-green-600">€{{ number_format($offer->price, 2) }}</p>
-                            </div>
+    <div class="p-6">
+        @forelse($commission->offers as $offer)
+            <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
+
+                {{-- HEADER --}}
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <span class="text-indigo-700 font-semibold text-sm">
+                                {{ strtoupper(substr($offer->user->firstname ?? $offer->user->name, 0, 1)) }}
+                            </span>
                         </div>
-                        @if($offer->message)
-                            <div class="mt-3 pt-3 border-t border-slate-200">
-                                <p class="text-sm text-slate-600">{{ $offer->message }}</p>
-                            </div>
+                        <div>
+                            <p class="font-medium text-slate-800">
+                                {{ $offer->user->firstname ?? $offer->user->name }} {{ $offer->user->lastname ?? '' }}
+                            </p>
+                            <p class="text-xs text-slate-500">{{ $offer->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-green-600">
+                            €{{ number_format($offer->price, 2) }}
+                        </p>
+
+                        {{-- STATUS BADGE 🔥 --}}
+                        <p class="mt-1">
+                            @if($offer->status === 'pending')
+                                <span class="px-2 py-1 text-xs rounded bg-amber-100 text-amber-800">Pending</span>
+                            @elseif($offer->status === 'accepted')
+                                <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Accepted</span>
+                            @else
+                                <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-800">Rejected</span>
+                            @endif
+                        </p>
+                    </div>
+                </div>
+
+                {{-- MESSAGE --}}
+                @if($offer->message)
+                    <div class="mt-3 pt-3 border-t border-slate-200">
+                        <p class="text-sm text-slate-600">{{ $offer->message }}</p>
+                    </div>
+                @endif
+
+                {{-- ACTIONS --}}
+                @auth
+                    @if(auth()->id() === $commission->user_id)
+
+                        {{-- Alleen tonen als nog niets geaccepteerd is --}}
+                        @if($commission->offers->where('status', 'accepted')->count() === 0)
+
+                            {{-- Alleen pending offers kunnen geaccepteerd worden --}}
+                            @if($offer->status === 'pending')
+                                <form action="{{ route('offers.accept', $offer) }}" method="POST" class="mt-3">
+                                    @csrf
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm">
+                                        Accepteren
+                                    </button>
+                                </form>
+                            @endif
+
                         @endif
-                    </div>
-                @empty
-                    <div class="text-center py-8">
-                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </div>
-                        <p class="text-slate-500">Nog geen offertes ontvangen</p>
-                    </div>
-                @endforelse
+
+                    @endif
+                @endauth
+
             </div>
-        </div>
+        @empty
+            <div class="text-center py-8">
+                <p class="text-slate-500">Nog geen offertes ontvangen</p>
+            </div>
+        @endforelse
+    </div>
+</div>
 
         {{-- Freelancer: Sollicitatie formulier --}}
         @auth
