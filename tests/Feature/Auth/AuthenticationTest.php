@@ -8,8 +8,8 @@ test('login screen can be rendered', function () {
     $response->assertStatus(200);
 });
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+test('freelancer wordt doorgestuurd naar freelancer dashboard na login', function () {
+    $user = User::factory()->create(['role' => 'freelancer']);
 
     $response = $this->post('/login', [
         'email' => $user->email,
@@ -17,7 +17,19 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('dashboard.freelancer', absolute: false));
+});
+
+test('opdrachtgever wordt doorgestuurd naar client dashboard na login', function () {
+    $user = User::factory()->create(['role' => 'client']);
+
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard.client', absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {

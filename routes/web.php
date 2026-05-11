@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OfferController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,10 @@ Route::resource('categories', CategoryController::class);
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
 
+Route::middleware('auth')->group(function () {
+    Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
+});
+
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
     Route::post('commissions', [CommissionController::class, 'store'])->name('commissions.store');
@@ -42,7 +47,9 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
 });
 
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
+    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+});
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
@@ -56,6 +63,23 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.store');
     Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
         ->name('applications.destroy');
+});
+
+//applications accept/reject routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
+        ->name('applications.store');
+    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
+        ->name('applications.destroy');
+    Route::patch('applications/{application}/accept', [ApplicationController::class, 'accept'])
+        ->name('applications.accept');
+    Route::patch('applications/{application}/reject', [ApplicationController::class, 'reject'])
+        ->name('applications.reject');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-applications', [ApplicationController::class, 'index'])
+        ->name('applications.index');
 });
 
 
