@@ -42,10 +42,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
     Route::post('commissions', [CommissionController::class, 'store'])->name('commissions.store');
-    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
     Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
+});
+
+Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
+    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
