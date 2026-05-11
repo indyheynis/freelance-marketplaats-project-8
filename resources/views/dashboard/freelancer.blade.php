@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-sans antialiased bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Navbar -->
@@ -88,27 +90,31 @@
             </div>
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @forelse(\App\Models\Commission::with('category')->where('status', 'open')->latest()->take(6)->get() as $commission)
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-lg font-semibold text-slate-800 line-clamp-1">{{ $commission->title }}</h3>
-                            @if($commission->category)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                    {{ $commission->category->name }}
-                                </span>
-                            @endif
-                        </div>
-                        <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
-                        <div class="flex gap-2">
-                            <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                                View Details
-                            </a>
-                            <button class="flex-1 text-center bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Apply
-                            </button>
-                        </div>
+                @forelse(\App\Models\Commission::with(['category', 'applications'])->where('status', 'open')->latest()->take(6)->get() as $commission) <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-lg font-semibold text-slate-800 line-clamp-1">{{ $commission->title }}</h3>
+                        @if($commission->category)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            {{ $commission->category->name }}
+                        </span>
+                        @endif
                     </div>
-                @empty
+                    <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
+                    <div class="flex gap-2">
+                        <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            View Details
+                        </a>
+                        @if($commission->applications->where('user_id', auth()->id())->count() > 0)
+                        <span class="flex-1 text-center bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium">
+                            ✅ Applied
+                        </span>
+                        @else
+                        <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Apply
+                        </a>
+                        @endif
+                    </div>
+                    @empty
                     <div class="col-span-full text-center py-12">
                         <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,10 +130,10 @@
                             Refresh
                         </a>
                     </div>
-                @endforelse
-            </div>
+                    @endforelse
+                </div>
 
-            @if(\App\Models\Commission::where('status', 'open')->count() > 6)
+                @if(\App\Models\Commission::where('status', 'open')->count() > 6)
                 <div class="text-center mt-8">
                     <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold transition-colors">
                         View All Commissions
@@ -136,8 +142,8 @@
                         </svg>
                     </a>
                 </div>
-            @endif
-        </div>
+                @endif
+            </div>
     </section>
 
     <!-- Footer -->
@@ -148,4 +154,5 @@
     </footer>
 
 </body>
+
 </html>
