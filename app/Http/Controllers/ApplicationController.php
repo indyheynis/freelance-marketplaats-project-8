@@ -43,4 +43,26 @@ class ApplicationController extends Controller
 
         return back()->with('success', 'Sollicitatie ingetrokken.');
     }
+
+    public function accept(Application $application)
+    {
+        if ($application->commission->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $application->update(['status' => 'accepted']);
+
+        return back()->with('success', 'Sollicitatie geaccepteerd!');
+    }
+
+    public function reject(Application $application)
+    {
+        if ($application->commission->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $application->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Sollicitatie afgewezen.');
+    }
 }

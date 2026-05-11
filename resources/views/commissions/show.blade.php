@@ -12,7 +12,7 @@
         </div>
 
         <!-- Commission Details -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
             <!-- Category Badge & Status -->
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                 @if($commission->category)
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <!-- Actions -->
+            <!-- Actions voor client -->
             @auth
                 @if(auth()->user()->role === 'client')
                     <div class="px-6 py-4 border-t border-slate-100 flex items-center gap-3">
@@ -71,7 +71,7 @@
                         <form action="{{ route('commissions.destroy', $commission) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('Are you sure you want to delete this commission?')">
+                            <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('Are you sure?')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -110,21 +110,54 @@
                                 @if($application->message)
                                     <p class="text-sm text-slate-600 mt-2">{{ $application->message }}</p>
                                 @endif
+
+                                @if($application->status === 'pending')
+                                    <div class="flex gap-2 mt-3">
+                                        <form action="{{ route('applications.accept', $application) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="inline-flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Accepteren
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('applications.reject', $application) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="inline-flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                                Afwijzen
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
                         @empty
                             <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
                         @endforelse
                     </div>
                 @endif
+            @endauth
+        </div>
 
-                @if(auth()->user()->isFreelancer())
-                    @php
-                        $alreadyApplied = $commission->applications->where('user_id', auth()->id())->first();
-                    @endphp
+        {{-- Freelancer: Sollicitatie formulier --}}
+        @auth
+            @if(auth()->user()->isFreelancer())
+                @php
+                    $alreadyApplied = $commission->applications->where('user_id', auth()->id())->first();
+                @endphp
 
-                    <div class="px-6 py-6 border-t border-slate-100">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4">Apply for this Commission</h2>
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100">
+                        <h2 class="text-xl font-semibold text-slate-800">Solliciteren</h2>
+                        <p class="text-sm text-slate-500 mt-1">Vertel waarom jij de perfecte kandidaat bent</p>
+                    </div>
 
+                    <div class="p-6">
                         @if(session('success'))
                             <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
                                 {{ session('success') }}
@@ -138,7 +171,12 @@
 
                         @if($alreadyApplied)
                             <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4">
-                                Je hebt al gesolliciteerd op deze commission.
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="font-medium">Je hebt al gesolliciteerd op deze opdracht</span>
+                                </div>
                                 @if($alreadyApplied->message)
                                     <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
                                 @endif
@@ -147,43 +185,48 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
                                     Sollicitatie intrekken
                                 </button>
                             </form>
                         @else
                             <form action="{{ route('applications.store', $commission) }}" method="POST">
                                 @csrf
-                                <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze commission..."
+                                <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze opdracht..."
                                     class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
                                 <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                     </svg>
-                                    Apply Now
+                                    Solliciteren
                                 </button>
                             </form>
                         @endif
                     </div>
-                @elseif(auth()->guest())
-                    <div class="px-6 py-6 border-t border-slate-100">
-                        <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
-                            <p class="font-medium mb-2">Geinteresseerd in deze commission?</p>
-                            <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
-                            <div class="flex gap-3">
-                                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                    </svg>
-                                    Log in
-                                </a>
-                                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                    Registreer
-                                </a>
-                            </div>
+                </div>
+            @endif
+        @endauth
+
+        {{-- Niet ingelogd --}}
+        @guest
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6">
+                    <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
+                        <p class="font-medium mb-2">Geïnteresseerd in deze opdracht?</p>
+                        <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
+                        <div class="flex gap-3">
+                            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                Log in
+                            </a>
+                            <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                Registreer
+                            </a>
                         </div>
                     </div>
-                @endif
-            @endauth
-        </div>
+                </div>
+            </div>
+        @endguest
     </div>
 </x-base-layout>

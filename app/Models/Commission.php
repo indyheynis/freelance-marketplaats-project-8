@@ -21,13 +21,10 @@ class Commission extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function applications()
     {
         return $this->hasMany(Application::class);
     }
+
+
 }

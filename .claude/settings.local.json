@@ -8,5 +8,8 @@
       "Bash(cmd *)",
       "Bash(./vendor/bin/pest *)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ]
 }
