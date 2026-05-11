@@ -9,16 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $applications = Application::with('commission.category')
+        $query = Application::with('commission.category')
             ->where('user_id', Auth::id())
-            ->latest()
-            ->get();
+            ->latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $applications = $query->get();
 
         return view('applications.index', compact('applications'));
     }
-    
+
     public function store(Request $request, Commission $commission)
     {
         $alreadyApplied = Application::where('commission_id', $commission->id)
