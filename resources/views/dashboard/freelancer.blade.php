@@ -54,6 +54,9 @@
                 <a href="{{ route('commissions.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md">
                     Browse Commissions
                 </a>
+                <a href="{{ route('applications.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md">
+                    Mijn Sollicitaties
+                </a>
                 <a href="{{ route('profile.edit') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-8 py-3 rounded-lg font-semibold transition-colors">
                     Update Profile
                 </a>

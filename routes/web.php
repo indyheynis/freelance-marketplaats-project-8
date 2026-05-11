@@ -77,5 +77,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.reject');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-applications', [ApplicationController::class, 'index'])
+        ->name('applications.index');
+});
+
 
 require __DIR__ . '/auth.php';
