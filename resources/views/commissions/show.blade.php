@@ -20,7 +20,7 @@
                         {{ $commission->category->name }}
                     </span>
                 @endif
-                <span class="text-sm text-slate-500">Posted {{ $commission->created_at->diffForHumans() }}</span>
+                <span class="text-sm text-slate-500">Posted {{ $commission->created_at?->diffForHumans() ?? 'Onbekend' }}</span>
             </div>
 
             <!-- Description -->
@@ -97,7 +97,7 @@
                                         </div>
                                         <div>
                                             <p class="font-medium text-slate-800">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
-                                            <p class="text-xs text-slate-500">{{ $application->created_at->diffForHumans() }}</p>
+                                            <p class="text-xs text-slate-500">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</p>
                                         </div>
                                     </div>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium

@@ -43,7 +43,7 @@
                     <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
                         <span>Budget: <span class="font-medium text-slate-700">{{ $application->commission->budget }}</span></span>
                         <span>Deadline: <span class="font-medium text-slate-700">{{ $application->commission->deadline }}</span></span>
-                        <span>Gesolliciteerd: <span class="font-medium text-slate-700">{{ $application->created_at->diffForHumans() }}</span></span>
+                        <span>Gesolliciteerd: <span class="font-medium text-slate-700">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</span></span>
                     </div>
 
                     @if($application->message)
