@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <!-- Actions -->
+            <!-- Actions voor client -->
             @auth
                 @if(auth()->user()->role === 'client')
                     <div class="px-6 py-4 border-t border-slate-100 flex items-center gap-3">
@@ -71,7 +71,7 @@
                         <form action="{{ route('commissions.destroy', $commission) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('Are you sure you want to delete this commission?')">
+                            <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('Are you sure?')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -110,6 +110,31 @@
                                 @if($application->message)
                                     <p class="text-sm text-slate-600 mt-2">{{ $application->message }}</p>
                                 @endif
+
+                                @if($application->status === 'pending')
+                                    <div class="flex gap-2 mt-3">
+                                        <form action="{{ route('applications.accept', $application) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="inline-flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Accepteren
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('applications.reject', $application) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="inline-flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                                Afwijzen
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
                         @empty
                             <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
@@ -120,87 +145,49 @@
         </div>
 
         {{-- Offertes Sectie --}}
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
-    <div class="px-6 py-4 border-b border-slate-100">
-        <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
-        <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
-    </div>
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
+                <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
+            </div>
 
-    <div class="p-6">
-        @forelse($commission->offers as $offer)
-            <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
-
-                {{-- HEADER --}}
-                <div class="flex items-start justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <span class="text-indigo-700 font-semibold text-sm">
-                                {{ strtoupper(substr($offer->user->firstname ?? $offer->user->name, 0, 1)) }}
-                            </span>
+            <div class="p-6">
+                @forelse($commission->offers as $offer)
+                    <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                                    <span class="text-indigo-700 font-semibold text-sm">
+                                        {{ strtoupper(substr($offer->user->firstname ?? $offer->user->name, 0, 1)) }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-slate-800">{{ $offer->user->firstname ?? $offer->user->name }} {{ $offer->user->lastname ?? '' }}</p>
+                                    <p class="text-xs text-slate-500">{{ $offer->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-green-600">€{{ number_format($offer->price, 2) }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-medium text-slate-800">
-                                {{ $offer->user->firstname ?? $offer->user->name }} {{ $offer->user->lastname ?? '' }}
-                            </p>
-                            <p class="text-xs text-slate-500">{{ $offer->created_at->diffForHumans() }}</p>
-                        </div>
-                    </div>
-
-                    <div class="text-right">
-                        <p class="text-2xl font-bold text-green-600">
-                            €{{ number_format($offer->price, 2) }}
-                        </p>
-
-                        {{-- STATUS BADGE 🔥 --}}
-                        <p class="mt-1">
-                            @if($offer->status === 'pending')
-                                <span class="px-2 py-1 text-xs rounded bg-amber-100 text-amber-800">Pending</span>
-                            @elseif($offer->status === 'accepted')
-                                <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Accepted</span>
-                            @else
-                                <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-800">Rejected</span>
-                            @endif
-                        </p>
-                    </div>
-                </div>
-
-                {{-- MESSAGE --}}
-                @if($offer->message)
-                    <div class="mt-3 pt-3 border-t border-slate-200">
-                        <p class="text-sm text-slate-600">{{ $offer->message }}</p>
-                    </div>
-                @endif
-
-                {{-- ACTIONS --}}
-                @auth
-                    @if(auth()->id() === $commission->user_id)
-
-                        {{-- Alleen tonen als nog niets geaccepteerd is --}}
-                        @if($commission->offers->where('status', 'accepted')->count() === 0)
-
-                            {{-- Alleen pending offers kunnen geaccepteerd worden --}}
-                            @if($offer->status === 'pending')
-                                <form action="{{ route('offers.accept', $offer) }}" method="POST" class="mt-3">
-                                    @csrf
-                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm">
-                                        Accepteren
-                                    </button>
-                                </form>
-                            @endif
-
+                        @if($offer->message)
+                            <div class="mt-3 pt-3 border-t border-slate-200">
+                                <p class="text-sm text-slate-600">{{ $offer->message }}</p>
+                            </div>
                         @endif
-
-                    @endif
-                @endauth
-
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-slate-500">Nog geen offertes ontvangen</p>
+                    </div>
+                @endforelse
             </div>
-        @empty
-            <div class="text-center py-8">
-                <p class="text-slate-500">Nog geen offertes ontvangen</p>
-            </div>
-        @endforelse
-    </div>
-</div>
+        </div>
 
         {{-- Freelancer: Sollicitatie formulier --}}
         @auth
@@ -264,27 +251,27 @@
                         @endif
                     </div>
                 </div>
-            @elseif(auth()->guest())
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-6">
-                        <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
-                            <p class="font-medium mb-2">Geinteresseerd in deze opdracht?</p>
-                            <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
-                            <div class="flex gap-3">
-                                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                    </svg>
-                                    Log in
-                                </a>
-                                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                    Registreer
-                                </a>
-                            </div>
+            @endif
+        @endauth
+
+        {{-- Niet ingelogd --}}
+        @guest
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6">
+                    <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
+                        <p class="font-medium mb-2">Geïnteresseerd in deze opdracht?</p>
+                        <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
+                        <div class="flex gap-3">
+                            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                Log in
+                            </a>
+                            <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                Registreer
+                            </a>
                         </div>
                     </div>
                 </div>
-            @endif
-        @endauth
+            </div>
+        @endguest
     </div>
 </x-base-layout>

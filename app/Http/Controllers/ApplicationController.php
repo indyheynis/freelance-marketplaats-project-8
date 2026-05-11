@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
+    public function index()
+    {
+        $applications = Application::with('commission.category')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('applications.index', compact('applications'));
+    }
+    
     public function store(Request $request, Commission $commission)
     {
         $alreadyApplied = Application::where('commission_id', $commission->id)
@@ -42,5 +52,27 @@ class ApplicationController extends Controller
         $application->delete();
 
         return back()->with('success', 'Sollicitatie ingetrokken.');
+    }
+
+    public function accept(Application $application)
+    {
+        if ($application->commission->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $application->update(['status' => 'accepted']);
+
+        return back()->with('success', 'Sollicitatie geaccepteerd!');
+    }
+
+    public function reject(Application $application)
+    {
+        if ($application->commission->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $application->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Sollicitatie afgewezen.');
     }
 }
