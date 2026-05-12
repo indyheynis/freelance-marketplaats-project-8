@@ -30,4 +30,9 @@ class Commission extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 }
