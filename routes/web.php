@@ -47,9 +47,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
 });
 
-Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
-});
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');

@@ -26,6 +26,7 @@ class Commission extends Model
         return $this->hasMany(Application::class);
     }
 
+<<<<<<< HEAD
     public function reviews()
     {
         return $this->hasMany(Review::class);
