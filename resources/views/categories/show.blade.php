@@ -23,7 +23,7 @@
                     </div>
                     <span class="text-lg font-semibold text-slate-800">{{ $category->name }}</span>
                 </div>
-                <span class="text-sm text-slate-500">Created {{ $category->created_at->diffForHumans() }}</span>
+                <span class="text-sm text-slate-500">Created {{ $category->created_at?->diffForHumans() ?? 'Onbekend' }}</span>
             </div>
 
             <!-- Details -->
@@ -36,7 +36,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">Created</p>
-                        <p class="text-lg font-semibold text-slate-800">{{ $category->created_at->format('M d, Y') }}</p>
+                        <p class="text-lg font-semibold text-slate-800">{{ $category->created_at?->format('M d, Y') ?? 'Onbekend' }}</p>
                     </div>
                 </div>
             </div>

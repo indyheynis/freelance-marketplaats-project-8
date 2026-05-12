@@ -63,6 +63,11 @@
                     @else
                         <div class="flex items-center gap-4">
                             <span class="text-slate-600 text-sm">Welcome, {{ Auth::user()->name }}</span>
+                            @if(Auth::user()->isFreelancer())
+                                <a href="{{ route('dashboard.freelancer') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md font-medium transition-colors text-sm">Dashboard</a>
+                            @elseif(Auth::user()->isClient())
+                                <a href="{{ route('dashboard.client') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md font-medium transition-colors text-sm">Dashboard</a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="text-slate-600 hover:text-red-600 font-medium transition-colors text-sm">Log out</button>
