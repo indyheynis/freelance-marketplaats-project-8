@@ -4,6 +4,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FreelancerController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
@@ -51,6 +52,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
 
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+    Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

@@ -90,15 +90,17 @@
                             <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-3">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <span class="text-purple-700 font-semibold text-sm">
-                                                {{ strtoupper(substr($application->freelancer->firstname, 0, 1)) }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-800">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
-                                            <p class="text-xs text-slate-500">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</p>
-                                        </div>
+                                        <a href="{{ route('freelancers.show', $application->freelancer) }}" class="flex items-center gap-2 group">
+                                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                                <span class="text-purple-700 font-semibold text-sm">
+                                                    {{ strtoupper(substr($application->freelancer->firstname, 0, 1)) }}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-slate-800 group-hover:text-indigo-600 transition-colors">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
+                                                <p class="text-xs text-slate-500">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</p>
+                                            </div>
+                                        </a>
                                     </div>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         {{ $application->status === 'pending' ? 'bg-amber-100 text-amber-800' : '' }}
@@ -140,7 +142,6 @@
                             <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
                         @endforelse
                     </div>
-                @endif
 
                     {{-- Reviews sectie --}}
                     @php
@@ -255,6 +256,7 @@
                             </form>
                         </div>
                     @endif
+                @endif
             @endauth
         </div>
 

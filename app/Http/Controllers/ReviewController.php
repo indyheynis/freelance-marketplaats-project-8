@@ -17,6 +17,9 @@ class ReviewController extends Controller
             'Je hebt al een review achtergelaten voor deze opdracht.'
         );
 
+        $acceptedApplication = $commission->applications()->where('status', 'accepted')->first();
+        abort_if($acceptedApplication === null, 422, 'Er is geen geaccepteerde freelancer voor deze opdracht.');
+
         $request->validate([
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['nullable', 'string', function ($attribute, $value, $fail) {
@@ -28,6 +31,7 @@ class ReviewController extends Controller
 
         $commission->reviews()->create([
             'reviewer_id' => auth()->id(),
+            'reviewee_id' => $acceptedApplication->user_id,
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);

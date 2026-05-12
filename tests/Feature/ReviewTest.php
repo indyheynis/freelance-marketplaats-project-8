@@ -30,7 +30,7 @@ function makeCommissionWithAcceptedApplication(): array
 }
 
 test('opdrachtgever kan een review plaatsen', function () {
-    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+    ['client' => $client, 'freelancer' => $freelancer, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
 
     $response = $this->actingAs($client)->post("/commissions/{$commission->id}/reviews", [
         'rating' => 4,
@@ -41,16 +41,18 @@ test('opdrachtgever kan een review plaatsen', function () {
     $this->assertDatabaseHas('reviews', [
         'commission_id' => $commission->id,
         'reviewer_id' => $client->id,
+        'reviewee_id' => $freelancer->id,
         'rating' => 4,
     ]);
 });
 
 test('opdrachtgever kan niet twee keer een review plaatsen', function () {
-    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+    ['client' => $client, 'freelancer' => $freelancer, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
 
     Review::create([
         'commission_id' => $commission->id,
         'reviewer_id' => $client->id,
+        'reviewee_id' => $freelancer->id,
         'rating' => 5,
         'comment' => 'Eerste review',
     ]);
@@ -97,4 +99,32 @@ test('review comment mag maximaal 200 woorden bevatten', function () {
     ]);
 
     $response->assertSessionHasErrors(['comment']);
+});
+
+test('freelancer profielpagina toont statistieken en reviews', function () {
+    ['client' => $client, 'freelancer' => $freelancer, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    Review::create([
+        'commission_id' => $commission->id,
+        'reviewer_id' => $client->id,
+        'reviewee_id' => $freelancer->id,
+        'rating' => 4,
+        'comment' => 'Geweldig werk!',
+    ]);
+
+    $response = $this->actingAs($client)->get("/freelancers/{$freelancer->id}");
+
+    $response->assertOk();
+    $response->assertSee($freelancer->firstname);
+    $response->assertSee('4.0');
+    $response->assertSee('Geweldig werk!');
+    $response->assertSee('1'); // 1 opdracht gedaan
+});
+
+test('freelancer profiel is niet toegankelijk voor niet-ingelogde gebruikers', function () {
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+
+    $response = $this->get("/freelancers/{$freelancer->id}");
+
+    $response->assertRedirect('/login');
 });
