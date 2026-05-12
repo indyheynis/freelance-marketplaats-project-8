@@ -73,11 +73,11 @@ class CommissionController extends Controller
     public function show(Commission $commission)
     {
         // Clients can only view their own commissions
-        if (auth()->user()->isClient() && $commission->user_id !== auth()->id()) {
+        if (auth()->check() && auth()->user()->isClient() && $commission->user_id !== auth()->id()) {
             abort(403, 'You can only view your own commissions.');
         }
 
-        $commission->load('applications.freelancer');
+        $commission->load(['applications.freelancer', 'offers.user']);
         return view('commissions.show', compact('commission'));
     }
 

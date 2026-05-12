@@ -12,6 +12,7 @@ class Offer extends Model
     'commission_id',
     'price',
     'message',
+    'status',
 ];
     public function commission()
     {

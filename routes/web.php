@@ -50,17 +50,29 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
+<<<<<<< HEAD
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
 });
+=======
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+>>>>>>> e320544adc97aa55bc7616a975e0871aca3ac586
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+    Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
