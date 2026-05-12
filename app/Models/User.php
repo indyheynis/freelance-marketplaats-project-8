@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Commission;
 
 #[Fillable([
     'name',
@@ -58,5 +57,42 @@ class User extends Authenticatable
     public function commissions()
     {
         return $this->hasMany(Commission::class);
+    }
+
+    public function acceptedApplications()
+    {
+        return $this->hasMany(Application::class)->where('status', 'accepted');
+    }
+
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function averageRating(): ?float
+    {
+        $avg = $this->receivedReviews()->avg('rating');
+
+        return $avg ? round($avg, 1) : null;
+    }
+
+    public function completedCommissionsCount(): int
+    {
+        return $this->acceptedApplications()->count();
+    }
+
+    public function averageCommissionDurationInDays(): ?float
+    {
+        $applications = $this->acceptedApplications()->with('commission')->get();
+
+        if ($applications->isEmpty()) {
+            return null;
+        }
+
+        $totalDays = $applications->sum(function (Application $application) {
+            return $application->commission->created_at->diffInDays($application->commission->deadline);
+        });
+
+        return round($totalDays / $applications->count());
     }
 }

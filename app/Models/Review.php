@@ -9,6 +9,7 @@ class Review extends Model
     protected $fillable = [
         'commission_id',
         'reviewer_id',
+        'reviewee_id',
         'rating',
         'comment',
     ];
@@ -21,5 +22,10 @@ class Review extends Model
     public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewer_id');
+    }
+
+    public function reviewee()
+    {
+        return $this->belongsTo(User::class, 'reviewee_id');
     }
 }

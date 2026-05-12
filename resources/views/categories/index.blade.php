@@ -6,12 +6,14 @@
                 <h1 class="text-3xl font-bold text-slate-800">Categories</h1>
                 <p class="text-slate-500 mt-1">Manage commission categories</p>
             </div>
+            @if (Auth::user()->isAdmin())         
             <a href="{{ route('categories.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 Create New
             </a>
+            @endif
         </div>
 
         <!-- Success Message -->
@@ -41,6 +43,7 @@
                         <a href="{{ route('categories.show', $category) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             View
                         </a>
+                        @if (Auth::user()->isAdmin())
                         <a href="{{ route('categories.edit', $category) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             Edit
                         </a>
@@ -50,6 +53,7 @@
                             <button type="submit" class="w-full inline-flex justify-center items-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="return confirm('Are you sure?')">
                                 Delete
                             </button>
+                        @endif
                         </form>
                     </div>
                 </div>
@@ -62,10 +66,12 @@
                     </div>
                     <h3 class="text-lg font-medium text-slate-700 mb-1">No categories found</h3>
                     <p class="text-slate-500 mb-4">Get started by creating your first category.</p>
+                    @if (Auth::user()->isAdmin())            
                     <a href="{{ route('categories.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                         Create One
                     </a>
                 </div>
+                    @endif
             @endforelse
         </div>
     </div>

@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ApplicationController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FreelancerController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,16 +47,32 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
     Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
+    Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
+<<<<<<< HEAD
+Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
+    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+    Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
+});
+=======
 Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+>>>>>>> e320544adc97aa55bc7616a975e0871aca3ac586
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+    Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
@@ -63,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.destroy');
 });
 
-//applications accept/reject routes
+// applications accept/reject routes
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
@@ -80,5 +98,4 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
 });
 
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
