@@ -141,6 +141,120 @@
                         @endforelse
                     </div>
                 @endif
+
+                    {{-- Reviews sectie --}}
+                    @php
+                        $hasAcceptedApplication = $commission->applications->where('status', 'accepted')->isNotEmpty();
+                        $alreadyReviewed = $commission->reviews->where('reviewer_id', auth()->id())->isNotEmpty();
+                    @endphp
+
+                    @if($commission->reviews->isNotEmpty())
+                        <div class="px-6 py-6 border-t border-slate-100">
+                            <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                                Reviews ({{ $commission->reviews->count() }})
+                            </h2>
+                            @foreach($commission->reviews as $review)
+                                <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-3">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                                            <span class="text-indigo-700 font-semibold text-sm">
+                                                {{ strtoupper(substr($review->reviewer->firstname, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-800 text-sm">{{ $review->reviewer->firstname }} {{ $review->reviewer->lastname }}</p>
+                                            <div class="flex gap-0.5 mt-0.5">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-amber-400' : 'text-slate-300' }}" fill="{{ $i <= $review->rating ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                                    </svg>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                        <span class="ml-auto text-xs text-slate-400">{{ $review->created_at?->diffForHumans() }}</span>
+                                    </div>
+                                    @if($review->comment)
+                                        <p class="text-sm text-slate-600 mt-2">{{ $review->comment }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @if($hasAcceptedApplication && !$alreadyReviewed)
+                        <div class="px-6 py-6 border-t border-slate-100">
+                            <h2 class="text-lg font-semibold text-slate-800 mb-1">Review achterlaten</h2>
+                            <p class="text-sm text-slate-500 mb-5">Hoe was jouw ervaring met de freelancer?</p>
+
+                            @if(session('review_success'))
+                                <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                                    {{ session('review_success') }}
+                                </div>
+                            @endif
+
+                            @if($errors->has('rating') || $errors->has('comment'))
+                                <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg text-sm">
+                                    @foreach($errors->all() as $error)
+                                        <p>{{ $error }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            <form action="{{ route('reviews.store', $commission) }}" method="POST"
+                                x-data="{
+                                    rating: 0,
+                                    hovered: 0,
+                                    wordCount: 0,
+                                    updateCount(val) { this.wordCount = val.trim() === '' ? 0 : val.trim().split(/\s+/).length; }
+                                }">
+                                @csrf
+
+                                {{-- Sterren --}}
+                                <div class="flex gap-1 mb-5">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button type="button"
+                                            @click="rating = {{ $i }}"
+                                            @mouseenter="hovered = {{ $i }}"
+                                            @mouseleave="hovered = 0"
+                                            class="focus:outline-none transition-transform hover:scale-110">
+                                            <svg class="w-9 h-9 transition-colors"
+                                                :class="{{ $i }} <= (hovered || rating) ? 'text-amber-400' : 'text-slate-300'"
+                                                :fill="{{ $i }} <= (hovered || rating) ? 'currentColor' : 'none'"
+                                                stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                            </svg>
+                                        </button>
+                                    @endfor
+                                </div>
+                                <input type="hidden" name="rating" :value="rating">
+
+                                {{-- Commentaar --}}
+                                <div class="mb-4">
+                                    <textarea
+                                        name="comment"
+                                        rows="4"
+                                        placeholder="Vertel over jouw ervaring met deze freelancer... (optioneel)"
+                                        @input="updateCount($event.target.value)"
+                                        class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                                    <div class="flex justify-end mt-1">
+                                        <span class="text-xs" :class="wordCount > 200 ? 'text-red-500 font-medium' : 'text-slate-400'">
+                                            <span x-text="wordCount"></span>/200 woorden
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                    :disabled="rating === 0 || wordCount > 200"
+                                    :class="rating === 0 || wordCount > 200 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'"
+                                    class="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Review plaatsen
+                                </button>
+                            </form>
+                        </div>
+                    @endif
             @endauth
         </div>
 

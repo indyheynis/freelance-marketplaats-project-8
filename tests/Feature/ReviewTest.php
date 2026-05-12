@@ -1,0 +1,100 @@
+<?php
+
+use App\Models\Application;
+use App\Models\Category;
+use App\Models\Commission;
+use App\Models\Review;
+use App\Models\User;
+
+function makeCommissionWithAcceptedApplication(): array
+{
+    $client = User::factory()->create(['role' => 'client']);
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+    $category = Category::create(['name' => 'Test categorie']);
+    $commission = Commission::create([
+        'title' => 'Test opdracht',
+        'description' => 'Beschrijving',
+        'budget' => 1000,
+        'deadline' => now()->addDays(30)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $client->id,
+    ]);
+    Application::create([
+        'commission_id' => $commission->id,
+        'user_id' => $freelancer->id,
+        'message' => 'Ik doe het',
+        'status' => 'accepted',
+    ]);
+
+    return compact('client', 'freelancer', 'commission');
+}
+
+test('opdrachtgever kan een review plaatsen', function () {
+    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    $response = $this->actingAs($client)->post("/commissions/{$commission->id}/reviews", [
+        'rating' => 4,
+        'comment' => 'Goede freelancer, prima werk geleverd.',
+    ]);
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('reviews', [
+        'commission_id' => $commission->id,
+        'reviewer_id' => $client->id,
+        'rating' => 4,
+    ]);
+});
+
+test('opdrachtgever kan niet twee keer een review plaatsen', function () {
+    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    Review::create([
+        'commission_id' => $commission->id,
+        'reviewer_id' => $client->id,
+        'rating' => 5,
+        'comment' => 'Eerste review',
+    ]);
+
+    $response = $this->actingAs($client)->post("/commissions/{$commission->id}/reviews", [
+        'rating' => 3,
+        'comment' => 'Tweede poging',
+    ]);
+
+    $response->assertStatus(422);
+    $this->assertDatabaseCount('reviews', 1);
+});
+
+test('freelancer kan geen review achterlaten', function () {
+    ['freelancer' => $freelancer, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    $response = $this->actingAs($freelancer)->post("/commissions/{$commission->id}/reviews", [
+        'rating' => 5,
+        'comment' => 'Ik review mezelf',
+    ]);
+
+    $response->assertForbidden();
+});
+
+test('rating buiten bereik 1-5 faalt validatie', function () {
+    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    $response = $this->actingAs($client)->post("/commissions/{$commission->id}/reviews", [
+        'rating' => 6,
+        'comment' => 'Te hoge score',
+    ]);
+
+    $response->assertSessionHasErrors(['rating']);
+});
+
+test('review comment mag maximaal 200 woorden bevatten', function () {
+    ['client' => $client, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    $longComment = implode(' ', array_fill(0, 201, 'woord'));
+
+    $response = $this->actingAs($client)->post("/commissions/{$commission->id}/reviews", [
+        'rating' => 3,
+        'comment' => $longComment,
+    ]);
+
+    $response->assertSessionHasErrors(['comment']);
+});

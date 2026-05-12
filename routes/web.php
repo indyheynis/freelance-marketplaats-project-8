@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ApplicationController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,6 +46,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
     Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
+    Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
@@ -65,7 +67,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.destroy');
 });
 
-//applications accept/reject routes
+// applications accept/reject routes
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
@@ -82,5 +84,4 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
 });
 
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
