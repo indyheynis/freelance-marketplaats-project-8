@@ -42,46 +42,18 @@
                     <div>
                         <h3 class="text-lg font-semibold text-slate-800">{{ $application->commission->title }}</h3>
                         @if($application->commission->category)
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
-                            {{ $application->commission->category->name }}
-                        </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                                {{ $application->commission->category->name }}
+                            </span>
                         @endif
                     </div>
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                            {{ $application->status === 'pending' ? 'bg-amber-100 text-amber-800' : '' }}
-                            {{ $application->status === 'accepted' ? 'bg-green-100 text-green-800' : '' }}
-                            {{ $application->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
-                            @if($application->status === 'pending') ⏳ In behandeling
-                            @elseif($application->status === 'accepted') ✅ Geaccepteerd
-                            @elseif($application->status === 'rejected') ❌ Afgewezen
-                            @endif
-                        </span>
-                    </div>
-
-                    <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
-                        <span>Budget: <span class="font-medium text-slate-700">{{ $application->commission->budget }}</span></span>
-                        <span>Deadline: <span class="font-medium text-slate-700">{{ $application->commission->deadline }}</span></span>
-                        <span>Gesolliciteerd: <span class="font-medium text-slate-700">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</span></span>
-                    </div>
-
-                    @if($application->message)
-                        <div class="bg-slate-50 rounded-lg p-3 mb-4 text-sm text-slate-600">
-                            <span class="font-medium text-slate-700">Jouw bericht:</span> {{ $application->message }}
-                        </div>
-                    @endif
-
-                    <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
-                        <a href="{{ route('commissions.show', $application->commission) }}" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Bekijk opdracht
-                        </a>
-                        @if($application->status === 'pending')
-                            <form action="{{ route('applications.destroy', $application) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                    Intrekken
-                                </button>
-                            </form>
+                        {{ $application->status === 'pending' ? 'bg-amber-100 text-amber-800' : '' }}
+                        {{ $application->status === 'accepted' ? 'bg-green-100 text-green-800' : '' }}
+                        {{ $application->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
+                        @if($application->status === 'pending') ⏳ In behandeling
+                        @elseif($application->status === 'accepted') ✅ Geaccepteerd
+                        @elseif($application->status === 'rejected') ❌ Afgewezen
                         @endif
                     </span>
                 </div>
@@ -89,13 +61,13 @@
                 <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
                     <span>Budget: <span class="font-medium text-slate-700">{{ $application->commission->budget }}</span></span>
                     <span>Deadline: <span class="font-medium text-slate-700">{{ $application->commission->deadline }}</span></span>
-                    <span>Gesolliciteerd: <span class="font-medium text-slate-700">{{ $application->created_at->diffForHumans() }}</span></span>
+                    <span>Gesolliciteerd: <span class="font-medium text-slate-700">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</span></span>
                 </div>
 
                 @if($application->message)
-                <div class="bg-slate-50 rounded-lg p-3 mb-4 text-sm text-slate-600">
-                    <span class="font-medium text-slate-700">Jouw bericht:</span> {{ $application->message }}
-                </div>
+                    <div class="bg-slate-50 rounded-lg p-3 mb-4 text-sm text-slate-600">
+                        <span class="font-medium text-slate-700">Jouw bericht:</span> {{ $application->message }}
+                    </div>
                 @endif
 
                 <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
@@ -103,13 +75,13 @@
                         Bekijk opdracht
                     </a>
                     @if($application->status === 'pending')
-                    <form action="{{ route('applications.destroy', $application) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Intrekken
-                        </button>
-                    </form>
+                        <form action="{{ route('applications.destroy', $application) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Intrekken
+                            </button>
+                        </form>
                     @endif
                 </div>
             </div>
