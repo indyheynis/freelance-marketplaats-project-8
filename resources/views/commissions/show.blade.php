@@ -48,7 +48,6 @@
                             <p class="text-xl font-semibold text-slate-800">{{ $commission->budget }}</p>
                         </div>
                     </div>
-
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,55 +212,55 @@
                                     wordCount: 0,
                                     updateCount(val) { this.wordCount = val.trim() === '' ? 0 : val.trim().split(/\s+/).length; }
                                 }">
-                    @csrf
+                                @csrf
 
-                    {{-- Sterren --}}
-                    <div class="flex gap-1 mb-5">
-                        @for($i = 1; $i <= 5; $i++)
-                            <button type="button"
-                            @click="rating = {{ $i }}"
-                            @mouseenter="hovered = {{ $i }}"
-                            @mouseleave="hovered = 0"
-                            class="focus:outline-none transition-transform hover:scale-110">
-                            <svg class="w-9 h-9 transition-colors"
-                                :class="{{ $i }} <= (hovered || rating) ? 'text-amber-400' : 'text-slate-300'"
-                                :fill="{{ $i }} <= (hovered || rating) ? 'currentColor' : 'none'"
-                                stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                            </svg>
-                            </button>
-                            @endfor
-                    </div>
-                    <input type="hidden" name="rating" :value="rating">
+                                {{-- Sterren --}}
+                                <div class="flex gap-1 mb-5">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button type="button"
+                                            @click="rating = {{ $i }}"
+                                            @mouseenter="hovered = {{ $i }}"
+                                            @mouseleave="hovered = 0"
+                                            class="focus:outline-none transition-transform hover:scale-110">
+                                            <svg class="w-9 h-9 transition-colors"
+                                                :class="{{ $i }} <= (hovered || rating) ? 'text-amber-400' : 'text-slate-300'"
+                                                :fill="{{ $i }} <= (hovered || rating) ? 'currentColor' : 'none'"
+                                                stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                            </svg>
+                                        </button>
+                                    @endfor
+                                </div>
+                                <input type="hidden" name="rating" :value="rating">
 
-                    {{-- Commentaar --}}
-                    <div class="mb-4">
-                        <textarea
-                            name="comment"
-                            rows="4"
-                            placeholder="Vertel over jouw ervaring met deze freelancer... (optioneel)"
-                            @input="updateCount($event.target.value)"
-                            class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
-                        <div class="flex justify-end mt-1">
-                            <span class="text-xs" :class="wordCount > 200 ? 'text-red-500 font-medium' : 'text-slate-400'">
-                                <span x-text="wordCount"></span>/200 woorden
-                            </span>
+                                {{-- Commentaar --}}
+                                <div class="mb-4">
+                                    <textarea
+                                        name="comment"
+                                        rows="4"
+                                        placeholder="Vertel over jouw ervaring met deze freelancer... (optioneel)"
+                                        @input="updateCount($event.target.value)"
+                                        class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                                    <div class="flex justify-end mt-1">
+                                        <span class="text-xs" :class="wordCount > 200 ? 'text-red-500 font-medium' : 'text-slate-400'">
+                                            <span x-text="wordCount"></span>/200 woorden
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                    :disabled="rating === 0 || wordCount > 200"
+                                    :class="rating === 0 || wordCount > 200 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'"
+                                    class="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Review plaatsen
+                                </button>
+                            </form>
                         </div>
-                    </div>
-
-                    <button type="submit"
-                        :disabled="rating === 0 || wordCount > 200"
-                        :class="rating === 0 || wordCount > 200 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'"
-                        class="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        Review plaatsen
-                    </button>
-                </form>
-            </div>
-            @endif
-            @endif
+                    @endif
+                @endif
             @endauth
         </div>
 
@@ -271,7 +270,6 @@
                 <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
                 <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
             </div>
-
             <div class="p-6">
                 @forelse($commission->offers as $offer)
                 <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
@@ -317,62 +315,62 @@
         $alreadyApplied = $commission->applications->where('user_id', auth()->id())->first();
         @endphp
 
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100">
-                <h2 class="text-xl font-semibold text-slate-800">Solliciteren</h2>
-                <p class="text-sm text-slate-500 mt-1">Vertel waarom jij de perfecte kandidaat bent</p>
-            </div>
-
-            <div class="p-6">
-                @if(session('success'))
-                <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
-                    {{ session('success') }}
-                </div>
-                @endif
-                @if(session('error'))
-                <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
-                    {{ session('error') }}
-                </div>
-                @endif
-
-                @if($alreadyApplied)
-                <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span class="font-medium">Je hebt al gesolliciteerd op deze opdracht</span>
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100">
+                        <h2 class="text-xl font-semibold text-slate-800">Solliciteren</h2>
+                        <p class="text-sm text-slate-500 mt-1">Vertel waarom jij de perfecte kandidaat bent</p>
                     </div>
-                    @if($alreadyApplied->message)
-                    <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
-                    @endif
+
+                    <div class="p-6">
+                        @if(session('success'))
+                            <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if(session('error'))
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if($alreadyApplied)
+                            <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg mb-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="font-medium">Je hebt al gesolliciteerd op deze opdracht</span>
+                                </div>
+                                @if($alreadyApplied->message)
+                                    <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
+                                @endif
+                            </div>
+                            <form action="{{ route('applications.destroy', $alreadyApplied) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Sollicitatie intrekken
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('applications.store', $commission) }}" method="POST">
+                                @csrf
+                                <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze opdracht..."
+                                    class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                                <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    Solliciteren
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
-                <form action="{{ route('applications.destroy', $alreadyApplied) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Sollicitatie intrekken
-                    </button>
-                </form>
-                @else
-                <form action="{{ route('applications.store', $commission) }}" method="POST">
-                    @csrf
-                    <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze opdracht..."
-                        class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
-                    <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                        Solliciteren
-                    </button>
-                </form>
-                @endif
-            </div>
-        </div>
-        @endif
+            @endif
         @endauth
 
         {{-- Niet ingelogd --}}

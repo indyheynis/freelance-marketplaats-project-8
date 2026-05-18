@@ -66,3 +66,13 @@ Stap 2. composer install
 Stap 3. php artisan migrate
 Stap 4. npm install
 Stap 5. npm run dev
+
+Mailfunctie opzetten
+
+Stap 1. Maak een mailtrap
+Stap 2. verander in de .env het volgende:
+
+MAIL_MAILER naar: smtp
+MAIL_HOST naar: sandbox.smtp.mailtrap.io
+MAIL_USERNAME naar: jouw mailtrap username (staat in de sandbox)
+MAIL_PASSWORD naar: jouw mailtrap password (staat in de sandbox)

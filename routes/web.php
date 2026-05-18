@@ -94,4 +94,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
 });
 
+// Route voor PDF-generatie
+Route::middleware(['auth'])->group(function () {
+    Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
+        ->name('commissions.pdf');
+});
+
 require __DIR__.'/auth.php';
