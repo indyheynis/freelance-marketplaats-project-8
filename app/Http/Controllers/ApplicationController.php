@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OfferSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
@@ -38,12 +40,15 @@ class ApplicationController extends Controller
             'message' => 'nullable|string|max:1000',
         ]);
 
-        Application::create([
+        $application = Application::create([
             'commission_id' => $commission->id,
             'user_id'       => Auth::id(),
             'message'       => $request->message,
             'status'        => 'pending',
         ]);
+
+        Mail::to(Auth::user()->email)
+            ->send(new OfferSubmitted($application));
 
         return back()->with('success', 'Je sollicitatie is verstuurd!');
     }
