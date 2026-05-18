@@ -14,6 +14,7 @@ class Commission extends Model
         'deadline',
         'category_id',
         'user_id',
+        'image',
     ];
 
     public function category()

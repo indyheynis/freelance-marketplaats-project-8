@@ -64,6 +64,11 @@
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($commissions as $commission)
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
+                @if($commission->image)
+                <div class="mb-4 overflow-hidden rounded-3xl border border-slate-200">
+                    <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission image" class="w-full h-40 object-cover">
+                </div>
+                @endif
                 <div class="flex justify-between items-start mb-4">
                     <h3 class="text-lg font-semibold text-slate-800">{{ $commission->title }}</h3>
                     @if($commission->category)

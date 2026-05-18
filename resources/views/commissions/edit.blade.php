@@ -14,7 +14,7 @@
 
         <!-- Form -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-            <form action="{{ route('commissions.update', $commission) }}" method="POST" class="space-y-5">
+            <form action="{{ route('commissions.update', $commission) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
                 @method('PUT')
 
@@ -22,7 +22,7 @@
                     <label for="title" class="block text-sm font-medium text-slate-700 mb-1">Title</label>
                     <input type="text" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all {{ $errors->has('title') ? 'border-red-500' : '' }}" id="title" name="title" value="{{ $commission->title }}" required>
                     @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -30,7 +30,7 @@
                     <label for="description" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
                     <textarea class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none {{ $errors->has('description') ? 'border-red-500' : '' }}" id="description" name="description" rows="4">{{ $commission->description }}</textarea>
                     @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -42,7 +42,7 @@
                             <input type="number" step="0.01" class="w-full pl-8 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all {{ $errors->has('budget') ? 'border-red-500' : '' }}" id="budget" name="budget" value="{{ $commission->budget }}">
                         </div>
                         @error('budget')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -50,7 +50,7 @@
                         <label for="deadline" class="block text-sm font-medium text-slate-700 mb-1">Deadline</label>
                         <input type="date" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all {{ $errors->has('deadline') ? 'border-red-500' : '' }}" id="deadline" name="deadline" value="{{ $commission->deadline }}">
                         @error('deadline')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -59,11 +59,19 @@
                     <label for="category_id" class="block text-sm font-medium text-slate-700 mb-1">Category</label>
                     <select class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all {{ $errors->has('category_id') ? 'border-red-500' : '' }}" id="category_id" name="category_id" required>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ $commission->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ $commission->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
                     </select>
                     @error('category_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="image" class="block text-sm font-medium text-slate-700 mb-1">Example image</label>
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="w-full text-sm text-slate-700 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    @error('image')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
