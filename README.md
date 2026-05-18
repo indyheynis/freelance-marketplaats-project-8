@@ -76,3 +76,8 @@ MAIL_MAILER naar: smtp
 MAIL_HOST naar: sandbox.smtp.mailtrap.io
 MAIL_USERNAME naar: jouw mailtrap username (staat in de sandbox)
 MAIL_PASSWORD naar: jouw mailtrap password (staat in de sandbox)
+
+Pdf Downloaden
+
+Stap: 1. Ga naar de terminal
+stap: 2. Type in composer install
