@@ -11,9 +11,15 @@
         .value { font-size: 16px; font-weight: 600; }
         .grid { display: flex; gap: 40px; margin-top: 16px; }
         .footer { margin-top: 40px; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+        .commission-image { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
+    {{-- Afbeelding --}}
+    @if($commission->image)
+        <img src="{{ storage_path('app/public/' . $commission->image) }}" class="commission-image" alt="Commission afbeelding">
+    @endif
+
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
             <h1>{{ $commission->title }}</h1>
@@ -42,7 +48,7 @@
                 <div class="value">{{ $commission->deadline }}</div>
             </div>
             <div>
-                <div class="label">Posted by </div>
+                <div class="label">Posted by</div>
                 <div class="value">{{ $commission->user->firstname }} {{ $commission->user->lastname }}</div>
             </div>
         </div>
