@@ -43,7 +43,6 @@
                             <p class="text-xl font-semibold text-slate-800">{{ $commission->budget }}</p>
                         </div>
                     </div>
-
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,8 +208,6 @@
                                     updateCount(val) { this.wordCount = val.trim() === '' ? 0 : val.trim().split(/\s+/).length; }
                                 }">
                                 @csrf
-
-                                {{-- Sterren --}}
                                 <div class="flex gap-1 mb-5">
                                     @for($i = 1; $i <= 5; $i++)
                                         <button type="button"
@@ -228,8 +225,6 @@
                                     @endfor
                                 </div>
                                 <input type="hidden" name="rating" :value="rating">
-
-                                {{-- Commentaar --}}
                                 <div class="mb-4">
                                     <textarea
                                         name="comment"
@@ -243,7 +238,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <button type="submit"
                                     :disabled="rating === 0 || wordCount > 200"
                                     :class="rating === 0 || wordCount > 200 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'"
@@ -266,7 +260,6 @@
                 <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
                 <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
             </div>
-
             <div class="p-6">
                 @forelse($commission->offers as $offer)
                     <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-4 last:mb-0">
@@ -317,7 +310,6 @@
                         <h2 class="text-xl font-semibold text-slate-800">Solliciteren</h2>
                         <p class="text-sm text-slate-500 mt-1">Vertel waarom jij de perfecte kandidaat bent</p>
                     </div>
-
                     <div class="p-6">
                         @if(session('success'))
                             <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
@@ -345,24 +337,40 @@
                             <form action="{{ route('applications.destroy', $alreadyApplied) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Sollicitatie intrekken
-                                </button>
+                                <div class="flex items-center gap-3">
+                                    <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Sollicitatie intrekken
+                                    </button>
+                                    <a href="{{ route('commissions.pdf', $commission) }}" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Download als PDF
+                                    </a>
+                                </div>
                             </form>
                         @else
                             <form action="{{ route('applications.store', $commission) }}" method="POST">
                                 @csrf
                                 <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze opdracht..."
                                     class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
-                                <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                    Solliciteren
-                                </button>
+                                <div class="flex items-center gap-3">
+                                    <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
+                                        Solliciteren
+                                    </button>
+                                    <a href="{{ route('commissions.pdf', $commission) }}" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Download als PDF
+                                    </a>
+                                </div>
                             </form>
                         @endif
                     </div>

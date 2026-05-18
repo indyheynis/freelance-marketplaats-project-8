@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commission;
 use App\Models\Category;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CommissionController extends Controller
@@ -107,5 +108,12 @@ class CommissionController extends Controller
         $commission->delete();
 
         return redirect()->route('commissions.index')->with('success', 'Commission deleted successfully.');
+    }
+
+    public function pdf(Commission $commission)
+    {
+        $commission->load('category', 'user');
+        $pdf = Pdf::loadView('commissions.pdf', compact('commission'));
+        return $pdf->download('commission_' . $commission->id . '.pdf');
     }
 }
