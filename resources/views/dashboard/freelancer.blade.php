@@ -16,8 +16,8 @@
     <!-- Navbar -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="/" class="flex items-center gap-2">
+            <div class="flex justify-between h-16 items-center gap-6">
+                <a href="/" class="flex items-center gap-2 shrink-0">
                     <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -25,14 +25,44 @@
                     </div>
                     <span class="font-bold text-xl text-slate-800">FreelanceHub</span>
                 </a>
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Commissions</a>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-slate-500">Welcome, {{ Auth::user()->firstname }}</span>
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
+
+                <div class="hidden md:flex items-center gap-6 flex-1">
+                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Commissions</a>
+                    <a href="{{ route('applications.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Sollicitaties</a>
+                    <a href="{{ route('reviews.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Reviews</a>
+                </div>
+
+                <div class="relative shrink-0" x-data="{ open: false }">
+                    <button @click="open = !open" @click.outside="open = false"
+                        class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 rounded-lg px-3 py-2 transition-colors">
+                        <div class="w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs font-semibold">{{ strtoupper(substr(Auth::user()->firstname, 0, 1)) }}</span>
+                        </div>
+                        <span class="hidden md:inline text-sm font-medium text-slate-700">{{ Auth::user()->firstname }}</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-transition
+                        class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            Profiel
+                        </a>
+                        <a href="{{ route('applications.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            Sollicitaties
+                        </a>
+                        <a href="{{ route('reviews.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
+                            <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            Reviews
+                        </a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="text-slate-600 hover:text-red-600 font-medium transition-colors">
-                                Logout
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                Log out
                             </button>
                         </form>
                     </div>
@@ -43,22 +73,38 @@
 
     <!-- Hero Section -->
     <section class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-            <h1 class="text-4xl font-bold text-slate-900 mb-4">
-                Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">{{ Auth::user()->firstname }}</span>!
-            </h1>
-            <p class="text-xl text-slate-500 mb-8 max-w-2xl mx-auto">
-                Discover new opportunities and grow your freelance career.
-            </p>
-            <div class="flex items-center justify-center gap-4">
-                <a href="{{ route('commissions.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md">
-                    Browse Commissions
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-900">
+                    Welkom terug, <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">{{ Auth::user()->firstname }}</span>!
+                </h1>
+                <p class="text-slate-500 mt-1">Ontdek nieuwe opdrachten en beheer je freelance carrière.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <a href="{{ route('commissions.index') }}" class="group flex items-center gap-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl p-4 transition-colors">
+                    <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-purple-800">Opdrachten</span>
                 </a>
-                <a href="{{ route('applications.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md">
-                    Mijn Sollicitaties
+                <a href="{{ route('applications.index') }}" class="group flex items-center gap-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl p-4 transition-colors">
+                    <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-indigo-800">Sollicitaties</span>
                 </a>
-                <a href="{{ route('profile.edit') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-8 py-3 rounded-lg font-semibold transition-colors">
-                    Update Profile
+                <a href="{{ route('reviews.index') }}" class="group flex items-center gap-3 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl p-4 transition-colors">
+                    <div class="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-amber-800">Mijn Reviews</span>
+                </a>
+                <a href="{{ route('profile.edit') }}" class="group flex items-center gap-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl p-4 transition-colors">
+                    <div class="w-9 h-9 bg-slate-600 rounded-lg flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-slate-700">Profiel</span>
                 </a>
             </div>
         </div>

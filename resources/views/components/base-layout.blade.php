@@ -58,20 +58,63 @@
                 <!-- Auth Links -->
                 <div class="flex items-center gap-3">
                     @guest
-                        <a href="{{ route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Log in</a>
-                        <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">Sign up</a>
+                        <a href="{{ route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Log in</a>
+                        <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">Sign up</a>
                     @else
-                        <div class="flex items-center gap-4">
-                            <span class="text-slate-600 text-sm">Welcome, {{ Auth::user()->name }}</span>
-                            @if(Auth::user()->isFreelancer())
-                                <a href="{{ route('dashboard.freelancer') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md font-medium transition-colors text-sm">Dashboard</a>
-                            @elseif(Auth::user()->isClient())
-                                <a href="{{ route('dashboard.client') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md font-medium transition-colors text-sm">Dashboard</a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="text-slate-600 hover:text-red-600 font-medium transition-colors text-sm">Log out</button>
-                            </form>
+                        @if(Auth::user()->isFreelancer())
+                            <a href="{{ route('applications.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('applications.index') ? 'text-indigo-600' : '' }}">Sollicitaties</a>
+                            <a href="{{ route('reviews.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('reviews.index') ? 'text-indigo-600' : '' }}">Reviews</a>
+                        @endif
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" @click.outside="open = false"
+                                class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 rounded-lg px-3 py-2 transition-colors">
+                                <div class="w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-xs font-semibold">{{ strtoupper(substr(Auth::user()->firstname ?? Auth::user()->name, 0, 1)) }}</span>
+                                </div>
+                                <span class="hidden md:inline text-sm font-medium text-slate-700">{{ Auth::user()->firstname ?? Auth::user()->name }}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="open" x-transition
+                                class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
+                                @if(Auth::user()->isFreelancer())
+                                    <a href="{{ route('dashboard.freelancer') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+                                        Dashboard
+                                    </a>
+                                    <a href="{{ route('applications.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                        Sollicitaties
+                                    </a>
+                                    <a href="{{ route('reviews.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
+                                        <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                                        Reviews
+                                    </a>
+                                @elseif(Auth::user()->isClient())
+                                    <a href="{{ route('dashboard.client') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+                                        Dashboard
+                                    </a>
+                                @elseif(Auth::user()->isAdmin())
+                                    <a href="{{ route('users.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+                                        Beheer
+                                    </a>
+                                @endif
+                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    Profiel
+                                </a>
+                                <div class="border-t border-slate-100 my-1"></div>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                        Log out
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     @endguest
                 </div>
