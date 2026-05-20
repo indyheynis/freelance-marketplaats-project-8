@@ -21,6 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/client', [DashboardController::class, 'client'])
         ->name('dashboard.client');
+
+    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])
+        ->middleware('role:admin')
+        ->name('dashboard.admin');
 });
 
 Route::middleware('auth')->group(function () {

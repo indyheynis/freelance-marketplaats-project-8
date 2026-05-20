@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
         }
 
         if ($user->isAdmin()) {
-            return redirect(route('dashboard.client'));
+            return redirect(route('dashboard.admin'));
         }
 
         return redirect(route('dashboard.client'));

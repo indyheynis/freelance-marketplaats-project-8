@@ -27,7 +27,7 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Commissions</a>
                     @auth
-                    <a href="{{ auth()->user()->isFreelancer() ? route('dashboard.freelancer') : route('dashboard.client') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Dashboard</a>
+                    <a href="{{ auth()->user()->isAdmin() ? route('dashboard.admin') : (auth()->user()->isFreelancer() ? route('dashboard.freelancer') : route('dashboard.client')) }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Dashboard</a>
                     @else
                     <a href="{{ route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Log in</a>
                     <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">Sign up</a>

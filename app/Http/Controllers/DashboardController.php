@@ -30,4 +30,9 @@ class DashboardController extends Controller
 
         return view('dashboard.client');
     }
+
+    public function admin()
+    {
+        return view('dashboard.admin');
+    }
 }
