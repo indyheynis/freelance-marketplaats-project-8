@@ -12,7 +12,7 @@ class DashboardController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (!$user->isFreelancer()) {
+        if (!$user->isFreelancer() && !$user->isAdmin()) {
             abort(403, 'Access denied. Freelancer account required.');
         }
 
@@ -24,11 +24,10 @@ class DashboardController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (!$user->isClient()) {
+        if (!$user->isClient() && !$user->isAdmin()) {
             abort(403, 'Access denied. Client account required.');
         }
 
         return view('dashboard.client');
     }
-
 }

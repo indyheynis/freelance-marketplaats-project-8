@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'role'      => 'required|in:client,freelancer',
+            'role'      => 'required|in:client,freelancer,admin',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -53,6 +53,10 @@ class RegisteredUserController extends Controller
 
         if ($user->isFreelancer()) {
             return redirect(route('dashboard.freelancer'));
+        }
+
+        if ($user->isAdmin()) {
+            return redirect(route('dashboard.client'));
         }
 
         return redirect(route('dashboard.client'));
