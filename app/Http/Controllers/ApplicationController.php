@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OfferStatusChanged;
 use App\Mail\OfferSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
@@ -70,7 +71,12 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update(['status' => 'accepted']);
+        $application->update([
+            'status' => 'accepted'
+        ]);
+
+        Mail::to($application->freelancer->email)
+            ->send(new OfferStatusChanged($application));
 
         // Reject all other applications for this commission
         Application::where('commission_id', $application->commission_id)
@@ -86,7 +92,12 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update(['status' => 'rejected']);
+        $application->update([
+            'status' => 'rejected'
+        ]);
+
+        Mail::to($application->freelancer->email)
+            ->send(new OfferStatusChanged($application));
 
         return back()->with('success', 'Sollicitatie afgewezen.');
     }
