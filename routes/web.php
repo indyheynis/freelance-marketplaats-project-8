@@ -39,6 +39,7 @@ Route::get('search', [CommissionController::class, 'search'])->name('search');
 
 Route::middleware('auth')->group(function () {
     Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
+    Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
 });
 
 Route::middleware(['auth', 'role:client'])->group(function () {
@@ -100,4 +101,4 @@ Route::middleware(['auth'])->group(function () {
         ->name('commissions.pdf');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
