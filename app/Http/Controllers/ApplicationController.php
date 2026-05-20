@@ -43,9 +43,9 @@ class ApplicationController extends Controller
 
         $application = Application::create([
             'commission_id' => $commission->id,
-            'user_id'       => Auth::id(),
-            'message'       => $request->message,
-            'status'        => 'pending',
+            'user_id' => Auth::id(),
+            'message' => $request->message,
+            'status' => 'pending',
         ]);
 
         Mail::to(Auth::user()->email)
@@ -77,6 +77,11 @@ class ApplicationController extends Controller
 
         Mail::to($application->freelancer->email)
             ->send(new OfferStatusChanged($application));
+
+        // Reject all other applications for this commission
+        Application::where('commission_id', $application->commission_id)
+            ->where('id', '!=', $application->id)
+            ->update(['status' => 'rejected']);
 
         return back()->with('success', 'Sollicitatie geaccepteerd!');
     }

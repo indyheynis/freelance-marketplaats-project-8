@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Commission;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ReviewController extends Controller
 {
+    public function index(): View
+    {
+        $reviews = auth()->user()
+            ->receivedReviews()
+            ->with('reviewer', 'commission')
+            ->latest()
+            ->get();
+
+        return view('reviews.index', compact('reviews'));
+    }
+
     public function store(Request $request, Commission $commission): RedirectResponse
     {
         abort_if($commission->user_id !== auth()->id(), 403);

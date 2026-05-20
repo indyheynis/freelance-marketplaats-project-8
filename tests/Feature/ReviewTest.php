@@ -128,3 +128,44 @@ test('freelancer profiel is niet toegankelijk voor niet-ingelogde gebruikers', f
 
     $response->assertRedirect('/login');
 });
+
+test('freelancer kan eigen reviews bekijken', function () {
+    ['client' => $client, 'freelancer' => $freelancer, 'commission' => $commission] = makeCommissionWithAcceptedApplication();
+
+    Review::create([
+        'commission_id' => $commission->id,
+        'reviewer_id' => $client->id,
+        'reviewee_id' => $freelancer->id,
+        'rating' => 5,
+        'comment' => 'Uitstekend werk!',
+    ]);
+
+    $response = $this->actingAs($freelancer)->get('/my-reviews');
+
+    $response->assertOk();
+    $response->assertSee('Uitstekend werk!');
+    $response->assertSee($client->firstname);
+});
+
+test('freelancer ziet lege staat als er geen reviews zijn', function () {
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+
+    $response = $this->actingAs($freelancer)->get('/my-reviews');
+
+    $response->assertOk();
+    $response->assertSee('Je hebt nog geen reviews ontvangen');
+});
+
+test('opdrachtgever heeft geen toegang tot mijn reviews pagina', function () {
+    $client = User::factory()->create(['role' => 'client']);
+
+    $response = $this->actingAs($client)->get('/my-reviews');
+
+    $response->assertForbidden();
+});
+
+test('niet-ingelogde gebruiker wordt doorgestuurd bij bezoek aan reviews pagina', function () {
+    $response = $this->get('/my-reviews');
+
+    $response->assertRedirect('/login');
+});
