@@ -22,12 +22,16 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'role' => 'required|in:client,freelancer,admin',
         ]);
 
-        $user->update($request->only('name', 'email', 'role'));
+        $data = $request->only('firstname', 'lastname', 'email', 'role');
+        $data['name'] = trim($request->input('firstname') . ' ' . $request->input('lastname'));
+
+        $user->update($data);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
