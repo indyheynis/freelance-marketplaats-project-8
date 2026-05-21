@@ -20,6 +20,19 @@ class Commission extends Model
         'image',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+
+        return asset('images/commission-placeholder.svg');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

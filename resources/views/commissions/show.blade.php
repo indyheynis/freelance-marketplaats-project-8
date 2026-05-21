@@ -8,11 +8,9 @@
                 </svg>
                 Back to Commissions
             </a>
-            @if($commission->image)
             <div class="mb-5 overflow-hidden rounded-3xl border border-slate-200">
-                <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission image" class="w-full h-64 object-cover">
+                <img src="{{ $commission->image_url }}" alt="{{ $commission->title }} image" class="w-full h-64 object-cover">
             </div>
-            @endif
             <h1 class="text-3xl font-bold text-slate-800">{{ $commission->title }}</h1>
         </div>
 
