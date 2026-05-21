@@ -29,6 +29,28 @@ test('beheerder kan gebruikersrol aanpassen', function () {
     $this->assertDatabaseHas('users', ['id' => $user->id, 'role' => 'client']);
 });
 
+test('beheerder kan een nieuwe gebruiker toevoegen', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $response = $this->actingAs($admin)->post('/users', [
+        'firstname' => 'Nieuwe',
+        'lastname' => 'Gebruiker',
+        'email' => 'nieuwe@example.com',
+        'role' => 'client',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertRedirect(route('users.index'));
+    $this->assertDatabaseHas('users', [
+        'firstname' => 'Nieuwe',
+        'lastname' => 'Gebruiker',
+        'name' => 'Nieuwe Gebruiker',
+        'email' => 'nieuwe@example.com',
+        'role' => 'client',
+    ]);
+});
+
 test('beheerder kan gebruikersgegevens bijwerken', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $user = User::factory()->create(['role' => 'freelancer', 'email' => 'oud@example.com']);
