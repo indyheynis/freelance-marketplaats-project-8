@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <style>
@@ -15,9 +15,8 @@
     </style>
 </head>
 <body>
-    {{-- Afbeelding --}}
     @if($commission->image)
-        <img src="{{ storage_path('app/public/' . $commission->image) }}" class="commission-image" alt="Commission afbeelding">
+        <img src="{{ storage_path('app/public/' . $commission->image) }}" class="commission-image" alt="Commission image">
     @endif
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -55,7 +54,7 @@
     </div>
 
     <div class="footer">
-        Gegenereerd via FreelanceHub &bull; {{ now()->format('d-m-Y H:i') }}
+        Generated via FreelanceHub &bull; {{ now()->format('d-m-Y H:i') }}
     </div>
 </body>
 </html>

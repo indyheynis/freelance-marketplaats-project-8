@@ -32,7 +32,7 @@
                 <!-- Search Bar -->
                 <div class="hidden md:block flex-1 max-w-md mx-8">
                     <form action="{{ request()->routeIs('categories.*') ? route('categories.search') : route('search') }}" method="GET" class="relative">
-                        <input type="text" name="q" placeholder="{{ request()->routeIs('categories.*') ? 'Search categories...' : 'Search commissions...' }}" value="{{ request('q') }}"
+                        <input type="text" name="q" placeholder="{{ request()->routeIs('categories.*') ? __('Search categories...') : __('Search commissions...') }}" value="{{ request('q') }}"
                             class="w-full pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-colors">
                         <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -43,15 +43,15 @@
                 <!-- Desktop Nav Links -->
                 <div class="hidden md:flex items-center gap-6">
                     <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors {{ request()->routeIs('commissions.index') ? 'text-indigo-600' : '' }}">
-                        Commissions
+                        {{ __('Commissions') }}
                     </a>
                     <a href="{{ route('categories.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors {{ request()->routeIs('categories.index') ? 'text-indigo-600' : '' }}">
-                        Categories
+                        {{ __('Categories') }}
                     </a>
                     @auth
                     @if(Auth::user()->isAdmin())
                     <a href="{{ route('users.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors {{ request()->routeIs('users.index') ? 'text-indigo-600' : '' }}">
-                        Users
+                        {{ __('Users') }}
                     </a>
                     @endif
                     @endauth
@@ -60,12 +60,27 @@
                 <!-- Auth Links -->
                 <div class="flex items-center gap-3">
                     @guest
-                    <a href="{{ route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Log in</a>
-                    <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">Sign up</a>
+                    {{-- Language switcher for guests --}}
+                    <div class="flex items-center gap-1">
+                        <form method="POST" action="{{ route('locale.switch', 'en') }}">
+                            @csrf
+                            <button type="submit" class="px-2 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'en' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                EN
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('locale.switch', 'nl') }}">
+                            @csrf
+                            <button type="submit" class="px-2 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'nl' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                NL
+                            </button>
+                        </form>
+                    </div>
+                    <a href="{{ route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">{{ __('Log in') }}</a>
+                    <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">{{ __('Sign up') }}</a>
                     @else
                     @if(Auth::user()->isFreelancer())
-                    <a href="{{ route('applications.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('applications.index') ? 'text-indigo-600' : '' }}">Sollicitaties</a>
-                    <a href="{{ route('reviews.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('reviews.index') ? 'text-indigo-600' : '' }}">Reviews</a>
+                    <a href="{{ route('applications.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('applications.index') ? 'text-indigo-600' : '' }}">{{ __('Applications') }}</a>
+                    <a href="{{ route('reviews.index') }}" class="hidden md:inline text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm {{ request()->routeIs('reviews.index') ? 'text-indigo-600' : '' }}">{{ __('Reviews') }}</a>
                     @endif
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false"
@@ -79,47 +94,68 @@
                             </svg>
                         </button>
                         <div x-show="open" x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
+                            class="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
                             @if(Auth::user()->isFreelancer())
                             <a href="{{ route('dashboard.freelancer') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
                                 </svg>
-                                Dashboard
+                                {{ __('Dashboard') }}
                             </a>
                             <a href="{{ route('applications.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
-                                Sollicitaties
+                                {{ __('Applications') }}
                             </a>
                             <a href="{{ route('reviews.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
                                 <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                                 </svg>
-                                Reviews
+                                {{ __('Reviews') }}
                             </a>
                             @elseif(Auth::user()->isClient())
                             <a href="{{ route('dashboard.client') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
                                 </svg>
-                                Dashboard
+                                {{ __('Dashboard') }}
                             </a>
                             @elseif(Auth::user()->isAdmin())
                             <a href="{{ route('dashboard.admin') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
                                 </svg>
-                                Beheer
+                                {{ __('Management') }}
                             </a>
                             @endif
                             <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                Profiel
+                                {{ __('Profile') }}
                             </a>
+
+                            {{-- Language switcher --}}
+                            <div class="border-t border-slate-100 my-1"></div>
+                            <div class="px-4 py-2">
+                                <p class="text-xs text-slate-400 mb-1.5">{{ __('Language') }}</p>
+                                <div class="flex gap-1.5">
+                                    <form method="POST" action="{{ route('locale.switch', 'en') }}">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'en' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                            🇬🇧 EN
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ route('locale.switch', 'nl') }}">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'nl' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                            🇳🇱 NL
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="border-t border-slate-100 my-1"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -127,7 +163,7 @@
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                     </svg>
-                                    Log out
+                                    {{ __('Log out') }}
                                 </button>
                             </form>
                         </div>
@@ -148,8 +184,8 @@
             <!-- Mobile Nav -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col gap-2">
-                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium py-2">Commissions</a>
-                    <a href="{{ route('categories.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium py-2">Categories</a>
+                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium py-2">{{ __('Commissions') }}</a>
+                    <a href="{{ route('categories.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium py-2">{{ __('Categories') }}</a>
                 </div>
             </div>
         </div>
@@ -172,7 +208,7 @@
                     </div>
                     <span class="font-bold text-lg text-white">FreelanceHub</span>
                 </div>
-                <p class="text-sm">&copy; {{ date('Y') }} FreelanceHub. All rights reserved.</p>
+                <p class="text-sm">&copy; {{ date('Y') }} FreelanceHub. {{ __('All rights reserved.') }}</p>
             </div>
         </div>
     </footer>

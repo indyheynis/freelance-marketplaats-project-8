@@ -27,9 +27,9 @@
                 </a>
 
                 <div class="hidden md:flex items-center gap-6 flex-1">
-                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Commissions</a>
-                    <a href="{{ route('applications.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Sollicitaties</a>
-                    <a href="{{ route('reviews.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">Reviews</a>
+                    <a href="{{ route('commissions.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">{{ __('Commissions') }}</a>
+                    <a href="{{ route('applications.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">{{ __('Applications') }}</a>
+                    <a href="{{ route('reviews.index') }}" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors text-sm">{{ __('Reviews') }}</a>
                 </div>
 
                 <div class="relative shrink-0" x-data="{ open: false }">
@@ -47,22 +47,43 @@
                         class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            Profiel
+                            {{ __('Profile') }}
                         </a>
                         <a href="{{ route('applications.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                            Sollicitaties
+                            {{ __('Applications') }}
                         </a>
                         <a href="{{ route('reviews.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 md:hidden">
                             <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            Reviews
+                            {{ __('Reviews') }}
                         </a>
+
+                        {{-- Language switcher --}}
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <div class="px-4 py-2">
+                            <p class="text-xs text-slate-400 mb-1.5">{{ __('Language') }}</p>
+                            <div class="flex gap-1.5">
+                                <form method="POST" action="{{ route('locale.switch', 'en') }}">
+                                    @csrf
+                                    <button type="submit" class="px-2.5 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'en' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                        🇬🇧 EN
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('locale.switch', 'nl') }}">
+                                    @csrf
+                                    <button type="submit" class="px-2.5 py-1 text-xs font-medium rounded {{ app()->getLocale() === 'nl' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }} transition-colors">
+                                        🇳🇱 NL
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
                         <div class="border-t border-slate-100 my-1"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                                Log out
+                                {{ __('Log out') }}
                             </button>
                         </form>
                     </div>
@@ -76,9 +97,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-slate-900">
-                    Welkom terug, <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">{{ Auth::user()->firstname }}</span>!
+                    {!! __('Welcome back, :name!', ['name' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">' . e(Auth::user()->firstname) . '</span>']) !!}
                 </h1>
-                <p class="text-slate-500 mt-1">Ontdek nieuwe opdrachten en beheer je freelance carrière.</p>
+                <p class="text-slate-500 mt-1">{{ __('Discover new commissions and manage your freelance career.') }}</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -86,25 +107,25 @@
                     <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-purple-800">Opdrachten</span>
+                    <span class="text-sm font-semibold text-purple-800">{{ __('Commissions') }}</span>
                 </a>
                 <a href="{{ route('applications.index') }}" class="group flex items-center gap-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-indigo-800">Sollicitaties</span>
+                    <span class="text-sm font-semibold text-indigo-800">{{ __('Applications') }}</span>
                 </a>
                 <a href="{{ route('reviews.index') }}" class="group flex items-center gap-3 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-amber-800">Mijn Reviews</span>
+                    <span class="text-sm font-semibold text-amber-800">{{ __('My Reviews') }}</span>
                 </a>
                 <a href="{{ route('profile.edit') }}" class="group flex items-center gap-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-slate-600 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-slate-700">Profiel</span>
+                    <span class="text-sm font-semibold text-slate-700">{{ __('Profile') }}</span>
                 </a>
             </div>
         </div>
@@ -116,15 +137,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div>
                     <div class="text-3xl font-bold mb-1">{{ \App\Models\Commission::where('status', 'open')->count() }}</div>
-                    <div class="text-purple-200 text-sm">Available Projects</div>
+                    <div class="text-purple-200 text-sm">{{ __('Available Projects') }}</div>
                 </div>
                 <div>
                     <div class="text-3xl font-bold mb-1">{{ \App\Models\Commission::where('status', 'open')->where('category_id', Auth::user()->preferred_category_id ?? 1)->count() }}</div>
-                    <div class="text-purple-200 text-sm">In Your Category</div>
+                    <div class="text-purple-200 text-sm">{{ __('In Your Category') }}</div>
                 </div>
                 <div>
                     <div class="text-3xl font-bold mb-1">€{{ number_format(\App\Models\Commission::where('status', 'open')->avg('budget') ?? 0, 0, ',', '.') }}</div>
-                    <div class="text-purple-200 text-sm">Avg. Project Budget</div>
+                    <div class="text-purple-200 text-sm">{{ __('Avg. Project Budget') }}</div>
                 </div>
             </div>
         </div>
@@ -135,8 +156,8 @@
     <section class="py-16 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-900 mb-3">Available Commissions</h2>
-                <p class="text-slate-500 text-lg">Find projects that match your skills and start working</p>
+                <h2 class="text-3xl font-bold text-slate-900 mb-3">{{ __('Available Commissions') }}</h2>
+                <p class="text-slate-500 text-lg">{{ __('Find projects that match your skills and start working') }}</p>
             </div>
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -158,7 +179,7 @@
                     <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
                     <div class="flex gap-2">
                         <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
+                            {{ __('View Details') }}
                         </a>
                         @php
                         $application = $commission->applications->where('user_id', auth()->id())->first();
@@ -166,20 +187,20 @@
                         @if($application)
                         @if($application->status === 'accepted')
                         <span class="flex-1 text-center bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium">
-                            ✅ Geaccepteerd
+                            {{ __('✅ Accepted') }}
                         </span>
                         @elseif($application->status === 'rejected')
                         <span class="flex-1 text-center bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium">
-                            ❌ Afgewezen
+                            {{ __('❌ Rejected') }}
                         </span>
                         @else
                         <span class="flex-1 text-center bg-amber-100 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium">
-                            ⏳ In behandeling
+                            {{ __('⏳ Pending') }}
                         </span>
                         @endif
                         @else
                         <a href="{{ route('commissions.show', $commission) }}" class="flex-1 text-center bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Apply
+                            {{ __('Apply') }}
                         </a>
                         @endif
                     </div>
@@ -191,10 +212,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-slate-700 mb-2">No commissions available</h3>
-                    <p class="text-slate-500 mb-6">Check back later for new opportunities.</p>
+                    <h3 class="text-lg font-medium text-slate-700 mb-2">{{ __('No commissions available') }}</h3>
+                    <p class="text-slate-500 mb-6">{{ __('Check back later for new opportunities.') }}</p>
                     <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md">
-                        Refresh
+                        {{ __('Refresh') }}
                     </a>
                 </div>
                 @endforelse
@@ -203,7 +224,7 @@
             @if(\App\Models\Commission::where('status', 'open')->count() > 6)
             <div class="text-center mt-8">
                 <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold transition-colors">
-                    View All Commissions
+                    {{ __('View All Commissions') }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -216,7 +237,7 @@
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2026 FreelanceHub. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} FreelanceHub. {{ __('All rights reserved.') }}</p>
         </div>
     </footer>
 

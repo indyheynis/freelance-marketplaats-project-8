@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Application;
+use App\Models\Offer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,18 +11,13 @@ class OfferStatusChanged extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Application $application;
-
-    public function __construct(Application $application)
-    {
-        $this->application = $application;
-    }
+    public function __construct(public Offer $offer) {}
 
     public function build()
     {
-        $subject = $this->application->status === 'accepted'
-            ? 'Je sollicitatie is geaccepteerd'
-            : 'Je sollicitatie is afgewezen';
+        $subject = $this->offer->status === 'accepted'
+            ? 'Your offer has been accepted'
+            : 'Your offer has been rejected';
 
         return $this->subject($subject)
             ->view('emails.offer-status-changed');

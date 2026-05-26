@@ -15,7 +15,7 @@ class OfferSubmitted extends Mailable
 
     public function build()
     {
-        return $this->subject('Bevestiging: jouw offerte is verstuurd')
+        return $this->subject('Confirmation: your offer has been sent')
             ->view('emails.offer-submitted');
     }
 }

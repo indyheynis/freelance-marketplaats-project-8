@@ -2,36 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Offer status</title>
+    <title>Application status</title>
 </head>
 <body>
 
-    <h1>Offer Status</h1>
+    <h1>Application Status</h1>
 
-    @if($offer->status === 'accepted')
+    @if($application->status === 'accepted')
 
         <p>
-            Great news! Your offer for commission
-            "{{ $offer->commission->title }}"
+            Great news! Your application for commission
+            "{{ $application->commission->title }}"
             has been accepted.
         </p>
 
     @else
 
         <p>
-            Unfortunately, your offer for commission
-            "{{ $offer->commission->title }}"
+            Unfortunately, your application for commission
+            "{{ $application->commission->title }}"
             has been rejected.
         </p>
 
     @endif
 
-    @if($offer->message)
     <p>
         <strong>Your message:</strong><br>
-        {{ $offer->message }}
+        {{ $application->message ?: 'No message provided.' }}
     </p>
-    @endif
 
     <p>
         View the commission for more information.

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Offerte verstuurd</title>
+    <title>Offer sent</title>
 </head>
 <body style="margin:0; padding:0; background:#f5f7fb; font-family: Arial, sans-serif;">
 
@@ -11,7 +11,7 @@
         <!-- Header -->
         <div style="background:#4f46e5; padding:24px; text-align:center;">
             <h1 style="color:#ffffff; margin:0; font-size:20px;">
-                Offerte succesvol verstuurd
+                Offer Successfully Sent
             </h1>
         </div>
 
@@ -19,37 +19,37 @@
         <div style="padding:24px; color:#111827;">
 
             <p style="font-size:16px; margin-bottom:16px;">
-                Hallo {{ $offer->user->firstname }},
+                Hello {{ $offer->user->firstname }},
             </p>
 
             <p style="font-size:15px; line-height:1.6; color:#374151;">
-                Je offerte voor de opdracht
+                Your offer for the commission
                 <strong>"{{ $offer->commission->title }}"</strong>
-                is succesvol verstuurd.
+                has been successfully sent.
             </p>
 
             <!-- Offer details -->
             <div style="margin:20px 0; padding:16px; background:#f9fafb; border-left:4px solid #4f46e5; border-radius:8px;">
-                <p style="margin:0 0 6px; font-size:13px; color:#6b7280;">Jouw offerte</p>
+                <p style="margin:0 0 6px; font-size:13px; color:#6b7280;">Your offer</p>
                 <p style="margin:0 0 6px; font-size:14px; color:#111827;">
-                    <strong>Bedrag:</strong> €{{ number_format($offer->price, 2, ',', '.') }}
+                    <strong>Amount:</strong> €{{ number_format($offer->price, 2, ',', '.') }}
                 </p>
                 @if($offer->message)
-                <p style="margin:8px 0 0; font-size:13px; color:#6b7280;">Bericht</p>
+                <p style="margin:8px 0 0; font-size:13px; color:#6b7280;">Message</p>
                 <p style="margin:4px 0 0; font-size:14px; color:#111827;">{{ $offer->message }}</p>
                 @endif
             </div>
 
             <p style="font-size:14px; line-height:1.6; color:#374151;">
-                De opdrachtgever bekijkt je offerte zo snel mogelijk.
+                The client will review your offer as soon as possible.
             </p>
 
             <div style="margin-top:20px; padding:12px 16px; background:#eef2ff; border-radius:8px; font-size:13px; color:#4338ca;">
-                Tip: Zorg dat je profiel up-to-date is voor een grotere kans op reacties.
+                Tip: Keep your profile up-to-date for better chances of getting responses.
             </div>
 
             <p style="margin-top:24px; font-size:14px;">
-                Groeten,<br>
+                Best regards,<br>
                 <strong>{{ config('app.name') }}</strong>
             </p>
 
@@ -57,7 +57,7 @@
 
         <!-- Footer -->
         <div style="background:#f3f4f6; padding:16px; text-align:center; font-size:12px; color:#6b7280;">
-            Dit is een automatische e-mail, je kunt hier niet op reageren.
+            This is an automated email, you cannot reply to it.
         </div>
 
     </div>

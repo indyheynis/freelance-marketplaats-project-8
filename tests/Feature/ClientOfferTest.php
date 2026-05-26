@@ -1,10 +1,7 @@
 <?php
 
-<<<<<<< HEAD
 use App\Mail\OfferReceived;
-=======
 use App\Mail\OfferStatusChanged;
->>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Offer;

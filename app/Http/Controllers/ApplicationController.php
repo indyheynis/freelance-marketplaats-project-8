@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\OfferStatusChanged;
+use App\Mail\ApplicationStatusChanged;
 use App\Mail\OfferSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
@@ -34,7 +34,7 @@ class ApplicationController extends Controller
             ->exists();
 
         if ($alreadyApplied) {
-            return back()->with('error', 'Je hebt al gesolliciteerd op deze commission.');
+            return back()->with('error', 'You have already applied for this commission.');
         }
 
         $request->validate([
@@ -51,7 +51,7 @@ class ApplicationController extends Controller
         Mail::to(Auth::user()->email)
             ->send(new OfferSubmitted($application));
 
-        return back()->with('success', 'Je sollicitatie is verstuurd!');
+        return back()->with('success', 'Your application has been sent!');
     }
 
     public function destroy(Application $application)
@@ -62,7 +62,7 @@ class ApplicationController extends Controller
 
         $application->delete();
 
-        return back()->with('success', 'Sollicitatie ingetrokken.');
+        return back()->with('success', 'Application withdrawn.');
     }
 
     public function accept(Application $application)
@@ -72,18 +72,18 @@ class ApplicationController extends Controller
         }
 
         $application->update([
-            'status' => 'accepted'
+            'status' => 'accepted',
         ]);
 
         Mail::to($application->freelancer->email)
-            ->send(new OfferStatusChanged($application));
+            ->send(new ApplicationStatusChanged($application));
 
         // Reject all other applications for this commission
         Application::where('commission_id', $application->commission_id)
             ->where('id', '!=', $application->id)
             ->update(['status' => 'rejected']);
 
-        return back()->with('success', 'Sollicitatie geaccepteerd!');
+        return back()->with('success', 'Application accepted!');
     }
 
     public function reject(Application $application)
@@ -93,12 +93,12 @@ class ApplicationController extends Controller
         }
 
         $application->update([
-            'status' => 'rejected'
+            'status' => 'rejected',
         ]);
 
         Mail::to($application->freelancer->email)
-            ->send(new OfferStatusChanged($application));
+            ->send(new ApplicationStatusChanged($application));
 
-        return back()->with('success', 'Sollicitatie afgewezen.');
+        return back()->with('success', 'Application rejected.');
     }
 }

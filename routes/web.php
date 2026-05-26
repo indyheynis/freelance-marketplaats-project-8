@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/freelancer', [DashboardController::class, 'freelancer'])
@@ -110,4 +113,4 @@ Route::middleware(['auth'])->group(function () {
         ->name('commissions.pdf');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
