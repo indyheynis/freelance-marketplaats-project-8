@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OfferReceived;
 use App\Mail\OfferSubmitted;
 use App\Models\Offer;
 use Illuminate\Http\Request;
@@ -26,6 +27,9 @@ class OfferController extends Controller
         ]);
 
         Mail::to(Auth::user()->email)->send(new OfferSubmitted($offer));
+
+        $offer->load('commission.user');
+        Mail::to($offer->commission->user->email)->send(new OfferReceived($offer));
 
         return back()->with('success', 'Offerte verstuurd!');
     }
