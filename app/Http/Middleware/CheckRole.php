@@ -13,9 +13,10 @@ class CheckRole
      *
      * @param  Closure(Request): (Response)  $next
      */
-  public function handle(Request $request, Closure $next,  ...$roles): Response //...$roles maakt het mogelijk om meerdere rollen te accepteren
+    public function handle(Request $request, Closure $next,  ...$roles): Response //...$roles maakt het mogelijk om meerdere rollen te accepteren
     {
-        if (!auth()->check() || !in_array(auth()->user()->role, $roles)) {
+        $user = auth()->user();
+        if (!$user || (!in_array($user->role, $roles) && !$user->isAdmin())) {
             return abort(403, 'Unauthorized action.');
         }
 

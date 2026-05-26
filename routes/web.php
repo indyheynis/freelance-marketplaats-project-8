@@ -21,6 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/client', [DashboardController::class, 'client'])
         ->name('dashboard.client');
+
+    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])
+        ->middleware('role:admin')
+        ->name('dashboard.admin');
 });
 
 Route::middleware('auth')->group(function () {
@@ -58,6 +62,8 @@ Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -104,4 +110,4 @@ Route::middleware(['auth'])->group(function () {
         ->name('commissions.pdf');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

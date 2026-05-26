@@ -42,7 +42,7 @@
             </div>
 
             <!-- Actions -->
-            @if (Auth::user()->isAdmin())
+            @if (auth()->check() && Auth::user()->isAdmin())
             <div class="px-6 py-4 border-t border-slate-100 flex items-center gap-3">
                 <a href="{{ route('categories.edit', $category) }}" class="inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-700 px-4 py-2 rounded-lg font-medium transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,5 +63,57 @@
                 </form>
             </div>
         </div>
+
+        <section class="mt-8">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Commissions in {{ $category->name }}</h2>
+                        <p class="text-sm text-slate-500">Browse all commissions classified under this category.</p>
+                    </div>
+                    <span class="text-sm text-slate-500">{{ $category->commissions->count() }} commission{{ $category->commissions->count() === 1 ? '' : 's' }}</span>
+                </div>
+
+                @if($category->commissions->isEmpty())
+                <div class="px-6 py-12 text-center">
+                    <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">No commissions yet</h3>
+                    <p class="text-sm text-slate-500">There are currently no commissions assigned to this category.</p>
+                </div>
+                @else
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 p-6">
+                    @foreach($category->commissions as $commission)
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                        <img src="{{ $commission->image_url }}" alt="{{ $commission->title }} image" class="w-full h-40 object-cover">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between gap-3 mb-3">
+                                <h3 class="text-lg font-semibold text-slate-800">{{ $commission->title }}</h3>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">{{ $category->name }}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4 line-clamp-2">{{ $commission->description }}</p>
+                            <div class="space-y-2 text-sm text-slate-500 mb-6">
+                                <div class="flex justify-between">
+                                    <span>Budget</span>
+                                    <span class="font-medium text-slate-700">{{ $commission->budget }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Deadline</span>
+                                    <span class="font-medium text-slate-700">{{ $commission->deadline }}</span>
+                                </div>
+                            </div>
+                            <a href="{{ route('commissions.show', $commission) }}" class="inline-flex items-center justify-center w-full rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-sm font-medium transition-colors">
+                                View commission
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+        </section>
     </div>
 </x-base-layout>

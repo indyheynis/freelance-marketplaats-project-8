@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Mail\OfferReceived;
+=======
+use App\Mail\OfferStatusChanged;
+>>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
 use App\Mail\OfferSubmitted;
 use App\Models\Offer;
 use Illuminate\Http\Request;
@@ -24,9 +28,14 @@ class OfferController extends Controller
             'commission_id' => $request->commission_id,
             'price' => $request->price,
             'message' => $request->message,
+            'status' => 'pending',
         ]);
 
-        Mail::to(Auth::user()->email)->send(new OfferSubmitted($offer));
+        // laad relaties (veilig voor mail)
+        $offer->load(['user', 'commission']);
+
+        Mail::to($offer->user->email)
+            ->send(new OfferSubmitted($offer));
 
         $offer->load('commission.user');
         Mail::to($offer->commission->user->email)->send(new OfferReceived($offer));
@@ -41,13 +50,35 @@ class OfferController extends Controller
             abort(403);
         }
 
-        // 1. Zet alle andere offers op rejected
-        Offer::where('commission_id', $offer->commission_id)
-            ->where('id', '!=', $offer->id)
-            ->update(['status' => 'rejected']);
+        // laad relaties
+        $offer->load(['user', 'commission']);
 
-        // 2. Zet deze offer op accepted
+        // alleen als nog niet geaccepteerd
+        if ($offer->status === 'accepted') {
+            return back()->with('success', 'Deze offerte is al geaccepteerd.');
+        }
+
+        // andere offertes ophalen
+        $otherOffers = Offer::with('user')
+            ->where('commission_id', $offer->commission_id)
+            ->where('id', '!=', $offer->id)
+            ->get();
+
+        foreach ($otherOffers as $otherOffer) {
+
+            if ($otherOffer->status !== 'rejected') {
+                $otherOffer->update(['status' => 'rejected']);
+
+                Mail::to($otherOffer->user->email)
+                    ->send(new OfferStatusChanged($otherOffer));
+            }
+        }
+
+        // accept offer
         $offer->update(['status' => 'accepted']);
+
+        Mail::to($offer->user->email)
+            ->send(new OfferStatusChanged($offer));
 
         return back()->with('success', 'Offerte geaccepteerd!');
     }

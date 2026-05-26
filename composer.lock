@@ -1288,6 +1288,7 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
             "version": "v13.11.1",
             "source": {
                 "type": "git",
@@ -1298,6 +1299,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/6b70133ea3552afc37307ffb85b9efa48dc187d1",
                 "reference": "6b70133ea3552afc37307ffb85b9efa48dc187d1",
+=======
+            "version": "v13.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "a0c6ad03b380287015287d8d5a0fa2459e2332fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/a0c6ad03b380287015287d8d5a0fa2459e2332fd",
+                "reference": "a0c6ad03b380287015287d8d5a0fa2459e2332fd",
+>>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
                 "shasum": ""
             },
             "require": {
@@ -1508,6 +1521,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2026-05-19T20:24:39+00:00"
         },
         {
@@ -1522,6 +1536,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/prompts/zipball/a19af51bb144bf87f08397921fa619f85c7d4e72",
                 "reference": "a19af51bb144bf87f08397921fa619f85c7d4e72",
+=======
+            "time": "2026-05-13T15:38:40+00:00"
+        },
+        {
+            "name": "laravel/prompts",
+            "version": "v0.3.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/prompts.git",
+                "reference": "6a82ac19a28b916ae0885828795dbd4c59d9a818"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/6a82ac19a28b916ae0885828795dbd4c59d9a818",
+                "reference": "6a82ac19a28b916ae0885828795dbd4c59d9a818",
+>>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
                 "shasum": ""
             },
             "require": {
@@ -1565,9 +1595,15 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/laravel/prompts/tree/v0.3.18"
             },
             "time": "2026-05-19T00:47:18+00:00"
+=======
+                "source": "https://github.com/laravel/prompts/tree/v0.3.17"
+            },
+            "time": "2026-04-20T16:07:33+00:00"
+>>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
         },
         {
             "name": "laravel/serializable-closure",
@@ -10325,6 +10361,10 @@
     "platform": {
         "php": "^8.3"
     },
+<<<<<<< HEAD
     "platform-dev": [],
+=======
+    "platform-dev": {},
+>>>>>>> e1e47ddf3abae5f5faaa90f54b2293f1fab3e610
     "plugin-api-version": "2.6.0"
 }

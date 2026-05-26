@@ -18,6 +18,10 @@
                 @csrf
                 @method('PUT')
 
+                <div class="mb-4 overflow-hidden rounded-3xl border border-slate-200">
+                    <img src="{{ $commission->image ? asset('storage/' . $commission->image) : asset('images/commission-placeholder.svg') }}" alt="{{ $commission->title }} image" class="w-full h-64 object-cover">
+                </div>
+
                 <div>
                     <label for="title" class="block text-sm font-medium text-slate-700 mb-1">Title</label>
                     <input type="text" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all {{ $errors->has('title') ? 'border-red-500' : '' }}" id="title" name="title" value="{{ $commission->title }}" required>

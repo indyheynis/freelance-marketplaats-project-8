@@ -18,15 +18,24 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
+            'name' => 'Admin User',
+            'firstname' => 'Admin',
+            'lastname' => 'User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+
+        User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
             'role' => 'client',
         ]);
 
-            $this->call([
-                CategorySeeder::class,
-                CommissionSeeder::class,
-            ]);
+        $this->call([
+            CategorySeeder::class,
+            CommissionSeeder::class,
+        ]);
     }
 }
