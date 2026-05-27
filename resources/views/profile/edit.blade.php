@@ -1,38 +1,36 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-4">
-            <x-avatar :user="Auth::user()" />
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Profile') }} of {{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}
-            </h2>
+<x-base-layout>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-800">Profile</h1>
+                <p class="text-slate-500 mt-1">Manage your account details, password, skills, and profile settings.</p>
+            </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+        <div class="space-y-6">
+            <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                 <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                 <div class="max-w-xl">
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                 <div class="max-w-xl">
                     @include('profile.partials.update-skills-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-base-layout>

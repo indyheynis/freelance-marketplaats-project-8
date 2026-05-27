@@ -6,13 +6,11 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Back to Commissions
+                {{ __('Back to Commissions') }}
             </a>
-            @if($commission->image)
             <div class="mb-5 overflow-hidden rounded-3xl border border-slate-200">
-                <img src="{{ asset('storage/' . $commission->image) }}" alt="Commission image" class="w-full h-64 object-cover">
+                <img src="{{ $commission->image_url }}" alt="{{ $commission->title }} image" class="w-full h-64 object-cover">
             </div>
-            @endif
             <h1 class="text-3xl font-bold text-slate-800">{{ $commission->title }}</h1>
         </div>
 
@@ -25,12 +23,12 @@
                     {{ $commission->category->name }}
                 </span>
                 @endif
-                <span class="text-sm text-slate-500">Posted {{ $commission->created_at?->diffForHumans() ?? 'Onbekend' }}</span>
+                <span class="text-sm text-slate-500">{{ __('Posted :time', ['time' => $commission->created_at?->diffForHumans() ?? __('Unknown')]) }}</span>
             </div>
 
             <!-- Description -->
             <div class="px-6 py-6">
-                <h2 class="text-lg font-semibold text-slate-800 mb-3">Description</h2>
+                <h2 class="text-lg font-semibold text-slate-800 mb-3">{{ __('Description') }}</h2>
                 <p class="text-slate-600 leading-relaxed">{{ $commission->description }}</p>
             </div>
 
@@ -44,7 +42,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-500">Budget</p>
+                            <p class="text-sm text-slate-500">{{ __('Budget') }}</p>
                             <p class="text-xl font-semibold text-slate-800">{{ $commission->budget }}</p>
                         </div>
                     </div>
@@ -55,7 +53,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-500">Deadline</p>
+                            <p class="text-sm text-slate-500">{{ __('Deadline') }}</p>
                             <p class="text-xl font-semibold text-slate-800">{{ $commission->deadline }}</p>
                         </div>
                     </div>
@@ -70,24 +68,24 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    Edit
+                    {{ __('Edit') }}
                 </a>
                 <form action="{{ route('commissions.destroy', $commission) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('Are you sure?')">
+                    <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium transition-colors" onclick="return confirm('{{ __('Are you sure?') }}')">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        Delete
+                        {{ __('Delete') }}
                     </button>
                 </form>
             </div>
 
-            {{-- Sollicitaties sectie --}}
+            {{-- Applications section --}}
             <div class="px-6 py-6 border-t border-slate-100">
                 <h2 class="text-lg font-semibold text-slate-800 mb-4">
-                    Sollicitaties ({{ $commission->applications->count() }})
+                    {{ __('Applications (:count)', ['count' => $commission->applications->count()]) }}
                 </h2>
 
                 @forelse($commission->applications as $application)
@@ -102,7 +100,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium text-slate-800 group-hover:text-indigo-600 transition-colors">{{ $application->freelancer->firstname }} {{ $application->freelancer->lastname }}</p>
-                                    <p class="text-xs text-slate-500">{{ $application->created_at?->diffForHumans() ?? 'Onbekend' }}</p>
+                                    <p class="text-xs text-slate-500">{{ $application->created_at?->diffForHumans() ?? __('Unknown') }}</p>
                                 </div>
                             </a>
                         </div>
@@ -126,7 +124,7 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
-                                Accepteren
+                                {{ __('Accept') }}
                             </button>
                         </form>
                         <form action="{{ route('applications.reject', $application) }}" method="POST">
@@ -136,14 +134,14 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
-                                Afwijzen
+                                {{ __('Reject') }}
                             </button>
                         </form>
                     </div>
                     @endif
                 </div>
                 @empty
-                <p class="text-slate-500 text-sm">Nog geen sollicitaties ontvangen.</p>
+                <p class="text-slate-500 text-sm">{{ __('No applications received yet.') }}</p>
                 @endforelse
             </div>
 
@@ -156,7 +154,7 @@
             @if($commission->reviews->isNotEmpty())
             <div class="px-6 py-6 border-t border-slate-100">
                 <h2 class="text-lg font-semibold text-slate-800 mb-4">
-                    Reviews ({{ $commission->reviews->count() }})
+                    {{ __('Reviews (:count)', ['count' => $commission->reviews->count()]) }}
                 </h2>
                 @foreach($commission->reviews as $review)
                 <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-3">
@@ -188,8 +186,8 @@
 
             @if($hasAcceptedApplication && !$alreadyReviewed)
             <div class="px-6 py-6 border-t border-slate-100">
-                <h2 class="text-lg font-semibold text-slate-800 mb-1">Review achterlaten</h2>
-                <p class="text-sm text-slate-500 mb-5">Hoe was jouw ervaring met de freelancer?</p>
+                <h2 class="text-lg font-semibold text-slate-800 mb-1">{{ __('Leave a Review') }}</h2>
+                <p class="text-sm text-slate-500 mb-5">{{ __('How was your experience with the freelancer?') }}</p>
 
                 @if(session('review_success'))
                 <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
@@ -238,12 +236,12 @@
                         <textarea
                             name="comment"
                             rows="4"
-                            placeholder="Vertel over jouw ervaring met deze freelancer... (optioneel)"
+                            placeholder="{{ __('Tell us about your experience with this freelancer... (optional)') }}"
                             @input="updateCount($event.target.value)"
                             class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
                         <div class="flex justify-end mt-1">
                             <span class="text-xs" :class="wordCount > 200 ? 'text-red-500 font-medium' : 'text-slate-400'">
-                                <span x-text="wordCount"></span>/200 woorden
+                                <span x-text="wordCount"></span>{{ __('/200 words') }}
                             </span>
                         </div>
                     </div>
@@ -255,7 +253,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        Review plaatsen
+                        {{ __('Post Review') }}
                     </button>
                 </form>
             </div>
@@ -264,11 +262,11 @@
             @endauth
         </div>
 
-        {{-- Offertes Sectie --}}
+        {{-- Offers Section --}}
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
             <div class="px-6 py-4 border-b border-slate-100">
-                <h2 class="text-xl font-semibold text-slate-800">Offertes</h2>
-                <p class="text-sm text-slate-500 mt-1">Bekijk alle ontvangen offertes voor deze opdracht</p>
+                <h2 class="text-xl font-semibold text-slate-800">{{ __('Offers') }}</h2>
+                <p class="text-sm text-slate-500 mt-1">{{ __('View all received offers for this commission') }}</p>
             </div>
             <div class="p-6">
                 @forelse($commission->offers as $offer)
@@ -302,13 +300,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </div>
-                    <p class="text-slate-500">Nog geen offertes ontvangen</p>
+                    <p class="text-slate-500">{{ __('No offers received yet') }}</p>
                 </div>
                 @endforelse
             </div>
         </div>
 
-        {{-- Freelancer: Sollicitatie formulier --}}
+        {{-- Freelancer: Application form --}}
         @auth
         @if(auth()->user()->isFreelancer())
         @php
@@ -317,8 +315,8 @@
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-100">
-                <h2 class="text-xl font-semibold text-slate-800">Solliciteren</h2>
-                <p class="text-sm text-slate-500 mt-1">Vertel waarom jij de perfecte kandidaat bent</p>
+                <h2 class="text-xl font-semibold text-slate-800">{{ __('Apply') }}</h2>
+                <p class="text-sm text-slate-500 mt-1">{{ __("Tell us why you're the perfect candidate") }}</p>
             </div>
 
             <div class="p-6">
@@ -339,10 +337,10 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span class="font-medium">Je hebt al gesolliciteerd op deze opdracht</span>
+                        <span class="font-medium">{{ __('You have already applied for this commission') }}</span>
                     </div>
                     @if($alreadyApplied->message)
-                    <p class="mt-2 text-sm text-green-700">Jouw bericht: "{{ $alreadyApplied->message }}"</p>
+                    <p class="mt-2 text-sm text-green-700">{{ __('Your message:') }} "{{ $alreadyApplied->message }}"</p>
                     @endif
                 </div>
                 <form action="{{ route('applications.destroy', $alreadyApplied) }}" method="POST">
@@ -353,33 +351,33 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
-                            Sollicitatie intrekken
+                            {{ __('Withdraw Application') }}
                         </button>
                         <a href="{{ route('commissions.pdf', $commission) }}" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            Download als PDF
+                            {{ __('Download as PDF') }}
                         </a>
                     </div>
                 </form>
                 @else
                 <form action="{{ route('applications.store', $commission) }}" method="POST">
                     @csrf
-                    <textarea name="message" rows="4" placeholder="Vertel waarom jij geschikt bent voor deze opdracht..."
+                    <textarea name="message" rows="4" placeholder="{{ __('Tell us why you are a great fit for this commission...') }}"
                         class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
                     <div class="flex items-center gap-3">
                         <button type="submit" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                             </svg>
-                            Solliciteren
+                            {{ __('Apply') }}
                         </button>
                         <a href="{{ route('commissions.pdf', $commission) }}" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            Download als PDF
+                            {{ __('Download as PDF') }}
                         </a>
                     </div>
                 </form>
@@ -389,19 +387,18 @@
         @endif
         @endauth
 
-        {{-- Niet ingelogd --}}
         @guest
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6">
                 <div class="p-4 bg-slate-100 border border-slate-200 text-slate-700 rounded-lg">
-                    <p class="font-medium mb-2">Geïnteresseerd in deze opdracht?</p>
-                    <p class="text-sm mb-4">Log in of registreer om te solliciteren.</p>
+                    <p class="font-medium mb-2">{{ __('Interested in this commission?') }}</p>
+                    <p class="text-sm mb-4">{{ __('Log in or register to apply.') }}</p>
                     <div class="flex gap-3">
                         <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                            Log in
+                            {{ __('Log in') }}
                         </a>
                         <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                            Registreer
+                            {{ __('Register') }}
                         </a>
                     </div>
                 </div>

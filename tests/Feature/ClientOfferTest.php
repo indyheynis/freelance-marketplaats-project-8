@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\OfferReceived;
 use App\Mail\OfferStatusChanged;
 use App\Models\Category;
 use App\Models\Commission;
@@ -259,4 +260,30 @@ test('gast wordt doorgestuurd naar login bij client dashboard', function () {
     $response = $this->get('/dashboard/client');
 
     $response->assertRedirect('/login');
+});
+
+test('opdrachtgever ontvangt een e-mail bij nieuwe offerte', function () {
+    Mail::fake();
+
+    $client = User::factory()->create(['role' => 'client']);
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+    $category = Category::create(['name' => 'Test']);
+    $commission = Commission::create([
+        'title' => 'Testproject',
+        'budget' => 500,
+        'deadline' => now()->addDays(14)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $client->id,
+    ]);
+
+    $this->actingAs($freelancer)->post('/offers', [
+        'commission_id' => $commission->id,
+        'price' => 450,
+        'message' => 'Ik doe dit graag.',
+    ]);
+
+    Mail::assertSent(OfferReceived::class, function (OfferReceived $mail) use ($client, $commission) {
+        return $mail->hasTo($client->email)
+            && $mail->offer->commission_id === $commission->id;
+    });
 });

@@ -49,6 +49,8 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        $category->load('commissions');
+
         return view('categories.show', compact('category'));
     }
 
