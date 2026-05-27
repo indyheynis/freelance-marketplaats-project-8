@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApplicationStatusChanged;
+use App\Mail\OfferSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
@@ -31,21 +34,24 @@ class ApplicationController extends Controller
             ->exists();
 
         if ($alreadyApplied) {
-            return back()->with('error', 'Je hebt al gesolliciteerd op deze commission.');
+            return back()->with('error', 'You have already applied for this commission.');
         }
 
         $request->validate([
             'message' => 'nullable|string|max:1000',
         ]);
 
-        Application::create([
+        $application = Application::create([
             'commission_id' => $commission->id,
-            'user_id'       => Auth::id(),
-            'message'       => $request->message,
-            'status'        => 'pending',
+            'user_id' => Auth::id(),
+            'message' => $request->message,
+            'status' => 'pending',
         ]);
 
-        return back()->with('success', 'Je sollicitatie is verstuurd!');
+        Mail::to(Auth::user()->email)
+            ->send(new OfferSubmitted($application));
+
+        return back()->with('success', 'Your application has been sent!');
     }
 
     public function destroy(Application $application)
@@ -56,7 +62,7 @@ class ApplicationController extends Controller
 
         $application->delete();
 
-        return back()->with('success', 'Sollicitatie ingetrokken.');
+        return back()->with('success', 'Application withdrawn.');
     }
 
     public function accept(Application $application)
@@ -65,9 +71,19 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update(['status' => 'accepted']);
+        $application->update([
+            'status' => 'accepted',
+        ]);
 
-        return back()->with('success', 'Sollicitatie geaccepteerd!');
+        Mail::to($application->freelancer->email)
+            ->send(new ApplicationStatusChanged($application));
+
+        // Reject all other applications for this commission
+        Application::where('commission_id', $application->commission_id)
+            ->where('id', '!=', $application->id)
+            ->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Application accepted!');
     }
 
     public function reject(Application $application)
@@ -76,8 +92,13 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update(['status' => 'rejected']);
+        $application->update([
+            'status' => 'rejected',
+        ]);
 
-        return back()->with('success', 'Sollicitatie afgewezen.');
+        Mail::to($application->freelancer->email)
+            ->send(new ApplicationStatusChanged($application));
+
+        return back()->with('success', 'Application rejected.');
     }
 }

@@ -1,11 +1,14 @@
-<x-guest-layout>
-    <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-slate-800">Welcome Back</h1>
-        <p class="text-slate-500 mt-1">Sign in to your account</p>
-    </div>
+<x-base-layout>
+    <main class="flex-1 flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Welcome Back</h1>
+                    <p class="text-slate-500 mt-1 dark:text-slate-300">Sign in to your account</p>
+                </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+                <!-- Session Status -->
+                <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
@@ -45,11 +48,14 @@
             {{ __('Log in') }}
         </x-primary-button>
 
-        <div class="text-center pt-4 border-t border-slate-100">
-            <span class="text-sm text-slate-500">Don't have an account?</span>
+        <div class="text-center pt-4 border-t border-slate-100 dark:border-slate-700">
+            <span class="text-sm text-slate-500 dark:text-slate-300">Don't have an account?</span>
             <a class="text-sm text-indigo-600 hover:text-indigo-700 font-medium ms-1" href="{{ route('register') }}">
                 {{ __('Sign up') }}
             </a>
         </div>
     </form>
-</x-guest-layout>
+            </div>
+        </div>
+    </main>
+</x-base-layout>

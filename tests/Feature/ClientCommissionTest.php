@@ -1,8 +1,10 @@
 <?php
 
+use App\Mail\OfferSubmitted;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 test('opdrachtgever kan een nieuwe opdracht aanmaken', function () {
     $client = User::factory()->create(['role' => 'client']);
@@ -115,6 +117,8 @@ test('freelancer kan een offerte indienen op een opdracht', function () {
         'user_id' => $client->id,
     ]);
 
+    Mail::fake();
+
     $response = $this->actingAs($freelancer)->post('/offers', [
         'commission_id' => $commission->id,
         'price' => 1800,
@@ -127,6 +131,10 @@ test('freelancer kan een offerte indienen op een opdracht', function () {
         'user_id' => $freelancer->id,
         'price' => 1800,
     ]);
+
+    Mail::assertSent(OfferSubmitted::class, function ($mail) use ($freelancer) {
+        return $mail->hasTo($freelancer->email);
+    });
 });
 
 test('commission show can load offers without relation error', function () {

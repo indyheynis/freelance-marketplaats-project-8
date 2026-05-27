@@ -53,16 +53,31 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## License 
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
 
-Startup 
+## Startup 
 
 Stap 1. git clone
 Stap 2. composer install
 Stap 3. php artisan migrate
 Stap 4. npm install
 Stap 5. npm run dev
+
+## Mailfunctie opzetten
+
+Stap 1. Maak een mailtrap
+Stap 2. verander in de .env het volgende:
+
+MAIL_MAILER naar: smtp
+MAIL_HOST naar: sandbox.smtp.mailtrap.io
+MAIL_USERNAME naar: jouw mailtrap username (staat in de sandbox)
+MAIL_PASSWORD naar: jouw mailtrap password (staat in de sandbox)
+
+## Pdf Downloaden
+
+Stap: 1. Ga naar de terminal
+stap: 2. Type in composer install

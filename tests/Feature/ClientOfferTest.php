@@ -1,9 +1,12 @@
 <?php
 
+use App\Mail\OfferReceived;
+use App\Mail\OfferStatusChanged;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Offer;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 // Offertes bekijken
 test('opdrachtgever kan offertes zien op eigen opdracht', function () {
@@ -89,6 +92,59 @@ test('opdrachtgever kan een offerte accepteren', function () {
         'id' => $offer->id,
         'status' => 'accepted',
     ]);
+});
+
+test('freelancer ontvangt email bij geaccepteerde en afgewezen offertes', function () {
+    Mail::fake();
+
+    $client = User::factory()->create(['role' => 'client']);
+    $freelancer1 = User::factory()->create(['role' => 'freelancer']);
+    $freelancer2 = User::factory()->create(['role' => 'freelancer']);
+    $freelancer3 = User::factory()->create(['role' => 'freelancer']);
+    $category = Category::create(['name' => 'Marketing']);
+    $commission = Commission::create([
+        'title' => 'Social media campagne',
+        'budget' => 800,
+        'deadline' => now()->addDays(21)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $client->id,
+    ]);
+
+    $acceptedOffer = Offer::create([
+        'user_id' => $freelancer1->id,
+        'commission_id' => $commission->id,
+        'price' => 700,
+        'message' => 'Ik pak dit graag op.',
+    ]);
+
+    $rejectedOffer1 = Offer::create([
+        'user_id' => $freelancer2->id,
+        'commission_id' => $commission->id,
+        'price' => 720,
+        'message' => 'Ook goed.',
+    ]);
+
+    $rejectedOffer2 = Offer::create([
+        'user_id' => $freelancer3->id,
+        'commission_id' => $commission->id,
+        'price' => 740,
+        'message' => 'Mijn bod.',
+    ]);
+
+    $response = $this->actingAs($client)->post("/offers/{$acceptedOffer->id}/accept");
+
+    $response->assertRedirect();
+
+    Mail::assertSent(OfferStatusChanged::class, 3);
+    Mail::assertSent(OfferStatusChanged::class, function ($mail) use ($freelancer1) {
+        return $mail->hasTo($freelancer1->email) && $mail->offer->status === 'accepted';
+    });
+    Mail::assertSent(OfferStatusChanged::class, function ($mail) use ($freelancer2) {
+        return $mail->hasTo($freelancer2->email) && $mail->offer->status === 'rejected';
+    });
+    Mail::assertSent(OfferStatusChanged::class, function ($mail) use ($freelancer3) {
+        return $mail->hasTo($freelancer3->email) && $mail->offer->status === 'rejected';
+    });
 });
 
 test('accepteren van een offerte wijst andere offertes automatisch af', function () {
@@ -204,4 +260,30 @@ test('gast wordt doorgestuurd naar login bij client dashboard', function () {
     $response = $this->get('/dashboard/client');
 
     $response->assertRedirect('/login');
+});
+
+test('opdrachtgever ontvangt een e-mail bij nieuwe offerte', function () {
+    Mail::fake();
+
+    $client = User::factory()->create(['role' => 'client']);
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+    $category = Category::create(['name' => 'Test']);
+    $commission = Commission::create([
+        'title' => 'Testproject',
+        'budget' => 500,
+        'deadline' => now()->addDays(14)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $client->id,
+    ]);
+
+    $this->actingAs($freelancer)->post('/offers', [
+        'commission_id' => $commission->id,
+        'price' => 450,
+        'message' => 'Ik doe dit graag.',
+    ]);
+
+    Mail::assertSent(OfferReceived::class, function (OfferReceived $mail) use ($client, $commission) {
+        return $mail->hasTo($client->email)
+            && $mail->offer->commission_id === $commission->id;
+    });
 });

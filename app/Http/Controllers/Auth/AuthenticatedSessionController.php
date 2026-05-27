@@ -27,9 +27,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        
+
         /** @var \App\Models\User $user */
         $user = Auth::user();
+
+        if ($user->isAdmin()) {
+            return redirect()->route('dashboard.admin');
+        }
 
         if ($user->isFreelancer()) {
             return redirect()->route('dashboard.freelancer');

@@ -3,15 +3,15 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800">Commissions</h1>
-                <p class="text-slate-500 mt-1">Browse and manage freelance commissions</p>
+                <h1 class="text-3xl font-bold text-slate-800">{{ __('Commissions') }}</h1>
+                <p class="text-slate-500 mt-1">{{ __('Browse and manage freelance commissions') }}</p>
             </div>
             @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
             <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                Create New
+                {{ __('Create New') }}
             </a>
             @endif
         </div>
@@ -30,7 +30,7 @@
             <div class="relative flex-1 min-w-[200px]">
                 <select name="category_id"
                     class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-700 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400">
-                    <option value="">-- All categories --</option>
+                    <option value="">{{ __('-- All categories --') }}</option>
                     @foreach($categories as $category)
                     <option value="{{ $category->id }}"
                         {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -47,7 +47,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
-                Filter
+                {{ __('Filter') }}
             </button>
             @if(request('category_id'))
             <a href="{{ route('commissions.index') }}"
@@ -55,7 +55,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Wis filter
+                {{ __('Clear filter') }}
             </a>
             @endif
         </form>
@@ -64,6 +64,9 @@
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($commissions as $commission)
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-6">
+                <div class="mb-4 overflow-hidden rounded-3xl border border-slate-200">
+                    <img src="{{ $commission->image_url }}" alt="{{ $commission->title }} image" class="w-full h-40 object-cover">
+                </div>
                 <div class="flex justify-between items-start mb-4">
                     <h3 class="text-lg font-semibold text-slate-800">{{ $commission->title }}</h3>
                     @if($commission->category)
@@ -85,19 +88,19 @@
                 </div>
                 <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
                     <a href="{{ route('commissions.show', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                        View
+                        {{ __('View') }}
                     </a>
                     @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
                     <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                        Edit
+                        {{ __('Edit') }}
                     </a>
                     @endif
                     @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
                     <form action="{{ route('commissions.destroy', $commission) }}" method="POST" class="flex-1">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="w-full inline-flex justify-center items-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="return confirm('Are you sure?')">
-                            Delete
+                        <button type="submit" class="w-full inline-flex justify-center items-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="return confirm('{{ __('Are you sure?') }}')">
+                            {{ __('Delete') }}
                         </button>
                         @endif
                     </form>
@@ -110,11 +113,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-slate-700 mb-1">No commissions found</h3>
+                <h3 class="text-lg font-medium text-slate-700 mb-1">{{ __('No commissions found') }}</h3>
                 @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
-                <p class="text-slate-500 mb-4">Get started by creating your first commission.</p>
+                <p class="text-slate-500 mb-4">{{ __('Get started by creating your first commission.') }}</p>
                 <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                    Create One
+                    {{ __('Create One') }}
                 </a>
                 @endif
             </div>
