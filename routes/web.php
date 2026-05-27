@@ -50,14 +50,11 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
-<<<<<<< HEAD
-Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
+
+Route::middleware(['auth', ])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
 });
-=======
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
->>>>>>> e320544adc97aa55bc7616a975e0871aca3ac586
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
@@ -96,6 +93,14 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-applications', [ApplicationController::class, 'index'])
         ->name('applications.index');
+}); 
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
+
+    Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])
+        ->name('offers.accept');
 });
+
 
 require __DIR__.'/auth.php';
