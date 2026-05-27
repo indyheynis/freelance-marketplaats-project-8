@@ -1,18 +1,21 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<x-base-layout>
+    <main class="flex-1 flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
 
-        <!-- Foutmeldingen -->
-        @if ($errors->any())
-        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-            <strong class="block font-semibold mb-1">Er zijn een aantal fouten:</strong>
-            <ul class="list-disc list-inside text-sm">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
+                    <!-- Foutmeldingen -->
+                    @if ($errors->any())
+                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md dark:bg-red-900/40 dark:border-red-600 dark:text-red-300">
+                        <strong class="block font-semibold mb-1">Er zijn een aantal fouten:</strong>
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
 
         <!-- Voornaam -->
         <div class="mt-4">
@@ -67,7 +70,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Al een account?') }}
             </a>
 
@@ -75,5 +78,8 @@
                 {{ __('Registreren') }}
             </x-primary-button>
         </div>
-    </form>
-</x-guest-layout>
+                </form>
+            </div>
+        </div>
+    </main>
+</x-base-layout>
