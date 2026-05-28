@@ -15,7 +15,7 @@
                             {{ $freelancer->firstname }} {{ $freelancer->lastname }}
                         </h1>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700 mt-1">
-                            Freelancer
+                            {{ __('Freelancer') }}
                         </span>
                         @if($freelancer->skills)
                             <div class="flex flex-wrap gap-1.5 mt-2">
@@ -33,7 +33,7 @@
                 <div class="border-t border-slate-100 grid grid-cols-3 divide-x divide-slate-100">
                     <div class="px-6 py-4 text-center">
                         <p class="text-2xl font-bold text-slate-800">{{ $completedCommissions }}</p>
-                        <p class="text-xs text-slate-500 mt-0.5">Opdrachten gedaan</p>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ __('Commissions Completed') }}</p>
                     </div>
                     <div class="px-6 py-4 text-center">
                         @if($averageRating)
@@ -43,19 +43,19 @@
                                     <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                                 </svg>
                             </div>
-                            <p class="text-xs text-slate-500 mt-0.5">Gemiddelde rating ({{ $freelancer->receivedReviews->count() }} {{ $freelancer->receivedReviews->count() === 1 ? 'review' : 'reviews' }})</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ __('Average rating') }} ({{ $freelancer->receivedReviews->count() }} {{ $freelancer->receivedReviews->count() === 1 ? 'review' : 'reviews' }})</p>
                         @else
                             <p class="text-2xl font-bold text-slate-400">—</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Nog geen reviews</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ __('No reviews yet') }}</p>
                         @endif
                     </div>
                     <div class="px-6 py-4 text-center">
                         @if($averageDuration)
                             <p class="text-2xl font-bold text-slate-800">{{ $averageDuration }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Gem. duur (dagen)</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ __('Avg. Duration (days)') }}</p>
                         @else
                             <p class="text-2xl font-bold text-slate-400">—</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Gem. duur (dagen)</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ __('Avg. Duration (days)') }}</p>
                         @endif
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                     <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                     </svg>
-                    <p class="text-slate-500 text-sm">Deze freelancer heeft nog geen reviews ontvangen.</p>
+                    <p class="text-slate-500 text-sm">{{ __('This freelancer has not received any reviews yet.') }}</p>
                 </div>
             @endforelse
         </div>

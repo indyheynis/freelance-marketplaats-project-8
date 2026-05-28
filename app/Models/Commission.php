@@ -20,6 +20,19 @@ class Commission extends Model
         'image',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+
+        return asset('images/commission-placeholder.svg');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -30,14 +43,14 @@ class Commission extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
     public function offers()
     {
         return $this->hasMany(Offer::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function user()

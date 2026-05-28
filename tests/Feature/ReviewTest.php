@@ -153,7 +153,7 @@ test('freelancer ziet lege staat als er geen reviews zijn', function () {
     $response = $this->actingAs($freelancer)->get('/my-reviews');
 
     $response->assertOk();
-    $response->assertSee('Je hebt nog geen reviews ontvangen');
+    $response->assertSee('You have not received any reviews yet.');
 });
 
 test('opdrachtgever heeft geen toegang tot mijn reviews pagina', function () {

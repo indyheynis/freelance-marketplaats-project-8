@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class OfferSubmitted extends Mailable
+class OfferStatusChanged extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -15,7 +15,11 @@ class OfferSubmitted extends Mailable
 
     public function build()
     {
-        return $this->subject('Confirmation: your offer has been sent')
-            ->view('emails.offer-submitted');
+        $subject = $this->offer->status === 'accepted'
+            ? 'Your offer has been accepted'
+            : 'Your offer has been rejected';
+
+        return $this->subject($subject)
+            ->view('emails.offer-status-changed');
     }
 }

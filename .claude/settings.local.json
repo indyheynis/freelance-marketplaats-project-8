@@ -8,7 +8,9 @@
       "Bash(cmd *)",
       "Bash(./vendor/bin/pest *)",
       "Bash(Get-Content C:\\\\Users\\\\Indy\\\\Herd\\\\freelance-marketplaats-project-8\\\\routes\\\\web.php)",
-      "Bash(Select-String -Pattern \"\\(Route|GET|POST|user|freelancer|profile\\)\")"
+      "Bash(Select-String -Pattern \"\\(Route|GET|POST|user|freelancer|profile\\)\")",
+      "PowerShell(php artisan test 2>&1 | Select-Object -Last 20)",
+      "PowerShell(php artisan test --compact --filter PasswordConfirmationTest 2>&1 | Select-Object -Last 10)"
     ]
   },
   "enabledMcpjsonServers": [
