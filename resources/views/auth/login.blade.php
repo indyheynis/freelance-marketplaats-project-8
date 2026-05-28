@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-slate-800">Log hier in</h1>
+        <h1 class="text-2xl font-bold text-slate-800">Welcome Back</h1>
         <p class="text-slate-500 mt-1">Sign in to your account</p>
     </div>
 
