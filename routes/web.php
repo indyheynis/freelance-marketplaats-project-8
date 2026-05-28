@@ -101,6 +101,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-applications', [ApplicationController::class, 'index'])
         ->name('applications.index');
+    Route::get('/my-reviews', [ReviewController::class, 'index'])
+        ->name('reviews.index');
 });
 
 require __DIR__.'/auth.php';
