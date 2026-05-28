@@ -104,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
     Route::get('/my-reviews', [ReviewController::class, 'index'])
         ->name('reviews.index');
+            Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
+        ->name('commissions.pdf');
 });
 
 require __DIR__.'/auth.php';
