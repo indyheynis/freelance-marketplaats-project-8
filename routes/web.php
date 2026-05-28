@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
+    Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

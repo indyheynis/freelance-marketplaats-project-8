@@ -20,8 +20,8 @@
 
         <div>
             <x-input-label for="skills" :value="__('Skills')" />
-            <p class="text-xs text-gray-500 mt-1">{{ __('Enter skills separated by commas') }}</p>
-            <textarea id="skills" name="skills" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ implode(', ', $user->skills ?? []) }}</textarea>
+            <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">{{ __('Enter skills separated by commas') }}</p>
+            <textarea id="skills" name="skills" class="text-sm text-slate-500 dark:text-slate-500 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ implode(', ', $user->skills ?? []) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('skills')" />
         </div>
 
