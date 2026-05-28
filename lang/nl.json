@@ -10,6 +10,7 @@
     "Management": "Beheer",
     "Profile": "Profiel",
     "Log out": "Uitloggen",
+    "Log Out": "Uitloggen",
     "Language": "Taal",
 
     "First Name": "Voornaam",
@@ -28,7 +29,6 @@
     "Save": "Opslaan",
     "Saved.": "Opgeslagen.",
     "Freelancer": "Freelancer",
-    "View Details": "Bekijk details",
 
     "Browse and manage freelance commissions": "Bekijk en beheer freelance opdrachten",
     "Create New": "Nieuw aanmaken",
@@ -126,5 +126,34 @@
     "Generated via FreelanceHub": "Gegenereerd via FreelanceHub",
     "All rights reserved.": "Alle rechten voorbehouden.",
     "Search commissions...": "Zoek opdrachten...",
-    "Search categories...": "Zoek categorieën..."
+    "Search categories...": "Zoek categorieën...",
+
+    "Email": "E-mail",
+    "Forgot password?": "Wachtwoord vergeten?",
+    "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Wachtwoord vergeten? Geen probleem. Vul je e-mailadres in en we sturen je een link om een nieuw wachtwoord in te stellen.",
+    "Email Password Reset Link": "Verstuur herstelLink",
+    "Remember me": "Onthoud mij",
+
+    "Reset Password": "Wachtwoord opnieuw instellen",
+    "New Password": "Nieuw wachtwoord",
+
+    "This is a secure area of the application. Please confirm your password before continuing.": "Dit is een beveiligd gedeelte. Bevestig je wachtwoord om verder te gaan.",
+    "Confirm": "Bevestigen",
+
+    "Resend Verification Email": "Verificatie-e-mail opnieuw sturen",
+    "Your email address is unverified.": "Je e-mailadres is niet geverifieerd.",
+    "Click here to re-send the verification email.": "Klik hier om de verificatie-e-mail opnieuw te sturen.",
+    "A new verification link has been sent to your email address.": "Er is een nieuwe verificatielink naar je e-mailadres gestuurd.",
+    "A new verification link has been sent to the email address you provided during registration.": "Er is een nieuwe verificatielink gestuurd naar het e-mailadres dat je bij registratie hebt opgegeven.",
+
+    "Profile Information": "Profielinformatie",
+    "Update Password": "Wachtwoord bijwerken",
+    "Current Password": "Huidig wachtwoord",
+    "Ensure your account is using a long, random password to stay secure.": "Gebruik een lang, willekeurig wachtwoord om je account veilig te houden.",
+
+    "Delete Account": "Account verwijderen",
+    "Are you sure you want to delete your account?": "Weet je zeker dat je je account wilt verwijderen?",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Zodra je account is verwijderd, worden alle gegevens permanent gewist. Download eerst alles wat je wilt bewaren.",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Zodra je account is verwijderd, worden alle gegevens permanent gewist. Voer je wachtwoord in ter bevestiging.",
+    "Cancel": "Annuleren"
 }
