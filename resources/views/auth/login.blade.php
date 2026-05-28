@@ -3,7 +3,7 @@
         <div class="w-full max-w-md">
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
                 <div class="text-center mb-6">
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Welcome Back</h1>
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Log hier in</h1>
                     <p class="text-slate-500 mt-1 dark:text-slate-300">Sign in to your account</p>
                 </div>
 
