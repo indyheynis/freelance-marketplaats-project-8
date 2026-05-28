@@ -1,6 +1,9 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<x-base-layout>
+    <main class="flex-1 flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
 
         @if ($errors->any())
         <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
@@ -69,5 +72,8 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
-    </form>
-</x-guest-layout>
+                </form>
+            </div>
+        </div>
+    </main>
+</x-base-layout>

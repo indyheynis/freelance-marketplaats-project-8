@@ -137,6 +137,31 @@ test('freelancer kan een offerte indienen op een opdracht', function () {
     });
 });
 
+test('commission show can load offers without relation error', function () {
+    $client = User::factory()->create(['role' => 'client']);
+    $freelancer = User::factory()->create(['role' => 'freelancer']);
+    $category = Category::create(['name' => 'Development']);
+    $commission = Commission::create([
+        'title' => 'App bouwen',
+        'budget' => 2000,
+        'deadline' => now()->addDays(60)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $client->id,
+    ]);
+
+    $commission->offers()->create([
+        'user_id' => $freelancer->id,
+        'price' => 1800,
+        'message' => 'Ik kan dit project uitvoeren voor dit bedrag.',
+    ]);
+
+    $response = $this->get("/commissions/{$commission->id}");
+
+    $response->assertOk();
+    $response->assertSee('App bouwen');
+    $response->assertSee('1800');
+});
+
 test('gast kan geen offerte indienen', function () {
     $client = User::factory()->create(['role' => 'client']);
     $category = Category::create(['name' => 'Design']);

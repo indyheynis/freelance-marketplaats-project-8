@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
+
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
@@ -100,17 +101,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-applications', [ApplicationController::class, 'index'])
         ->name('applications.index');
-});
-
-Route::middleware(['auth', 'role:freelancer'])->group(function () {
-    Route::get('/my-reviews', [ReviewController::class, 'index'])
-        ->name('reviews.index');
-});
-
-// Route voor PDF-generatie
-Route::middleware(['auth'])->group(function () {
-    Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
-        ->name('commissions.pdf');
 });
 
 require __DIR__.'/auth.php';

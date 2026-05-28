@@ -43,14 +43,14 @@ class Commission extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
     public function offers()
     {
         return $this->hasMany(Offer::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function user()

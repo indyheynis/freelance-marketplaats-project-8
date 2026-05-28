@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ApplicationStatusChanged;
-use App\Mail\OfferSubmitted;
+use App\Mail\ApplicationSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
 use Illuminate\Http\Request;
@@ -49,7 +49,7 @@ class ApplicationController extends Controller
         ]);
 
         Mail::to(Auth::user()->email)
-            ->send(new OfferSubmitted($application));
+            ->send(new ApplicationSubmitted($application));
 
         return back()->with('success', 'Your application has been sent!');
     }
