@@ -75,6 +75,8 @@ class ApplicationController extends Controller
             'status' => 'accepted',
         ]);
 
+        $application->commission->update(['status' => 'in_progress']);
+
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
 

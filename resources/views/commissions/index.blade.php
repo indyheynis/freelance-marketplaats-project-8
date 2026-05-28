@@ -28,6 +28,14 @@
 
         <form method="GET" action="{{ route('commissions.index') }}" class="flex flex-wrap gap-3 items-center mb-8">
             <div class="relative flex-1 min-w-[200px]">
+                <input type="text" name="q" value="{{ request('q') }}"
+                    placeholder="{{ __('Search commissions...') }}"
+                    class="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:font-normal placeholder:text-slate-400">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <div class="relative min-w-[180px]">
                 <select name="category_id"
                     class="w-full pl-4 pr-10 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400 dark:hover:border-slate-500">
                     <option value="">{{ __('-- All categories --') }}</option>
@@ -49,7 +57,7 @@
                 </svg>
                 {{ __('Filter') }}
             </button>
-            @if(request('category_id'))
+            @if(request('category_id') || request('q'))
             <a href="{{ route('commissions.index') }}"
                 class="inline-flex items-center gap-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,11 +77,22 @@
                 </div>
                 <div class="flex justify-between items-start mb-4">
                     <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">{{ $commission->title }}</h3>
-                    @if($commission->category)
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300">
-                        {{ $commission->category->name }}
-                    </span>
-                    @endif
+                    <div class="flex flex-col items-end gap-1">
+                        @if($commission->category)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300">
+                            {{ $commission->category->name }}
+                        </span>
+                        @endif
+                        @if($commission->status === 'in_progress')
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+                            {{ __('In Progress') }}
+                        </span>
+                        @elseif($commission->status === 'open')
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300">
+                            {{ __('Open') }}
+                        </span>
+                        @endif
+                    </div>
                 </div>
                 <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
                 <div class="space-y-2 mb-4">
