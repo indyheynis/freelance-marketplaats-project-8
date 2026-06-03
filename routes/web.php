@@ -113,4 +113,12 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/invoices/{invoice}/mark-paid', [InvoiceController::class, 'markPaid'])->name('invoices.mark-paid');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/map', function () {
+    $commissions = \App\Models\Commission::with('category')
+        ->whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->get();
+    return view('map.index', compact('commissions'));
+})->name('map.index');
+
+require __DIR__ . '/auth.php';
