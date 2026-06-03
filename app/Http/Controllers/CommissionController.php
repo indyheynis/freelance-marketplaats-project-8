@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommissionStoreRequest;
 use App\Models\Commission;
 use App\Models\Category;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -64,17 +65,8 @@ class CommissionController extends Controller
 
 
 
-    public function store(Request $request)
+    public function store(CommissionStoreRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'budget' => 'nullable|numeric',
-            'deadline' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
         $data = $request->all();
         $data['user_id'] = auth()->id();
 
@@ -113,17 +105,8 @@ class CommissionController extends Controller
 
 
 
-    public function update(Request $request, Commission $commission)
+    public function update(CommissionStoreRequest $request, Commission $commission)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'budget' => 'nullable|numeric',
-            'deadline' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
         $data = $request->all();
 
         if ($request->hasFile('image')) {
