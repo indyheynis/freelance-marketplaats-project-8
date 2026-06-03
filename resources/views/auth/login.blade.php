@@ -4,8 +4,8 @@
         <p class="mt-1 text-slate-500">Sign in to your account</p>
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+                <!-- Session Status -->
+                <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
@@ -13,14 +13,14 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
         <div>
             <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block w-full mt-1"
+            <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
@@ -28,7 +28,7 @@
         </div>
 
         <!-- Remember Me -->
-        <div class="flex items-center justify-between">
+        <div class="flex justify-between items-center">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="text-indigo-600 rounded shadow-sm border-slate-300 focus:ring-indigo-500" name="remember">
                 <span class="text-sm ms-2 text-slate-600">{{ __('Remember me') }}</span>
@@ -45,11 +45,14 @@
             {{ __('Log in') }}
         </x-primary-button>
 
-        <div class="pt-4 text-center border-t border-slate-100">
-            <span class="text-sm text-slate-500">Don't have an account?</span>
+        <div class="pt-4 text-center border-t border-slate-100 dark:border-slate-700">
+            <span class="text-sm text-slate-500 dark:text-slate-300">Don't have an account?</span>
             <a class="text-sm font-medium text-indigo-600 hover:text-indigo-700 ms-1" href="{{ route('register') }}">
                 {{ __('Sign up') }}
             </a>
         </div>
     </form>
-</x-guest-layout>
+            </div>
+        </div>
+    </main>
+</x-base-layout>

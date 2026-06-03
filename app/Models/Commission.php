@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Commission extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'description',
@@ -14,7 +17,21 @@ class Commission extends Model
         'deadline',
         'category_id',
         'user_id',
+        'image',
     ];
+
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+
+        return asset('images/commission-placeholder.svg');
+    }
 
     public function category()
     {
@@ -26,5 +43,18 @@ class Commission extends Model
         return $this->hasMany(Application::class);
     }
 
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

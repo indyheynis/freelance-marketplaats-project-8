@@ -19,7 +19,8 @@ test('beheerder kan gebruikersrol aanpassen', function () {
     $user = User::factory()->create(['role' => 'freelancer']);
 
     $response = $this->actingAs($admin)->put("/users/{$user->id}", [
-        'name' => $user->name,
+        'firstname' => $user->firstname,
+        'lastname' => $user->lastname,
         'email' => $user->email,
         'role' => 'client',
     ]);
@@ -28,12 +29,35 @@ test('beheerder kan gebruikersrol aanpassen', function () {
     $this->assertDatabaseHas('users', ['id' => $user->id, 'role' => 'client']);
 });
 
+test('beheerder kan een nieuwe gebruiker toevoegen', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $response = $this->actingAs($admin)->post('/users', [
+        'firstname' => 'Nieuwe',
+        'lastname' => 'Gebruiker',
+        'email' => 'nieuwe@example.com',
+        'role' => 'client',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertRedirect(route('users.index'));
+    $this->assertDatabaseHas('users', [
+        'firstname' => 'Nieuwe',
+        'lastname' => 'Gebruiker',
+        'name' => 'Nieuwe Gebruiker',
+        'email' => 'nieuwe@example.com',
+        'role' => 'client',
+    ]);
+});
+
 test('beheerder kan gebruikersgegevens bijwerken', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $user = User::factory()->create(['role' => 'freelancer', 'email' => 'oud@example.com']);
 
     $response = $this->actingAs($admin)->put("/users/{$user->id}", [
-        'name' => 'Bijgewerkte naam',
+        'firstname' => 'Bijgewerkt',
+        'lastname' => 'Naam',
         'email' => 'nieuw@example.com',
         'role' => 'freelancer',
     ]);
@@ -41,7 +65,9 @@ test('beheerder kan gebruikersgegevens bijwerken', function () {
     $response->assertRedirect(route('users.index'));
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
-        'name' => 'Bijgewerkte naam',
+        'firstname' => 'Bijgewerkt',
+        'lastname' => 'Naam',
+        'name' => 'Bijgewerkt Naam',
         'email' => 'nieuw@example.com',
     ]);
 });
@@ -63,7 +89,8 @@ test('gebruikersrol moet geldig zijn bij bijwerken', function () {
     $user = User::factory()->create(['role' => 'freelancer']);
 
     $response = $this->actingAs($admin)->put("/users/{$user->id}", [
-        'name' => $user->name,
+        'firstname' => $user->firstname,
+        'lastname' => $user->lastname,
         'email' => $user->email,
         'role' => 'superuser',
     ]);
@@ -77,7 +104,8 @@ test('e-mailadres moet uniek zijn bij bijwerken van gebruiker', function () {
     $user2 = User::factory()->create(['role' => 'freelancer']);
 
     $response = $this->actingAs($admin)->put("/users/{$user2->id}", [
-        'name' => $user2->name,
+        'firstname' => $user2->firstname,
+        'lastname' => $user2->lastname,
         'email' => 'bestaand@example.com',
         'role' => 'freelancer',
     ]);
