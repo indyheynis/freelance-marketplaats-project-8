@@ -18,6 +18,9 @@ class Commission extends Model
         'category_id',
         'user_id',
         'image',
+        'latitude',
+        'longitude',
+        'location_name',
     ];
 
     protected $appends = [
