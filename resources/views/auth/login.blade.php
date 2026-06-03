@@ -1,11 +1,8 @@
-<x-base-layout>
-    <main class="flex-1 flex items-center justify-center py-12 px-4">
-        <div class="w-full max-w-md">
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
-                <div class="text-center mb-6">
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Log hier in</h1>
-                    <p class="text-slate-500 mt-1 dark:text-slate-300">Sign in to your account</p>
-                </div>
+<x-guest-layout>
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-slate-800">Log hier in</h1>
+        <p class="mt-1 text-slate-500">Sign in to your account</p>
+    </div>
 
                 <!-- Session Status -->
                 <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -31,26 +28,26 @@
         </div>
 
         <!-- Remember Me -->
-        <div class="flex items-center justify-between">
+        <div class="flex justify-between items-center">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-slate-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-slate-600">{{ __('Remember me') }}</span>
+                <input id="remember_me" type="checkbox" class="text-indigo-600 rounded shadow-sm border-slate-300 focus:ring-indigo-500" name="remember">
+                <span class="text-sm ms-2 text-slate-600">{{ __('Remember me') }}</span>
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-sm text-indigo-600 hover:text-indigo-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                <a class="text-sm text-indigo-600 rounded-md hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                     {{ __('Forgot password?') }}
                 </a>
             @endif
         </div>
 
-        <x-primary-button class="w-full justify-center">
+        <x-primary-button class="justify-center w-full">
             {{ __('Log in') }}
         </x-primary-button>
 
-        <div class="text-center pt-4 border-t border-slate-100 dark:border-slate-700">
+        <div class="pt-4 text-center border-t border-slate-100 dark:border-slate-700">
             <span class="text-sm text-slate-500 dark:text-slate-300">Don't have an account?</span>
-            <a class="text-sm text-indigo-600 hover:text-indigo-700 font-medium ms-1" href="{{ route('register') }}">
+            <a class="text-sm font-medium text-indigo-600 hover:text-indigo-700 ms-1" href="{{ route('register') }}">
                 {{ __('Sign up') }}
             </a>
         </div>
