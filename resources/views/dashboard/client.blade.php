@@ -61,10 +61,10 @@
                         $hasAccepted = $commission->applications->where('status', 'accepted')->count() > 0;
                         @endphp
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-    @if($hasAccepted) bg-blue-100 text-blue-800
-    @elseif($commission->status === 'open') bg-green-100 text-green-800
-    @elseif($commission->status === 'closed') bg-red-100 text-red-800
-    @else bg-gray-100 text-gray-800 @endif">
+    @if($hasAccepted) bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300
+    @elseif($commission->status === 'open') bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300
+    @elseif($commission->status === 'closed') bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300
+    @else bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 @endif">
                             @if($hasAccepted) 🎯 Taken
                             @else {{ ucfirst($commission->status) }}
                             @endif
@@ -76,7 +76,7 @@
                             View
                         </a>
                         @if($commission->status === 'open')
-                        <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 text-center bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 text-center bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             Edit
                         </a>
                         @endif
@@ -85,7 +85,7 @@
                 @empty
                 <div class="col-span-full text-center py-12">
                     <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>

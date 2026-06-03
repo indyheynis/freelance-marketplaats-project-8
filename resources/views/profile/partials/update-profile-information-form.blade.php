@@ -19,19 +19,19 @@
 
         <div>
             <x-input-label for="firstname" :value="__('First Name')" />
-            <x-text-input id="firstname" name="firstname" type="text" class="mt-1 block w-full" :value="old('firstname', $user->firstname)" required autofocus autocomplete="given-name" />
+            <x-text-input id="firstname" name="firstname" type="text" class="text-sm text-slate-500 dark:text-slate-500" :value="old('firstname', $user->firstname)" required autofocus autocomplete="given-name" />
             <x-input-error class="mt-2" :messages="$errors->get('firstname')" />
         </div>
 
         <div>
             <x-input-label for="lastname" :value="__('Last Name')" />
-            <x-text-input id="lastname" name="lastname" type="text" class="mt-1 block w-full" :value="old('lastname', $user->lastname)" required autocomplete="family-name" />
+            <x-text-input id="lastname" name="lastname" type="text" class="text-sm text-slate-500 dark:text-slate-500" :value="old('lastname', $user->lastname)" required autocomplete="family-name" />
             <x-input-error class="mt-2" :messages="$errors->get('lastname')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="text-sm text-slate-500 dark:text-slate-500" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())

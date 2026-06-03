@@ -10,6 +10,7 @@
     "Management": "Beheer",
     "Profile": "Profiel",
     "Log out": "Uitloggen",
+    "Log Out": "Uitloggen",
     "Language": "Taal",
 
     "First Name": "Voornaam",
@@ -28,7 +29,6 @@
     "Save": "Opslaan",
     "Saved.": "Opgeslagen.",
     "Freelancer": "Freelancer",
-    "View Details": "Bekijk details",
 
     "Browse and manage freelance commissions": "Bekijk en beheer freelance opdrachten",
     "Create New": "Nieuw aanmaken",
@@ -126,5 +126,60 @@
     "Generated via FreelanceHub": "Gegenereerd via FreelanceHub",
     "All rights reserved.": "Alle rechten voorbehouden.",
     "Search commissions...": "Zoek opdrachten...",
-    "Search categories...": "Zoek categorieën..."
+    "Search categories...": "Zoek categorieën...",
+    "Open": "Open",
+    "In Progress": "Lopend",
+
+    "The freelance marketplace for everyone": "De freelance marktplaats voor iedereen",
+    "Connect with top <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600\">freelancers</span><br>or find your next client": "Werk samen met top <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600\">freelancers</span><br>of vind je volgende opdrachtgever",
+    "FreelanceHub brings clients and freelancers together. Post commissions, browse opportunities, and get work done — all in one place.": "FreelanceHub brengt opdrachtgevers en freelancers samen. Plaats opdrachten, bekijk mogelijkheden en zet ze om in resultaat — alles op één plek.",
+    "Get Started Free": "Gratis beginnen",
+    "Browse Commissions": "Bekijk opdrachten",
+    "Active Freelancers": "Actieve freelancers",
+    "Commissions Posted": "Geplaatste opdrachten",
+    "Satisfaction Rate": "Tevredenheidsgraad",
+    "How it works": "Hoe het werkt",
+    "Simple steps to get started": "Eenvoudige stappen om te beginnen",
+    "1. Create an account": "1. Maak een account aan",
+    "Sign up as a freelancer or client and set up your profile in minutes.": "Registreer als freelancer of opdrachtgever en stel je profiel in een paar minuten in.",
+    "2. Post or browse": "2. Plaatsen of bladeren",
+    "Clients post commissions, freelancers browse and find the perfect project.": "Opdrachtgevers plaatsen opdrachten, freelancers bladeren en vinden het perfecte project.",
+    "3. Get it done": "3. Aan de slag",
+    "Connect, collaborate and complete projects with ease.": "Maak contact, werk samen en voltooi projecten moeiteloos.",
+    "Built for both sides": "Gemaakt voor beide kanten",
+    "Whether you're hiring or looking for work, FreelanceHub has you covered.": "Of je nu iemand zoekt of werk zoekt, FreelanceHub heeft je gedekt.",
+    "For Clients": "Voor opdrachtgevers",
+    "Post commissions easily": "Plaats opdrachten eenvoudig",
+    "Set your own budget & deadline": "Stel je eigen budget en deadline in",
+    "Find the right freelancer fast": "Vind snel de juiste freelancer",
+    "Join as Client": "Aanmelden als opdrachtgever",
+
+    "Email": "E-mail",
+    "Forgot password?": "Wachtwoord vergeten?",
+    "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Wachtwoord vergeten? Geen probleem. Vul je e-mailadres in en we sturen je een link om een nieuw wachtwoord in te stellen.",
+    "Email Password Reset Link": "Verstuur herstelLink",
+    "Remember me": "Onthoud mij",
+
+    "Reset Password": "Wachtwoord opnieuw instellen",
+    "New Password": "Nieuw wachtwoord",
+
+    "This is a secure area of the application. Please confirm your password before continuing.": "Dit is een beveiligd gedeelte. Bevestig je wachtwoord om verder te gaan.",
+    "Confirm": "Bevestigen",
+
+    "Resend Verification Email": "Verificatie-e-mail opnieuw sturen",
+    "Your email address is unverified.": "Je e-mailadres is niet geverifieerd.",
+    "Click here to re-send the verification email.": "Klik hier om de verificatie-e-mail opnieuw te sturen.",
+    "A new verification link has been sent to your email address.": "Er is een nieuwe verificatielink naar je e-mailadres gestuurd.",
+    "A new verification link has been sent to the email address you provided during registration.": "Er is een nieuwe verificatielink gestuurd naar het e-mailadres dat je bij registratie hebt opgegeven.",
+
+    "Profile Information": "Profielinformatie",
+    "Update Password": "Wachtwoord bijwerken",
+    "Current Password": "Huidig wachtwoord",
+    "Ensure your account is using a long, random password to stay secure.": "Gebruik een lang, willekeurig wachtwoord om je account veilig te houden.",
+
+    "Delete Account": "Account verwijderen",
+    "Are you sure you want to delete your account?": "Weet je zeker dat je je account wilt verwijderen?",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Zodra je account is verwijderd, worden alle gegevens permanent gewist. Download eerst alles wat je wilt bewaren.",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Zodra je account is verwijderd, worden alle gegevens permanent gewist. Voer je wachtwoord in ter bevestiging.",
+    "Cancel": "Annuleren"
 }
