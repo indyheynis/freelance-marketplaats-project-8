@@ -30,7 +30,7 @@ class Commission extends Model
     public function getImageUrlAttribute(): string
     {
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            return asset('storage/'.$this->image);
         }
 
         return asset('images/commission-placeholder.svg');
@@ -59,5 +59,10 @@ class Commission extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
     }
 }

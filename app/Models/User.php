@@ -59,6 +59,16 @@ class User extends Authenticatable
         return $this->hasMany(Commission::class);
     }
 
+    public function clientInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'client_id');
+    }
+
+    public function freelancerInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'freelancer_id');
+    }
+
     public function acceptedApplications()
     {
         return $this->hasMany(Application::class)->where('status', 'accepted');
