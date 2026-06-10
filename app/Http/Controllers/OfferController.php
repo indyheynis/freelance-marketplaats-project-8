@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OfferReceived;
 use App\Mail\OfferStatusChanged;
 use App\Mail\OfferSubmitted;
+use App\Models\Invoice;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,12 +15,6 @@ class OfferController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'commission_id' => 'required|exists:commissions,id',
-            'price' => 'required|numeric',
-            'message' => 'nullable|string',
-        ]);
-
         $offer = Offer::create([
             'user_id' => Auth::id(),
             'commission_id' => $request->commission_id,
@@ -53,7 +48,18 @@ class OfferController extends Controller
         }
 
         $offer->update(['status' => 'accepted']);
+        $offer->commission->update(['status' => 'in_progress']);
         Mail::to($offer->user->email)->send(new OfferStatusChanged($offer));
+
+        Invoice::create([
+            'invoice_number' => Invoice::generateNumber(),
+            'offer_id' => $offer->id,
+            'commission_id' => $offer->commission_id,
+            'client_id' => auth()->id(),
+            'freelancer_id' => $offer->user_id,
+            'amount' => $offer->price,
+            'status' => 'pending',
+        ]);
 
         return back()->with('success', 'Offer accepted!');
     }

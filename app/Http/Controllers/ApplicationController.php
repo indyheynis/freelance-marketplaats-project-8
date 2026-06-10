@@ -6,6 +6,7 @@ use App\Mail\ApplicationStatusChanged;
 use App\Mail\ApplicationSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -84,6 +85,16 @@ class ApplicationController extends Controller
         Application::where('commission_id', $application->commission_id)
             ->where('id', '!=', $application->id)
             ->update(['status' => 'rejected']);
+
+        Invoice::create([
+            'invoice_number' => Invoice::generateNumber(),
+            'offer_id' => null,
+            'commission_id' => $application->commission_id,
+            'client_id' => Auth::id(),
+            'freelancer_id' => $application->user_id,
+            'amount' => $application->commission->budget,
+            'status' => 'pending',
+        ]);
 
         return back()->with('success', 'Application accepted!');
     }

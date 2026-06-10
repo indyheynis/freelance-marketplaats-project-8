@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
@@ -58,7 +59,6 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
-
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
     Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
@@ -104,8 +104,21 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
     Route::get('/my-reviews', [ReviewController::class, 'index'])
         ->name('reviews.index');
-            Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
+    Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
         ->name('commissions.pdf');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
+    Route::patch('/invoices/{invoice}/mark-paid', [InvoiceController::class, 'markPaid'])->name('invoices.mark-paid');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/map', function () {
+    $commissions = \App\Models\Commission::with('category')
+        ->whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->get();
+    return view('map.index', compact('commissions'));
+})->name('map.index');
+
+require __DIR__ . '/auth.php';
