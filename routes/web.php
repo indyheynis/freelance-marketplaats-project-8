@@ -43,6 +43,7 @@ Route::get('categories/search', [CategoryController::class, 'search'])->name('ca
 Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
 
 Route::middleware('auth')->group(function () {
@@ -60,7 +61,7 @@ Route::middleware(['auth', 'role:client'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+   
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });
@@ -78,13 +79,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-});
-
-Route::middleware(['auth'])->group(function () {
-    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
-        ->name('applications.store');
-    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
-        ->name('applications.destroy');
 });
 
 // applications accept/reject routes
