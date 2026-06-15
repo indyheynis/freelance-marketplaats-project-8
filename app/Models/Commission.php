@@ -65,4 +65,9 @@ class Commission extends Model
     {
         return $this->hasOne(Invoice::class);
     }
+
+    public function favoriteBY()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
 }
