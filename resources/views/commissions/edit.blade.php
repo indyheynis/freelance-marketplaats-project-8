@@ -130,18 +130,18 @@
     <script>
         const existingLat = {
             {
-                $commission - > latitude ?? 52.3
+                $commission -> latitude ?? 52.3
             }
         };
         const existingLng = {
             {
-                $commission - > longitude ?? 5.3
+                $commission -> longitude ?? 5.3
             }
         };
 
         const editMap = L.map('editMap').setView([existingLat, existingLng], {
             {
-                $commission - > latitude ? 13 : 7
+                $commission -> latitude ? 13 : 7
             }
         });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -151,14 +151,14 @@
         let editMarker;
 
         // Bestaande locatie tonen
-        @if($commission - > latitude)
+        @if($commission -> latitude)
         editMarker = L.marker([{
             {
-                $commission - > latitude
+                $commission -> latitude
             }
         }, {
             {
-                $commission - > longitude
+                $commission -> longitude
             }
         }]).addTo(editMap);
         @endif
