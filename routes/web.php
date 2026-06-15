@@ -11,6 +11,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -120,5 +121,14 @@ Route::get('/map', function () {
         ->get();
     return view('map.index', compact('commissions'));
 })->name('map.index');
+
+
+// Favorites routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('commissions/{commission}/favorite', [FavoriteController::class, 'toggle'])
+        ->name('favorites.toggle');
+    Route::get('favorites', [FavoriteController::class, 'index'])
+        ->name('favorites.index');
+});
 
 require __DIR__ . '/auth.php';
