@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommissionStoreRequest;
 use App\Models\Commission;
 use App\Models\Category;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class CommissionController extends Controller
+class   CommissionController extends Controller
 {
     public function index(Request $request)
     {
@@ -32,9 +33,6 @@ class CommissionController extends Controller
         return view('commissions.index', compact('commissions', 'categories'));
     }
 
-
-
-
     public function search(Request $request)
     {
         $categories = Category::all();
@@ -52,29 +50,14 @@ class CommissionController extends Controller
         return view('commissions.index', compact('commissions', 'categories'));
     }
 
-
-
-
     public function create()
     {
         $categories = Category::all();
         return view('commissions.create', compact('categories'));
     }
 
-
-
-
-    public function store(Request $request)
+    public function store(CommissionStoreRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'budget' => 'nullable|numeric',
-            'deadline' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
         $data = $request->all();
         $data['user_id'] = auth()->id();
 
@@ -87,9 +70,6 @@ class CommissionController extends Controller
         return redirect()->route('commissions.index')->with('success', 'Commission created successfully.');
     }
 
-
-
-
     public function show(Commission $commission)
     {
         // Clients can only view their own commissions
@@ -101,29 +81,14 @@ class CommissionController extends Controller
         return view('commissions.show', compact('commission'));
     }
 
-
-
-
     public function edit(Commission $commission)
     {
         $categories = Category::all();
         return view('commissions.edit', compact('commission', 'categories'));
     }
 
-
-
-
-    public function update(Request $request, Commission $commission)
+    public function update(CommissionStoreRequest $request, Commission $commission)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'budget' => 'nullable|numeric',
-            'deadline' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
         $data = $request->all();
 
         if ($request->hasFile('image')) {
@@ -138,9 +103,6 @@ class CommissionController extends Controller
 
         return redirect()->route('commissions.show', $commission)->with('success', 'Commission updated successfully.');
     }
-
-
-
 
     public function destroy(Commission $commission)
     {

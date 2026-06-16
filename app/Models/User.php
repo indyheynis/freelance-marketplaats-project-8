@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Application;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -59,6 +60,16 @@ class User extends Authenticatable
         return $this->hasMany(Commission::class);
     }
 
+    public function clientInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'client_id');
+    }
+
+    public function freelancerInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'freelancer_id');
+    }
+
     public function acceptedApplications()
     {
         return $this->hasMany(Application::class)->where('status', 'accepted');
@@ -94,5 +105,15 @@ class User extends Authenticatable
         });
 
         return round($totalDays / $applications->count());
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Commission::class, 'favorites');
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
     }
 }

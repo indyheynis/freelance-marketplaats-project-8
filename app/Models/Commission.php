@@ -18,6 +18,9 @@ class Commission extends Model
         'category_id',
         'user_id',
         'image',
+        'latitude',
+        'longitude',
+        'location_name',
     ];
 
     protected $appends = [
@@ -27,7 +30,7 @@ class Commission extends Model
     public function getImageUrlAttribute(): string
     {
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            return asset('storage/'.$this->image);
         }
 
         return asset('images/commission-placeholder.svg');
@@ -56,5 +59,15 @@ class Commission extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function favoriteBY()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
     }
 }

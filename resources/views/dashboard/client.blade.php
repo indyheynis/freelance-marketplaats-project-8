@@ -113,4 +113,58 @@
             @endif
         </div>
     </section>
+
+    <!-- Recent Invoices -->
+    <section class="py-16 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Recent Invoices</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Invoices from accepted freelancer offers</p>
+                </div>
+                <a href="{{ route('invoices.index') }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium transition-colors">
+                    View all →
+                </a>
+            </div>
+
+            @php $recentInvoices = Auth::user()->clientInvoices()->with('commission')->latest()->take(5)->get(); @endphp
+
+            @if($recentInvoices->isEmpty())
+            <p class="text-slate-500 dark:text-slate-400 text-sm">No invoices yet. Invoices are created automatically when you accept a freelancer's offer.</p>
+            @else
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50">
+                            <th class="text-left px-6 py-3 font-semibold text-slate-700 dark:text-slate-300">Invoice</th>
+                            <th class="text-left px-6 py-3 font-semibold text-slate-700 dark:text-slate-300">Commission</th>
+                            <th class="text-left px-6 py-3 font-semibold text-slate-700 dark:text-slate-300">Amount</th>
+                            <th class="text-left px-6 py-3 font-semibold text-slate-700 dark:text-slate-300">Status</th>
+                            <th class="px-6 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                        @foreach($recentInvoices as $invoice)
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                            <td class="px-6 py-3 font-mono text-slate-700 dark:text-slate-300">{{ $invoice->invoice_number }}</td>
+                            <td class="px-6 py-3 text-slate-600 dark:text-slate-400">{{ $invoice->commission->title ?? '-' }}</td>
+                            <td class="px-6 py-3 font-semibold text-slate-800 dark:text-slate-200">€{{ number_format($invoice->amount, 2, ',', '.') }}</td>
+                            <td class="px-6 py-3">
+                                @if($invoice->isPaid())
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300">Paid</span>
+                                @else
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Pending</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-3 text-right">
+                                <a href="{{ route('invoices.show', $invoice) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium transition-colors">View</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @endif
+        </div>
+    </section>
 </x-base-layout>

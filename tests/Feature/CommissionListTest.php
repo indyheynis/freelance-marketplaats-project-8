@@ -75,3 +75,12 @@ test('bezoeker ziet lege lijst als er geen opdrachten zijn', function () {
 
     $response->assertOk();
 });
+
+test('client kan de opdracht aanmaken pagina bereiken', function () {
+    $client = User::factory()->create(['role' => 'client']);
+
+    $response = $this->actingAs($client)->get('/commissions/create');
+
+    $response->assertOk();
+    $response->assertSee('Create New Commission');
+});

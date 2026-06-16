@@ -5,11 +5,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,6 +44,12 @@ Route::get('categories/search', [CategoryController::class, 'search'])->name('ca
 Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
+Route::middleware(['auth', 'role:client'])->group(function () {
+    Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
+});
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])
+    ->whereNumber('commission')
+    ->name('commissions.show');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
 
 Route::middleware('auth')->group(function () {
@@ -50,17 +58,15 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:client'])->group(function () {
-    Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
     Route::post('commissions', [CommissionController::class, 'store'])->name('commissions.store');
     Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
     Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
-
-
+    
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+   
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });
@@ -80,13 +86,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
-        ->name('applications.store');
-    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
-        ->name('applications.destroy');
-});
-
 // applications accept/reject routes
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
@@ -104,8 +103,30 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.index');
     Route::get('/my-reviews', [ReviewController::class, 'index'])
         ->name('reviews.index');
-            Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
+    Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
         ->name('commissions.pdf');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
+    Route::patch('/invoices/{invoice}/mark-paid', [InvoiceController::class, 'markPaid'])->name('invoices.mark-paid');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/map', function () {
+    $commissions = \App\Models\Commission::with('category')
+        ->whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->get();
+    return view('map.index', compact('commissions'));
+})->name('map.index');
+
+
+// Favorites routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('commissions/{commission}/favorite', [FavoriteController::class, 'toggle'])
+        ->name('favorites.toggle');
+    Route::get('favorites', [FavoriteController::class, 'index'])
+        ->name('favorites.index');
+});
+
+require __DIR__ . '/auth.php';
