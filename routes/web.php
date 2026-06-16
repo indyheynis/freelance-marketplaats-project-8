@@ -4,13 +4,17 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FreelancerController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Models\Commission;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +24,18 @@ Route::get('/', function () {
 Route::post('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            return redirect()->route('dashboard.admin');
+        }
+        if ($user->isFreelancer()) {
+            return redirect()->route('dashboard.freelancer');
+        }
+
+        return redirect()->route('dashboard.client');
+    })->name('dashboard');
+
     Route::get('/dashboard/freelancer', [DashboardController::class, 'freelancer'])
         ->name('dashboard.freelancer');
 
@@ -53,16 +69,23 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
     Route::post('commissions', [CommissionController::class, 'store'])->name('commissions.store');
-    Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
-    Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
-    Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
+Route::middleware(['auth', 'role:client,admin'])->group(function () {
+    Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
+    Route::put('commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
+    Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
+});
+
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
+
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-    Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
-    Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
+});
+
+Route::middleware(['auth', 'role:freelancer'])->group(function () {
+    Route::get('/my-reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -85,14 +108,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('applications.store');
     Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
         ->name('applications.destroy');
-});
-
-// applications accept/reject routes
-Route::middleware(['auth'])->group(function () {
-    Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
-        ->name('applications.store');
-    Route::delete('applications/{application}', [ApplicationController::class, 'destroy'])
-        ->name('applications.destroy');
     Route::patch('applications/{application}/accept', [ApplicationController::class, 'accept'])
         ->name('applications.accept');
     Route::patch('applications/{application}/reject', [ApplicationController::class, 'reject'])
@@ -102,8 +117,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-applications', [ApplicationController::class, 'index'])
         ->name('applications.index');
-    Route::get('/my-reviews', [ReviewController::class, 'index'])
-        ->name('reviews.index');
     Route::get('commissions/{commission}/pdf', [CommissionController::class, 'pdf'])
         ->name('commissions.pdf');
 
@@ -111,14 +124,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
     Route::patch('/invoices/{invoice}/mark-paid', [InvoiceController::class, 'markPaid'])->name('invoices.mark-paid');
+
+    // Favorites
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{commission}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
 });
 
 Route::get('/map', function () {
-    $commissions = \App\Models\Commission::with('category')
+    $commissions = Commission::with('category')
         ->whereNotNull('latitude')
         ->whereNotNull('longitude')
         ->get();
+
     return view('map.index', compact('commissions'));
 })->name('map.index');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

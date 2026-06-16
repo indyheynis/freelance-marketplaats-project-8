@@ -61,6 +61,11 @@ class Commission extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class);

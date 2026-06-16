@@ -59,6 +59,16 @@ class User extends Authenticatable
         return $this->hasMany(Commission::class);
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favoritedCommissions()
+    {
+        return $this->belongsToMany(Commission::class, 'favorites');
+    }
+
     public function clientInvoices()
     {
         return $this->hasMany(Invoice::class, 'client_id');
