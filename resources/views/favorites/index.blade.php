@@ -2,7 +2,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex justify-between items-center mb-8">
             <div>
-<<<<<<< HEAD
                 <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100">{{ __('My Favorites') }}</h1>
                 <p class="text-slate-500 dark:text-slate-400 mt-1">{{ __('Commissions you have saved') }}</p>
             </div>
@@ -136,4 +135,3 @@
         </div>
     </div>
 </x-base-layout>
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0

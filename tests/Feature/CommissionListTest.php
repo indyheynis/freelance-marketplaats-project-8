@@ -76,7 +76,6 @@ test('bezoeker ziet lege lijst als er geen opdrachten zijn', function () {
     $response->assertOk();
 });
 
-<<<<<<< HEAD
 test('freelancer kan filteren op minimumbudget', function () {
     $user = User::factory()->create(['role' => 'client']);
     $category = Category::create(['name' => 'Dev']);
