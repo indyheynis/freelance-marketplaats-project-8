@@ -11,13 +11,13 @@ test('confirm password screen can be rendered', function () {
 });
 
 test('password can be confirmed', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'freelancer']);
 
     $response = $this->actingAs($user)->post('/confirm-password', [
         'password' => 'password',
     ]);
 
-    $response->assertRedirect(route('dashboard.freelancer', absolute: false));
+    $response->assertRedirect(route('dashboard', absolute: false));
     $response->assertSessionHasNoErrors();
 });
 

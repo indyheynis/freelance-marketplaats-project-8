@@ -7,6 +7,8 @@ use App\Mail\ApplicationSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
 use App\Models\Invoice;
+use App\Notifications\ApplicationStatusChangedNotification;
+use App\Notifications\NewApplicationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -52,6 +54,8 @@ class ApplicationController extends Controller
         Mail::to(Auth::user()->email)
             ->send(new ApplicationSubmitted($application));
 
+        $commission->user->notify(new NewApplicationNotification($application));
+
         return back()->with('success', 'Your application has been sent!');
     }
 
@@ -80,6 +84,8 @@ class ApplicationController extends Controller
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
+
+        $application->freelancer->notify(new ApplicationStatusChangedNotification($application));
 
         // Reject all other applications for this commission
         Application::where('commission_id', $application->commission_id)
@@ -111,6 +117,8 @@ class ApplicationController extends Controller
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
+
+        $application->freelancer->notify(new ApplicationStatusChangedNotification($application));
 
         return back()->with('success', 'Application rejected.');
     }

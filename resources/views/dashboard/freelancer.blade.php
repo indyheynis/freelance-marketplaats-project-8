@@ -299,6 +299,73 @@
         </div>
     </section>
 
+    <!-- Matches For You -->
+    <section class="py-16 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-start justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">{{ __('Matches for you') }}</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">{{ __('Open commissions that match your skills') }}</p>
+                </div>
+                <a href="{{ route('profile.edit') }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium transition-colors shrink-0">
+                    {{ __('Edit skills') }} →
+                </a>
+            </div>
+
+            @if(empty($skills))
+                <div class="flex items-start gap-4 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-xl p-5">
+                    <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-800 rounded-lg flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-900 dark:text-indigo-100 text-sm">{{ __('No skills set yet') }}</p>
+                        <p class="text-indigo-700 dark:text-indigo-300 text-sm mt-0.5">{{ __('Add skills to your profile to see commissions that match what you can do.') }}</p>
+                        <a href="{{ route('profile.edit') }}" class="inline-flex items-center gap-1 mt-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 transition-colors">
+                            {{ __('Add skills') }} →
+                        </a>
+                    </div>
+                </div>
+            @elseif($matchingCommissions->isEmpty())
+                <div class="text-center py-10">
+                    <div class="w-14 h-14 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-7 h-7 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">{{ __('No open commissions match your skills right now. Check back later!') }}</p>
+                </div>
+            @else
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    @foreach($matchingCommissions as $commission)
+                    <div class="bg-slate-50 dark:bg-slate-700 rounded-xl border border-indigo-200 dark:border-indigo-700 shadow-sm hover:shadow-md transition-shadow p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-base font-semibold text-slate-800 dark:text-white line-clamp-1">{{ $commission->title }}</h3>
+                            @if($commission->category)
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 shrink-0 ml-2">
+                                {{ $commission->category->name }}
+                            </span>
+                            @endif
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-2">{{ $commission->description }}</p>
+                        <div class="flex items-center justify-between">
+                            @if($commission->budget)
+                            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">€{{ number_format($commission->budget, 0, ',', '.') }}</span>
+                            @else
+                            <span></span>
+                            @endif
+                            <a href="{{ route('commissions.show', $commission) }}" class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 transition-colors">
+                                {{ __('View') }} →
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
+
     <!-- Available Commissions -->
     <section class="py-16 bg-slate-50 dark:bg-slate-900">
         <section class="py-16 bg-slate-50 dark:bg-slate-900">
