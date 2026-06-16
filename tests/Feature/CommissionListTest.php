@@ -63,7 +63,7 @@ test('bezoeker kan opdrachten filteren op categorie', function () {
         'user_id' => $user->id,
     ]);
 
-    $response = $this->get('/commissions?category_id='.$webdesign->id);
+    $response = $this->get('/commissions?category_id=' . $webdesign->id);
 
     $response->assertOk();
     $response->assertSee('Website bouwen');
@@ -113,7 +113,7 @@ test('filters zijn combineerbaar: zoekwoord en categorie samen', function () {
     Commission::create(['title' => 'Laravel API', 'description' => 'REST API', 'budget' => 600, 'deadline' => now()->addDays(20), 'category_id' => $marketing->id, 'user_id' => $user->id]);
     Commission::create(['title' => 'Logo ontwerp', 'description' => 'Huisstijl', 'budget' => 400, 'deadline' => now()->addDays(10), 'category_id' => $webdesign->id, 'user_id' => $user->id]);
 
-    $response = $this->get('/commissions?q=Laravel&category_id='.$webdesign->id);
+    $response = $this->get('/commissions?q=Laravel&category_id=' . $webdesign->id);
 
     $response->assertOk();
     $response->assertSee('Website bouwen');
