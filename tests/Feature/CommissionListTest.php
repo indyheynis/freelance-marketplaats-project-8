@@ -162,7 +162,8 @@ test('zoeken doorzoekt ook de beschrijving', function () {
     $response->assertOk();
     $response->assertSee('Opdracht A');
     $response->assertDontSee('Opdracht B');
-=======
+});
+
 test('client kan de opdracht aanmaken pagina bereiken', function () {
     $client = User::factory()->create(['role' => 'client']);
 
@@ -170,5 +171,4 @@ test('client kan de opdracht aanmaken pagina bereiken', function () {
 
     $response->assertOk();
     $response->assertSee('Create New Commission');
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
 });
