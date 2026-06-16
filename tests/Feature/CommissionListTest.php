@@ -76,6 +76,7 @@ test('bezoeker ziet lege lijst als er geen opdrachten zijn', function () {
     $response->assertOk();
 });
 
+<<<<<<< HEAD
 test('freelancer kan filteren op minimumbudget', function () {
     $user = User::factory()->create(['role' => 'client']);
     $category = Category::create(['name' => 'Dev']);
@@ -161,4 +162,13 @@ test('zoeken doorzoekt ook de beschrijving', function () {
     $response->assertOk();
     $response->assertSee('Opdracht A');
     $response->assertDontSee('Opdracht B');
+=======
+test('client kan de opdracht aanmaken pagina bereiken', function () {
+    $client = User::factory()->create(['role' => 'client']);
+
+    $response = $this->actingAs($client)->get('/commissions/create');
+
+    $response->assertOk();
+    $response->assertSee('Create New Commission');
+>>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
 });
