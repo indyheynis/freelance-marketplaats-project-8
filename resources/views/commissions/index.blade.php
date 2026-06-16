@@ -68,6 +68,27 @@
             @endif
         </form>
 
+        </form>
+
+        {{-- Resultaten teller --}}
+        <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                @if(request('q') || request('category_id'))
+                {{ __(':count commissions found', ['count' => $commissions->count()]) }}
+                @if(request('q'))
+                {{ __('for') }} "<span class="font-medium text-slate-700 dark:text-slate-200">{{ request('q') }}</span>"
+                @endif
+                @if(request('category_id'))
+                {{ __('in') }} <span class="font-medium text-slate-700 dark:text-slate-200">{{ $categories->find(request('category_id'))->name ?? '' }}</span>
+                @endif
+                @else
+                {{ __('Showing :count commissions', ['count' => $commissions->count()]) }}
+                @endif
+            </p>
+        </div>
+
+        <!-- Cards Grid -->
+
         <!-- Cards Grid -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($commissions as $commission)
