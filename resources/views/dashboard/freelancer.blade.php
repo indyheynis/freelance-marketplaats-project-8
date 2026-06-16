@@ -235,34 +235,48 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    <span class="text-sm font-semibold text-purple-800 dark:text-purple-300">{{ __('Commissions') }}</span>
+                    <div>
+                        <span class="text-sm font-semibold text-purple-800 dark:text-purple-300">{{ __('Commissions') }}</span>
+                        <p class="text-xs text-purple-600 dark:text-purple-400">{{ \App\Models\Commission::where('status', 'open')->count() }} {{ __('open') }}</p>
+                    </div>
                 </a>
+
                 <a href="{{ route('applications.index') }}" class="group flex items-center gap-3 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-700 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <span class="text-sm font-semibold text-indigo-800 dark:text-indigo-300">{{ __('Applications') }}</span>
+                    <div>
+                        <span class="text-sm font-semibold text-indigo-800 dark:text-indigo-300">{{ __('Applications') }}</span>
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400">{{ Auth::user()->applications()->count() }} {{ __('total') }}</p>
+                    </div>
                 </a>
+
                 <a href="{{ route('reviews.index') }}" class="group flex items-center gap-3 bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900 border border-amber-200 dark:border-amber-700 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                         </svg>
                     </div>
-                    <span class="text-sm font-semibold text-amber-800 dark:text-amber-300">{{ __('My Reviews') }}</span>
+                    <div>
+                        <span class="text-sm font-semibold text-amber-800 dark:text-amber-300">{{ __('My Reviews') }}</span>
+                        <p class="text-xs text-amber-600 dark:text-amber-400">{{ Auth::user()->receivedReviews()->count() ?? 0 }} {{ __('received') }}</p>
+                    </div>
                 </a>
+
                 <a href="{{ route('profile.edit') }}" class="group flex items-center gap-3 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 rounded-xl p-4 transition-colors">
                     <div class="w-9 h-9 bg-slate-600 rounded-lg flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </div>
-                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ __('Profile') }}</span>
+                    <div>
+                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ __('Profile') }}</span>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</p>
+                    </div>
                 </a>
             </div>
-        </div>
     </section>
 
     <!-- Stats Section -->
