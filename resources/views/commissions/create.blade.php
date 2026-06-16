@@ -89,7 +89,7 @@
                 <div class="mt-4">
                     <x-input-label for="location_name" :value="__('Locatie (optioneel)')" />
                     <x-text-input id="location_name" class="block mt-1 w-full" type="text" name="location_name"
-                        :value="old('location_name')" placeholder="Klik op de kaart of typ een adres" readonly />
+                        :value="old('location_name')" placeholder="Klik op de kaart" readonly />
                     <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
                     <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
                 </div>
