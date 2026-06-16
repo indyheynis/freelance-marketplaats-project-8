@@ -9,7 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class CommissionController extends Controller
+class   CommissionController extends Controller
 {
     public function index(Request $request)
     {
