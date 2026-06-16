@@ -15,7 +15,7 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'commission_id' => 'required|exists:commissions,id',
+            'commission_id' => 'required|exists:commissions,id' ,
             'price' => 'required|numeric',
             'message' => 'nullable|string',
         ]);
