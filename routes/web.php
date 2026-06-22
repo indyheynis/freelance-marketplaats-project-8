@@ -101,6 +101,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
+<<<<<<< HEAD
+=======
+// applications accept/reject routes
+>>>>>>> ace4f4b5cfad5e473da473df4460e5b088f4cdab
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
@@ -146,4 +150,8 @@ Route::get('/map', function () {
     return view('map.index', compact('commissions'));
 })->name('map.index');
 
+<<<<<<< HEAD
 require __DIR__.'/auth.php';
+=======
+require __DIR__ . '/auth.php';
+>>>>>>> ace4f4b5cfad5e473da473df4460e5b088f4cdab
