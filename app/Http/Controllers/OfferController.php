@@ -30,7 +30,8 @@ class OfferController extends Controller
             return back()->withErrors(['offer' => __('You cannot bid on your own commission.')]);
         }
 
-        $alreadyOffered = Offer::where('user_id', $user->id)
+        $alreadyOffered = Offer::query()
+            ->where('user_id', $user->id)
             ->where('commission_id', $commission->id)
             ->exists();
 
@@ -56,11 +57,12 @@ class OfferController extends Controller
 
     public function accept(Offer $offer)
     {
-        if ($offer->commission->user_id !== auth()->id()) {
+        if ($offer->commission->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $otherOffers = Offer::with('user')
+        $otherOffers = Offer::query()
+            ->with('user')
             ->where('commission_id', $offer->commission_id)
             ->where('id', '!=', $offer->id)
             ->get();
@@ -71,14 +73,17 @@ class OfferController extends Controller
         }
 
         $offer->update(['status' => 'accepted']);
-        $offer->commission->update(['status' => 'in_progress']);
+
+        $commission = $offer->commission;
+        $commission->update(['status' => 'in_progress']);
+
         Mail::to($offer->user->email)->send(new OfferStatusChanged($offer));
 
         Invoice::create([
             'invoice_number' => Invoice::generateNumber(),
             'offer_id' => $offer->id,
             'commission_id' => $offer->commission_id,
-            'client_id' => auth()->id(),
+            'client_id' => Auth::id(),
             'freelancer_id' => $offer->user_id,
             'amount' => $offer->price,
             'status' => 'pending',

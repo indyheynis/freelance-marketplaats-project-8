@@ -114,6 +114,31 @@
                         {{ __('Join as Client') }}
                     </a>
                 </div>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-slate-900 rounded-xl border border-purple-200 dark:border-purple-800 p-8">
+                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3">{{ __('For Freelancers') }}</h3>
+                    <ul class="space-y-2 text-slate-600 dark:text-slate-300 text-sm mb-6">
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            {{ __('Browse commissions that match your skills') }}
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            {{ __('Set your own rate and apply directly') }}
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            {{ __('Build your reputation with reviews') }}
+                        </li>
+                    </ul>
+                    <a href="{{ route('register') }}?role=freelancer" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors text-sm">
+                        {{ __('Join as Freelancer') }}
+                    </a>
+                </div>
             </div>
         </div>
     </section>

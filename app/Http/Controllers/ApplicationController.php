@@ -17,7 +17,7 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Application::with('commission.category')
+        $query = Application::query()->with('commission.category')
             ->where('user_id', Auth::id())
             ->latest();
 
@@ -32,7 +32,8 @@ class ApplicationController extends Controller
 
     public function store(Request $request, Commission $commission)
     {
-        $alreadyApplied = Application::where('commission_id', $commission->id)
+        $alreadyApplied = Application::query()
+            ->where('commission_id', $commission->id)
             ->where('user_id', Auth::id())
             ->exists();
 
@@ -76,19 +77,18 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update([
-            'status' => 'accepted',
-        ]);
+        $application->update(['status' => 'accepted']);
 
-        $application->commission->update(['status' => 'in_progress']);
+        $commission = $application->commission;
+        $commission->update(['status' => 'in_progress']);
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
 
         $application->freelancer->notify(new ApplicationStatusChangedNotification($application));
 
-        // Reject all other applications for this commission
-        Application::where('commission_id', $application->commission_id)
+        Application::query()
+            ->where('commission_id', $application->commission_id)
             ->where('id', '!=', $application->id)
             ->update(['status' => 'rejected']);
 
@@ -111,9 +111,7 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update([
-            'status' => 'rejected',
-        ]);
+        $application->update(['status' => 'rejected']);
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));

@@ -79,7 +79,7 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('View all commissions and navigate to details.') }}</p>
             </a>
 
-            <a href="{{ route('reviews.index') }}" class="block bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow p-6 text-left">
+            <a href="{{ route('admin.reviews.index') }}" class="block bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow p-6 text-left">
                 <div class="flex items-center justify-between mb-4">
                     <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">{{ __('Reviews') }}</span>
                     <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">R</span>

@@ -153,6 +153,11 @@
     "Set your own budget & deadline": "Stel je eigen budget en deadline in",
     "Find the right freelancer fast": "Vind snel de juiste freelancer",
     "Join as Client": "Aanmelden als opdrachtgever",
+    "For Freelancers": "Voor freelancers",
+    "Browse commissions that match your skills": "Bekijk opdrachten die passen bij jouw vaardigheden",
+    "Set your own rate and apply directly": "Stel je eigen tarief in en solliciteer direct",
+    "Build your reputation with reviews": "Bouw je reputatie op met reviews",
+    "Join as Freelancer": "Aanmelden als freelancer",
 
     "Email": "E-mail",
     "Forgot password?": "Wachtwoord vergeten?",
@@ -256,5 +261,20 @@
     "Send a message": "Stuur een bericht",
     "Write your message...": "Schrijf je bericht...",
     "Send": "Versturen",
-    "Message sent.": "Bericht verstuurd."
+    "Message sent.": "Bericht verstuurd.",
+
+    "All Reviews": "Alle reviews",
+    "Manage all platform reviews": "Beheer alle reviews op het platform",
+    "Add Review": "Review toevoegen",
+    "Reviewer": "Beoordelaar",
+    "Freelancer": "Freelancer",
+    "Date": "Datum",
+    "Edit Review": "Review bewerken",
+    "Reviewed freelancer": "Beoordeelde freelancer",
+    "Select a commission": "Selecteer een opdracht",
+    "Select a client": "Selecteer een opdrachtgever",
+    "Select a freelancer": "Selecteer een freelancer",
+    "Review created.": "Review aangemaakt.",
+    "Review updated.": "Review bijgewerkt.",
+    "Review deleted.": "Review verwijderd."
 }

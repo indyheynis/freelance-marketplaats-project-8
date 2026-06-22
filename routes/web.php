@@ -94,6 +94,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+    Route::get('reviews', [ReviewController::class, 'adminIndex'])->name('admin.reviews.index');
+    Route::get('reviews/create', [ReviewController::class, 'create'])->name('admin.reviews.create');
+    Route::post('reviews', [ReviewController::class, 'adminStore'])->name('admin.reviews.store');
+    Route::get('reviews/{review}/edit', [ReviewController::class, 'edit'])->name('admin.reviews.edit');
+    Route::put('reviews/{review}', [ReviewController::class, 'update'])->name('admin.reviews.update');
+    Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+
     Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
@@ -101,10 +108,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-<<<<<<< HEAD
-=======
-// applications accept/reject routes
->>>>>>> ace4f4b5cfad5e473da473df4460e5b088f4cdab
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
@@ -150,8 +153,4 @@ Route::get('/map', function () {
     return view('map.index', compact('commissions'));
 })->name('map.index');
 
-<<<<<<< HEAD
 require __DIR__.'/auth.php';
-=======
-require __DIR__ . '/auth.php';
->>>>>>> ace4f4b5cfad5e473da473df4460e5b088f4cdab

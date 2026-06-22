@@ -2,6 +2,7 @@
     <main class="flex-1 flex items-center justify-center py-12 px-4">
         <div class="w-full max-w-md">
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8 dark:bg-slate-800 dark:border-slate-700">
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">{{ __('Sign up') }}</h1>
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
