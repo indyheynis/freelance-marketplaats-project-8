@@ -71,8 +71,17 @@ class Commission extends Model
         return $this->hasOne(Invoice::class);
     }
 
-    public function favoriteBY()
+    public function messages()
     {
-        return $this->belongsToMany(User::class, 'favorites');
+        return $this->hasMany(Message::class);
+    }
+
+    public function isInvolvedUser(int $userId): bool
+    {
+        if ($this->user_id === $userId) {
+            return true;
+        }
+
+        return $this->applications()->where('user_id', $userId)->where('status', 'accepted')->exists();
     }
 }

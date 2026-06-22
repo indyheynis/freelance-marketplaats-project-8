@@ -8,17 +8,14 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FreelancerController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
-<<<<<<< HEAD
 use App\Models\Commission;
 use Illuminate\Support\Facades\Auth;
-=======
-use App\Http\Controllers\FavoriteController;
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -57,18 +54,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route voor Commissions
-// Route::resource('commissions', CommissionController::class);
 Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
 Route::resource('categories', CategoryController::class);
 
 Route::get('commissions', [CommissionController::class, 'index'])->name('commissions.index');
-Route::middleware(['auth', 'role:client'])->group(function () {
-    Route::get('commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
-});
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])
-    ->whereNumber('commission')
-    ->name('commissions.show');
+Route::get('commissions/create', [CommissionController::class, 'create'])->middleware(['auth', 'role:client'])->name('commissions.create');
+Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
 Route::get('search', [CommissionController::class, 'search'])->name('search');
 
 Route::middleware('auth')->group(function () {
@@ -80,7 +71,6 @@ Route::middleware(['auth', 'role:client'])->group(function () {
     Route::post('commissions', [CommissionController::class, 'store'])->name('commissions.store');
     Route::post('commissions/{commission}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
-<<<<<<< HEAD
 
 Route::middleware(['auth', 'role:client,admin'])->group(function () {
     Route::get('commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
@@ -88,14 +78,7 @@ Route::middleware(['auth', 'role:client,admin'])->group(function () {
     Route::delete('commissions/{commission}', [CommissionController::class, 'destroy'])->name('commissions.destroy');
 });
 
-Route::get('commissions/{commission}', [CommissionController::class, 'show'])->name('commissions.show');
-
 Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-=======
-    
-Route::middleware(['auth', 'role:client,freelancer'])->group(function () {
-   
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
     Route::get('freelancers/{freelancer}', [FreelancerController::class, 'show'])->name('freelancers.show');
 });
 
@@ -118,10 +101,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-<<<<<<< HEAD
-=======
-// applications accept/reject routes
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
 Route::middleware(['auth'])->group(function () {
     Route::post('commissions/{commission}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
@@ -152,6 +131,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+
+    // Messages
+    Route::get('commissions/{commission}/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::post('commissions/{commission}/messages', [MessageController::class, 'store'])->name('messages.store');
 });
 
 Route::get('/map', function () {
@@ -163,17 +146,4 @@ Route::get('/map', function () {
     return view('map.index', compact('commissions'));
 })->name('map.index');
 
-<<<<<<< HEAD
 require __DIR__.'/auth.php';
-=======
-
-// Favorites routes
-Route::middleware(['auth'])->group(function () {
-    Route::post('commissions/{commission}/favorite', [FavoriteController::class, 'toggle'])
-        ->name('favorites.toggle');
-    Route::get('favorites', [FavoriteController::class, 'index'])
-        ->name('favorites.index');
-});
-
-require __DIR__ . '/auth.php';
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0

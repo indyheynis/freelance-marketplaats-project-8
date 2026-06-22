@@ -83,6 +83,22 @@
             </div>
             @endif
 
+            {{-- Messages link for involved users --}}
+            @if(auth()->check() && $commission->isInvolvedUser(auth()->id()))
+            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700">
+                <a href="{{ route('messages.index', $commission) }}" class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    {{ __('Messages') }}
+                    @php $msgCount = $commission->messages()->count(); @endphp
+                    @if($msgCount > 0)
+                    <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold bg-indigo-600 text-white">{{ $msgCount }}</span>
+                    @endif
+                </a>
+            </div>
+            @endif
+
             {{-- Applications section --}}
             @if(auth()->check() && auth()->id() === $commission->user_id)
             <div class="px-6 py-6 border-t border-slate-100 dark:border-slate-700">

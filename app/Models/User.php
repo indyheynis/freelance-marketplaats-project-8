@@ -117,11 +117,6 @@ class User extends Authenticatable
         return round($totalDays / $applications->count());
     }
 
-    public function favorites()
-    {
-        return $this->belongsToMany(Commission::class, 'favorites');
-    }
-
     public function applications()
     {
         return $this->hasMany(Application::class);

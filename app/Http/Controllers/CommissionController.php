@@ -9,7 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class   CommissionController extends Controller
+class CommissionController extends Controller
 {
     public function index(Request $request)
     {
@@ -64,26 +64,6 @@ class   CommissionController extends Controller
         return $query;
     }
 
-<<<<<<< HEAD
-=======
-    public function search(Request $request)
-    {
-        $categories = Category::all();
-        $query = Commission::with('category');
-
-        if (auth()->check() && auth()->user()->isClient()) {
-            $query->where('user_id', auth()->id());
-        }
-
-        if ($request->filled('q')) {
-            $query->where('title', 'like', '%' . $request->q . '%');
-        }
-
-        $commissions = $query->get();
-        return view('commissions.index', compact('commissions', 'categories'));
-    }
-
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
     public function create()
     {
         $categories = Category::all();

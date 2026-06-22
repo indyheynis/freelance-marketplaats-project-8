@@ -76,7 +76,6 @@ test('bezoeker ziet lege lijst als er geen opdrachten zijn', function () {
     $response->assertOk();
 });
 
-<<<<<<< HEAD
 test('freelancer kan filteren op minimumbudget', function () {
     $user = User::factory()->create(['role' => 'client']);
     $category = Category::create(['name' => 'Dev']);
@@ -118,8 +117,8 @@ test('filters zijn combineerbaar: zoekwoord en categorie samen', function () {
 
     $response->assertOk();
     $response->assertSee('Website bouwen');
-    $response->assertDontSee('Laravel API');    // juiste q, verkeerde categorie
-    $response->assertDontSee('Logo ontwerp');   // juiste categorie, verkeerde q
+    $response->assertDontSee('Laravel API');
+    $response->assertDontSee('Logo ontwerp');
 });
 
 test('sorteren op hoogste budget werkt', function () {
@@ -134,7 +133,6 @@ test('sorteren op hoogste budget werkt', function () {
 
     $response->assertOk();
     $content = $response->getContent();
-    // Budget 999 moet vóór Budget 100 staan
     expect(strpos($content, 'Budget 999'))->toBeLessThan(strpos($content, 'Budget 100'));
 });
 
@@ -162,7 +160,8 @@ test('zoeken doorzoekt ook de beschrijving', function () {
     $response->assertOk();
     $response->assertSee('Opdracht A');
     $response->assertDontSee('Opdracht B');
-=======
+});
+
 test('client kan de opdracht aanmaken pagina bereiken', function () {
     $client = User::factory()->create(['role' => 'client']);
 
@@ -170,5 +169,4 @@ test('client kan de opdracht aanmaken pagina bereiken', function () {
 
     $response->assertOk();
     $response->assertSee('Create New Commission');
->>>>>>> 7dd6caf42c19ba790f10fb5dfe4920f9ceb79ce0
 });

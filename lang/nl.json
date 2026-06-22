@@ -248,5 +248,13 @@
     "Application accepted": "Sollicitatie geaccepteerd",
     "Application rejected": "Sollicitatie afgewezen",
     "Your application for \":commission\" has been accepted.": "Jouw sollicitatie voor \":commission\" is geaccepteerd.",
-    "Your application for \":commission\" has been rejected.": "Jouw sollicitatie voor \":commission\" is afgewezen."
+    "Your application for \":commission\" has been rejected.": "Jouw sollicitatie voor \":commission\" is afgewezen.",
+
+    "Messages": "Berichten",
+    "Back to commission": "Terug naar opdracht",
+    "No messages yet. Start the conversation!": "Nog geen berichten. Start het gesprek!",
+    "Send a message": "Stuur een bericht",
+    "Write your message...": "Schrijf je bericht...",
+    "Send": "Versturen",
+    "Message sent.": "Bericht verstuurd."
 }

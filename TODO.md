@@ -34,27 +34,12 @@ Freelancer kan opdrachten bewaren en terugvinden op "Mijn favorieten".
 - Basiscriteria: opslaan/verwijderen (toggle), aparte favorietenpagina, nooit
   dubbel, alleen voor ingelogde freelancers.
 
-### FEATURE-2 — Meldingen binnen het platform
-In-app meldingen met een belletje + ongelezen-teller.
-- Startwijzer: Laravel heeft hiervoor `php artisan notifications:table` +
-  database-notifications. Zoek in de docs op "notifications".
-- Basiscriteria: melding bij nieuwe sollicitatie/bieding en bij acceptatie/afwijzing,
-  belletje met ongelezen aantal, eigen meldingen-overzicht (nieuwste boven),
-  je ziet alleen je eigen meldingen.
-
 ### FEATURE-3 — Beter zoeken en filteren  ⭐ goede instap
 Filteren op categorie, minimum/maximum budget en deadline; filters blijven actief.
 - Startwijzer: bouw voort op `CommissionController::index` (daar zit al een
   categorie-/zoekfilter). Voeg `budget_min`, `budget_max`, sortering toe.
 - Basiscriteria: filter op categorie + budget, filters blijven zichtbaar na
   verversen, nette melding bij 0 resultaten.
-
-### FEATURE-6 — Berichten tussen opdrachtgever en freelancer
-Eenvoudige chat per opdracht tussen de betrokken partijen.
-- Startwijzer: tabel `messages` (commission_id, sender_id, body, timestamps).
-  Let op autorisatie: alleen betrokkenen mogen lezen.
-- Basiscriteria: berichten met afzender + tijd (oudste boven), alleen betrokkenen
-  kunnen lezen, leeg bericht kan niet verstuurd worden.
 
 ---
 
