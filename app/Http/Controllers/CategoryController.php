@@ -13,10 +13,11 @@ class CategoryController extends Controller
         $query = Category::query();
 
         if ($request->filled('q')) {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
 
         $categories = $query->get();
+
         return view('categories.index', compact('categories'));
     }
 
@@ -25,10 +26,11 @@ class CategoryController extends Controller
         $query = Category::query();
 
         if ($request->filled('q')) {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
 
         $categories = $query->get();
+
         return view('categories.index', compact('categories'));
     }
 
@@ -62,7 +64,7 @@ class CategoryController extends Controller
 
     public function update(CategoryStoreRequest $request, Category $category)
     {
-        $category->update($request->all());
+        $category->update($request->validated());
 
         return redirect()->route('categories.show', $category)->with('success', 'Category updated successfully.');
     }

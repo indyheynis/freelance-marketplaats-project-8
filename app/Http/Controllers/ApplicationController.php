@@ -7,6 +7,8 @@ use App\Mail\ApplicationSubmitted;
 use App\Models\Application;
 use App\Models\Commission;
 use App\Models\Invoice;
+use App\Notifications\ApplicationStatusChangedNotification;
+use App\Notifications\NewApplicationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -15,7 +17,7 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Application::with('commission.category')
+        $query = Application::query()->with('commission.category')
             ->where('user_id', Auth::id())
             ->latest();
 
@@ -30,7 +32,8 @@ class ApplicationController extends Controller
 
     public function store(Request $request, Commission $commission)
     {
-        $alreadyApplied = Application::where('commission_id', $commission->id)
+        $alreadyApplied = Application::query()
+            ->where('commission_id', $commission->id)
             ->where('user_id', Auth::id())
             ->exists();
 
@@ -52,6 +55,8 @@ class ApplicationController extends Controller
         Mail::to(Auth::user()->email)
             ->send(new ApplicationSubmitted($application));
 
+        $commission->user->notify(new NewApplicationNotification($application));
+
         return back()->with('success', 'Your application has been sent!');
     }
 
@@ -72,17 +77,18 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update([
-            'status' => 'accepted',
-        ]);
+        $application->update(['status' => 'accepted']);
 
-        $application->commission->update(['status' => 'in_progress']);
+        $commission = $application->commission;
+        $commission->update(['status' => 'in_progress']);
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
 
-        // Reject all other applications for this commission
-        Application::where('commission_id', $application->commission_id)
+        $application->freelancer->notify(new ApplicationStatusChangedNotification($application));
+
+        Application::query()
+            ->where('commission_id', $application->commission_id)
             ->where('id', '!=', $application->id)
             ->update(['status' => 'rejected']);
 
@@ -105,12 +111,12 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $application->update([
-            'status' => 'rejected',
-        ]);
+        $application->update(['status' => 'rejected']);
 
         Mail::to($application->freelancer->email)
             ->send(new ApplicationStatusChanged($application));
+
+        $application->freelancer->notify(new ApplicationStatusChangedNotification($application));
 
         return back()->with('success', 'Application rejected.');
     }

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Mail\OfferReceived;
 use App\Mail\OfferStatusChanged;
 use App\Mail\OfferSubmitted;
+use App\Models\Commission;
 use App\Models\Invoice;
 use App\Models\Offer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -15,15 +17,9 @@ class OfferController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'commission_id' => 'required|exists:commissions,id',
-            'price' => 'required|numeric',
-            'message' => 'nullable|string',
-        ]);
-
         $offer = Offer::create([
-            'user_id' => Auth::id(),
-            'commission_id' => $request->commission_id,
+            'user_id' => $user->id,
+            'commission_id' => $commission->id,
             'price' => $request->price,
             'message' => $request->message,
             'status' => 'pending',
@@ -34,16 +30,17 @@ class OfferController extends Controller
         Mail::to($offer->user->email)->send(new OfferSubmitted($offer));
         Mail::to($offer->commission->user->email)->send(new OfferReceived($offer));
 
-        return back()->with('success', 'Offer sent!');
+        return back()->with('success', __('Offer sent!'));
     }
 
     public function accept(Offer $offer)
     {
-        if ($offer->commission->user_id !== auth()->id()) {
+        if ($offer->commission->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $otherOffers = Offer::with('user')
+        $otherOffers = Offer::query()
+            ->with('user')
             ->where('commission_id', $offer->commission_id)
             ->where('id', '!=', $offer->id)
             ->get();
@@ -54,14 +51,17 @@ class OfferController extends Controller
         }
 
         $offer->update(['status' => 'accepted']);
-        $offer->commission->update(['status' => 'in_progress']);
+
+        $commission = $offer->commission;
+        $commission->update(['status' => 'in_progress']);
+
         Mail::to($offer->user->email)->send(new OfferStatusChanged($offer));
 
         Invoice::create([
             'invoice_number' => Invoice::generateNumber(),
             'offer_id' => $offer->id,
             'commission_id' => $offer->commission_id,
-            'client_id' => auth()->id(),
+            'client_id' => Auth::id(),
             'freelancer_id' => $offer->user_id,
             'amount' => $offer->price,
             'status' => 'pending',

@@ -26,46 +26,126 @@
         </div>
         @endif
 
-        <form method="GET" action="{{ route('commissions.index') }}" class="flex flex-wrap gap-3 items-center mb-8">
-            <div class="relative flex-1 min-w-[200px]">
-                <input type="text" name="q" value="{{ request('q') }}"
-                    placeholder="{{ __('Search commissions...') }}"
-                    class="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:font-normal placeholder:text-slate-400">
-                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+        @php
+            $hasFilters = request()->hasAny(['q', 'category_id', 'budget_min', 'budget_max'])
+                && array_filter(request()->only(['q', 'category_id', 'budget_min', 'budget_max']));
+            $inputClass = 'w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors placeholder:text-slate-400 dark:placeholder:text-slate-500';
+            $selectClass = 'w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors appearance-none cursor-pointer';
+        @endphp
+
+        <form method="GET" action="{{ route('commissions.index') }}" class="mb-6">
+            <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm">
+                <div class="flex flex-wrap gap-3 items-end">
+
+                    {{-- Zoeken --}}
+                    <div class="flex-1 min-w-[180px]">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ __('Search') }}</label>
+                        <div class="relative">
+                            <input type="text" name="q" value="{{ request('q') }}"
+                                placeholder="{{ __('Title or description...') }}"
+                                class="{{ $inputClass }} pl-9">
+                            <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {{-- Categorie --}}
+                    <div class="min-w-[160px]">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ __('Category') }}</label>
+                        <div class="relative">
+                            <select name="category_id" class="{{ $selectClass }} pr-8">
+                                <option value="">{{ __('All categories') }}</option>
+                                @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {{-- Budget --}}
+                    <div class="min-w-[100px]">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ __('Min budget') }} (€)</label>
+                        <input type="number" name="budget_min" value="{{ request('budget_min') }}"
+                            placeholder="0" min="0"
+                            class="{{ $inputClass }}">
+                    </div>
+                    <div class="min-w-[100px]">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ __('Max budget') }} (€)</label>
+                        <input type="number" name="budget_max" value="{{ request('budget_max') }}"
+                            placeholder="9999" min="0"
+                            class="{{ $inputClass }}">
+                    </div>
+
+                    {{-- Sortering --}}
+                    <div class="min-w-[170px]">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ __('Sort by') }}</label>
+                        <div class="relative">
+                            <select name="sort" class="{{ $selectClass }} pr-8">
+                                <option value="newest" {{ request('sort', 'newest') === 'newest' ? 'selected' : '' }}>{{ __('Newest first') }}</option>
+                                <option value="budget_desc" {{ request('sort') === 'budget_desc' ? 'selected' : '' }}>{{ __('Highest budget') }}</option>
+                                <option value="budget_asc" {{ request('sort') === 'budget_asc' ? 'selected' : '' }}>{{ __('Lowest budget') }}</option>
+                                <option value="deadline_asc" {{ request('sort') === 'deadline_asc' ? 'selected' : '' }}>{{ __('Deadline (soonest)') }}</option>
+                            </select>
+                            <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {{-- Buttons --}}
+                    <div class="flex items-center gap-2">
+                        <button type="submit"
+                            class="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            {{ __('Filter') }}
+                        </button>
+                        @if($hasFilters)
+                        <a href="{{ route('commissions.index') }}"
+                            class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('Clear') }}
+                        </a>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Actieve filter-chips --}}
+                @if($hasFilters)
+                <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                    <span class="text-xs text-slate-400 dark:text-slate-500 self-center">{{ __('Active filters:') }}</span>
+                    @if(request('q'))
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
+                        "{{ request('q') }}"
+                    </span>
+                    @endif
+                    @if(request('category_id'))
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
+                        {{ $categories->firstWhere('id', request('category_id'))?->name }}
+                    </span>
+                    @endif
+                    @if(request('budget_min'))
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/40 text-green-700 dark:text-green-300">
+                        {{ __('Min') }} €{{ number_format(request('budget_min'), 0, ',', '.') }}
+                    </span>
+                    @endif
+                    @if(request('budget_max'))
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/40 text-green-700 dark:text-green-300">
+                        {{ __('Max') }} €{{ number_format(request('budget_max'), 0, ',', '.') }}
+                    </span>
+                    @endif
+                </div>
+                @endif
             </div>
-            <div class="relative min-w-[180px]">
-                <select name="category_id"
-                    class="w-full pl-4 pr-10 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400 dark:hover:border-slate-500">
-                    <option value="">{{ __('-- All categories --') }}</option>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}"
-                        {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                    @endforeach
-                </select>
-                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </div>
-            <button type="submit"
-                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-                {{ __('Filter') }}
-            </button>
-            @if(request('category_id') || request('q'))
-            <a href="{{ route('commissions.index') }}"
-                class="inline-flex items-center gap-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                {{ __('Clear filter') }}
-            </a>
-            @endif
         </form>
 
         </form>
@@ -130,12 +210,23 @@
                     <a href="{{ route('commissions.show', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                         {{ __('View') }}
                     </a>
-                    @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
+                    @auth
+                    @if(auth()->user()->isFreelancer())
+                    @php $isFavorited = auth()->user()->favoritedCommissions->contains($commission->id); @endphp
+                    <form action="{{ route('favorites.toggle', $commission) }}" method="POST">
+                        @csrf
+                        <button type="submit" title="{{ $isFavorited ? __('Remove from favorites') : __('Save to favorites') }}"
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg transition-colors {{ $isFavorited ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-200' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20' }}">
+                            <svg class="w-4 h-4" fill="{{ $isFavorited ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </form>
+                    @endif
+                    @if(auth()->user()->isClient() || auth()->user()->isAdmin())
                     <a href="{{ route('commissions.edit', $commission) }}" class="flex-1 inline-flex justify-center items-center gap-1 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                         {{ __('Edit') }}
                     </a>
-                    @endif
-                    @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
                     <form action="{{ route('commissions.destroy', $commission) }}" method="POST" class="flex-1">
                         @csrf
                         @method('DELETE')
@@ -144,21 +235,39 @@
                         </button>
                     </form>
                     @endif
+                    @endauth
                 </div>
             </div>
             @empty
             <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
                 <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mb-4">
+                    @if($hasFilters)
+                    <svg class="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    @else
                     <svg class="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
+                    @endif
                 </div>
+                @if($hasFilters)
+                <h3 class="text-lg font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('No commissions match your filters') }}</h3>
+                <p class="text-slate-500 dark:text-slate-400 mb-4">{{ __('Try adjusting or clearing your filters.') }}</p>
+                <a href="{{ route('commissions.index') }}" class="inline-flex items-center gap-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-medium transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    {{ __('Clear all filters') }}
+                </a>
+                @else
                 <h3 class="text-lg font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('No commissions found') }}</h3>
                 @if(auth()->check() && (auth()->user()->role === 'client' || auth()->user()->role === 'admin'))
                 <p class="text-slate-500 dark:text-slate-400 mb-4">{{ __('Get started by creating your first commission.') }}</p>
                 <a href="{{ route('commissions.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     {{ __('Create One') }}
                 </a>
+                @endif
                 @endif
             </div>
             @endforelse

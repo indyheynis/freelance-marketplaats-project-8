@@ -159,7 +159,50 @@ test('commission show can load offers without relation error', function () {
 
     $response->assertOk();
     $response->assertSee('App bouwen');
-    $response->assertSee('1800');
+    $response->assertSee('1,800.00');
+});
+
+test('client kan opdracht van een andere client niet bewerken', function () {
+    $owner = User::factory()->create(['role' => 'client']);
+    $other = User::factory()->create(['role' => 'client']);
+    $category = Category::create(['name' => 'Test']);
+    $commission = Commission::create([
+        'title' => 'Eigenaarsopdracht',
+        'budget' => 500,
+        'deadline' => now()->addDays(10)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $owner->id,
+    ]);
+
+    $this->actingAs($other)
+        ->put("/commissions/{$commission->id}", [
+            'title' => 'Gehacked',
+            'budget' => 1,
+            'deadline' => now()->addDays(1)->format('Y-m-d'),
+            'category_id' => $category->id,
+        ])
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('commissions', ['id' => $commission->id, 'title' => 'Eigenaarsopdracht']);
+});
+
+test('client kan opdracht van een andere client niet verwijderen', function () {
+    $owner = User::factory()->create(['role' => 'client']);
+    $other = User::factory()->create(['role' => 'client']);
+    $category = Category::create(['name' => 'Test']);
+    $commission = Commission::create([
+        'title' => 'Te beschermen opdracht',
+        'budget' => 500,
+        'deadline' => now()->addDays(10)->format('Y-m-d'),
+        'category_id' => $category->id,
+        'user_id' => $owner->id,
+    ]);
+
+    $this->actingAs($other)
+        ->delete("/commissions/{$commission->id}")
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('commissions', ['id' => $commission->id]);
 });
 
 test('gast kan geen offerte indienen', function () {

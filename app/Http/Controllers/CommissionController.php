@@ -3,39 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommissionStoreRequest;
-use App\Models\Commission;
 use App\Models\Category;
+use App\Models\Commission;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class   CommissionController extends Controller
+class CommissionController extends Controller
 {
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Commission::with('category');
+        $commissions = $this->buildFilteredQuery($request)->get();
 
-        // Filter commissions based on user role
-        if (auth()->check() && auth()->user()->isClient()) {
-            $query->where('user_id', auth()->id());
-        }
-
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->filled('q')) {
-            $query->where('title', 'like', '%' . $request->q . '%');
-        }
-
-        $commissions = $query->get();
         return view('commissions.index', compact('commissions', 'categories'));
     }
 
     public function search(Request $request)
     {
         $categories = Category::all();
+        $commissions = $this->buildFilteredQuery($request)->get();
+
+        return view('commissions.index', compact('commissions', 'categories'));
+    }
+
+    private function buildFilteredQuery(Request $request)
+    {
         $query = Commission::with('category');
 
         if (auth()->check() && auth()->user()->isClient()) {
@@ -43,22 +36,44 @@ class   CommissionController extends Controller
         }
 
         if ($request->filled('q')) {
-            $query->where('title', 'like', '%' . $request->q . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->q.'%')
+                    ->orWhere('description', 'like', '%'.$request->q.'%');
+            });
         }
 
-        $commissions = $query->get();
-        return view('commissions.index', compact('commissions', 'categories'));
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('budget_min')) {
+            $query->where('budget', '>=', (float) $request->budget_min);
+        }
+
+        if ($request->filled('budget_max')) {
+            $query->where('budget', '<=', (float) $request->budget_max);
+        }
+
+        match ($request->get('sort', 'newest')) {
+            'budget_desc' => $query->orderByDesc('budget'),
+            'budget_asc' => $query->orderBy('budget'),
+            'deadline_asc' => $query->orderBy('deadline'),
+            default => $query->latest(),
+        };
+
+        return $query;
     }
 
     public function create()
     {
         $categories = Category::all();
+
         return view('commissions.create', compact('categories'));
     }
 
     public function store(CommissionStoreRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['user_id'] = auth()->id();
 
         if ($request->hasFile('image')) {
@@ -72,24 +87,25 @@ class   CommissionController extends Controller
 
     public function show(Commission $commission)
     {
-        // Clients can only view their own commissions
-        if (auth()->check() && auth()->user()->isClient() && $commission->user_id !== auth()->id()) {
-            abort(403, 'You can only view your own commissions.');
-        }
-
         $commission->load(['applications.freelancer', 'offers.user']);
+
         return view('commissions.show', compact('commission'));
     }
 
     public function edit(Commission $commission)
     {
+        $this->authorize('update', $commission);
+
         $categories = Category::all();
+
         return view('commissions.edit', compact('commission', 'categories'));
     }
 
     public function update(CommissionStoreRequest $request, Commission $commission)
     {
-        $data = $request->all();
+        $this->authorize('update', $commission);
+
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             if ($commission->image) {
@@ -106,6 +122,12 @@ class   CommissionController extends Controller
 
     public function destroy(Commission $commission)
     {
+        $this->authorize('delete', $commission);
+
+        if ($commission->image) {
+            Storage::disk('public')->delete($commission->image);
+        }
+
         $commission->delete();
 
         return redirect()->route('commissions.index')->with('success', 'Commission deleted successfully.');
@@ -115,6 +137,7 @@ class   CommissionController extends Controller
     {
         $commission->load('category', 'user');
         $pdf = Pdf::loadView('commissions.pdf', compact('commission'));
-        return $pdf->download('commission_' . $commission->id . '.pdf');
+
+        return $pdf->download('commission_'.$commission->id.'.pdf');
     }
 }

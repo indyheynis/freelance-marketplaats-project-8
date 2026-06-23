@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryStoreRequest extends FormRequest
 {
@@ -22,8 +24,15 @@ class CategoryStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $category = $this->route('category');
+
         return [
-             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'name')->ignore($category instanceof Category ? $category->id : null),
+            ],
         ];
     }
 }
